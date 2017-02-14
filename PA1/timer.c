@@ -65,7 +65,7 @@ else if (rank == 1)
 }
 
 if (rank == 0 ) {
-  printf("%d \n", totalTime);
+  printf("%f \n", totalTime);
   }
 
  MPI_Finalize();
