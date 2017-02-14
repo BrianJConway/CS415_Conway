@@ -41,6 +41,7 @@ if (rank == 0)
   {
     rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
     rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+    printf("%d \n",index);
   }
 }
 
