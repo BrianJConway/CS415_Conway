@@ -18,7 +18,7 @@ int inmsg, outmsg=1;
 MPI_Status Stat;
 int index;
 struct 	timeval tv1, tv2;
-double totalTime = 0;
+double t1, t2, totalTime = 0;
 
 MPI_Init(&argc,&argv);
 MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
@@ -43,11 +43,11 @@ if (rank == 0)
   
   for( index = 0; index < 1000; index++ )
   {
-    tv1 = MPI_Wtime();
+    t1 = MPI_Wtime();
     rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
     rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-    tv2 = MPI_Wtime();
-    totalTime += tv2 - tv1;
+    t2 = MPI_Wtime();
+    totalTime += t2 - t1;
   }
 }
 
