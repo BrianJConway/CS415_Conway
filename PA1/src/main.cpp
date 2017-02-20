@@ -72,8 +72,7 @@ int main(int argc, char *argv[])
     {
         timer.getElapsedTime(time);
 
-        cout << "WTime: " << totalTime << endl
-             << "Timeval: " << time << endl;
+        cout << "Timeval: " << time << endl;
     }
 
     MPI_Finalize();

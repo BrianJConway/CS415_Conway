@@ -1,4 +1,7 @@
 #include "Timer.h"
+#include <iostream>
+
+using namespace std;
 
 Timer::Timer()
 {
@@ -40,6 +43,12 @@ void Timer::resume()
 
 void Timer::getElapsedTime(char *timeStr)
 {
+    cout << "Seconds: " << seconds << endl << "MicroSeconds: " << microSeconds << endl;
+      
+    totalTime =  (double) seconds / (double) microSeconds;
+
+    cout << "Total: " << totalTime;
+
     int low, high, index = 0;
     char temp;
 
@@ -103,4 +112,5 @@ void Timer::getElapsedTime(char *timeStr)
     {
         strcpy(timeStr, "No Data");
     }
+    
 }
