@@ -5,7 +5,7 @@ LIBS=-lpmi
 # feel free to either add files here (for more compilcated src's), or create more vars, or just manually type them in. Up to you.
 FILE=../src/main.cpp
 # uncomment below if/when you have a folder called include that holds potential header files
-#INCLUDES=-I../include
+INCLUDES=-I../include
 OUTPUT=mpi_pingpong
 
 all: $(OUTPUT)
