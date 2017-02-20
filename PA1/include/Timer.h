@@ -17,6 +17,7 @@ class Timer
 
     void start();
     void stop();
+    void resume();
     void getElapsedTime(char *timeStr);
 
   private:

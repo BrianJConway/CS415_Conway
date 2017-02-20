@@ -33,6 +33,11 @@ void Timer::stop()
     }
 }
 
+void Timer::resume()
+{
+    isRunning = true;
+}
+
 void Timer::getElapsedTime(char *timeStr)
 {
     int low, high, index = 0;

@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     Timer timer;
     double t1, t2, totalTime = 0;
     char time[11];
+    bool started = false;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
@@ -40,14 +41,23 @@ int main(int argc, char *argv[])
         for (index = 0; index < 1000; index++)
         {
             t1 = MPI_Wtime();
-            timer.start();
+            if( !started )
+            {
+                started = true;
+                timer.start();
+            }
+            else
+            {
+                timer.resume();
+            }
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             timer.stop();
             t2 = MPI_Wtime();
-            timer.getElapsedTime(time);
             totalTime += t2 - t1;
         }
+            timer.getElapsedTime(time);
+
     }
 
     else if (rank == 1)

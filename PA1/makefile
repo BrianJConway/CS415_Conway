@@ -20,8 +20,11 @@ Timer.o: ../src/Timer.cpp
 	$(CC) $(CXXFLAGS) -c ../src/Timer.cpp -o Timer.o $(INCLUDES)
 
 # use this to run
-run: $(OUTPUT)
-	srun -n16 $(OUTPUT)
+oneBox: $(OUTPUT)
+	srun -n2 $(OUTPUT)
+
+twoBox: $(OUTPUT)
+	srun -N2 $(OUTPUT)
 
 clean:
 	-@if rm $(OUTPUT) 2>/dev/null || true; then echo "Cleaned"; else echo "Nothing to clean"; fi
