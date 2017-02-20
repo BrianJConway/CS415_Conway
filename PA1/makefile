@@ -11,7 +11,6 @@ OUTPUT=mpi_pingpong
 
 all: $(O_FILES)
 	$(CC) $(CXXFLAGS) -o $(OUTPUT) $(O_FILES) $(LIBS) #$(PATHI) $(PATHL)
-    
 
 main.o: ../src/main.cpp
 	$(CC) $(CXXFLAGS) -c ../src/main.cpp -o main.o $(INCLUDES)

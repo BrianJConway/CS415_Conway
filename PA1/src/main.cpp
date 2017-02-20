@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
             {
                 timer.resume();
             }
-            
+
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             timer.stop();
