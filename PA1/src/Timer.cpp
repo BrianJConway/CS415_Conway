@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -48,7 +49,7 @@ void Timer::getElapsedTime(char *timeStr)
       
     totalTime =  (double) seconds + (double) microSeconds / 1000000;
 
-    cout << "Total: " << setPrecision(6) << totalTime;
+    cout << "Total: " << setprecision(6) << totalTime;
 
     int low, high, index = 0;
     char temp;
