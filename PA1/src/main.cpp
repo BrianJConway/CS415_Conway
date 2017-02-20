@@ -38,9 +38,8 @@ int main(int argc, char *argv[])
         dest = 1;
         source = 1;
 
-        for (index = 0; index < 5000; index++)
+        for (index = 0; index < 10000; index++)
         {
-            t1 = MPI_Wtime();
             if( !started )
             {
                 started = true;
@@ -54,10 +53,7 @@ int main(int argc, char *argv[])
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             timer.stop();
-            t2 = MPI_Wtime();
-            totalTime += t2 - t1;
         }
-            timer.getElapsedTime(time);
     }
 
     else if (rank == 1)
@@ -65,7 +61,7 @@ int main(int argc, char *argv[])
         dest = 0;
         source = 0;
 
-        for (index = 0; index < 1000; index++)
+        for (index = 0; index < 10000; index++)
         {   
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
@@ -74,9 +70,10 @@ int main(int argc, char *argv[])
 
     if (rank == 0)
     {
+        timer.getElapsedTime(time);
+
         cout << "WTime: " << totalTime << endl
              << "Timeval: " << time << endl;
-
     }
 
     MPI_Finalize();
