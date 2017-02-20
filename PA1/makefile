@@ -10,7 +10,7 @@ INCLUDES=-I../include
 OUTPUT=mpi_pingpong
 
 all: $(O_FILES)
-	$(CC) $(CXXFLAGS) -o Tutorial $(O_FILES) $(LIBS) #$(PATHI) $(PATHL)
+	$(CC) $(CXXFLAGS) -o $(OUTPUT) $(O_FILES) $(LIBS) #$(PATHI) $(PATHL)
     
 
 main.o: ../src/main.cpp
