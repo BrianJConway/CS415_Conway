@@ -45,7 +45,7 @@ void Timer::getElapsedTime(char *timeStr)
 {
     cout << "Seconds: " << seconds << endl << "MicroSeconds: " << microSeconds << endl;
       
-    totalTime =  (double) seconds / (double) microSeconds;
+    totalTime =  (double) seconds + (double) microSeconds / 1000000;
 
     cout << "Total: " << totalTime;
 
