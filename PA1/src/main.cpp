@@ -8,14 +8,13 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    int numtasks, rank, dest, source, rc, count, tag = 1;
+    int numtasks, rank, dest, source, rc, tag = 1;
     int inmsg, outmsg = 1;
     MPI_Status Stat;
     int index;
-    struct timeval tv1, tv2;
-    SimpleTimer timer;
+    Timer timer;
     double t1, t2, totalTime = 0;
-    chat time[11];
+    char time[11];
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
@@ -57,7 +56,7 @@ int main(int argc, char *argv[])
         source = 0;
 
         for (index = 0; index < 1000; index++)
-        {
+        {   
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
         }
