@@ -26,6 +26,6 @@ class Timer
     long int seconds, microSeconds;
     bool validTime, isRunning;
 };
-
+run
 #endif 
 
