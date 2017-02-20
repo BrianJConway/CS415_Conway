@@ -25,7 +25,7 @@ class Timer
     long int startTime, endTime;
     long int seconds, microSeconds;
     bool validTime, isRunning;
-    double totalTime = 0.0;
+    double totalTime;
 };
 
 #endif 

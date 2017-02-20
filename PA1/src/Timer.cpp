@@ -6,6 +6,7 @@ using namespace std;
 Timer::Timer()
 {
     isRunning = false;
+    totalTime = 0.0;
 }
 
 Timer::~Timer()
@@ -47,7 +48,7 @@ void Timer::getElapsedTime(char *timeStr)
       
     totalTime =  (double) seconds + (double) microSeconds / 1000000;
 
-    cout << "Total: " << totalTime;
+    cout << "Total: " << setPrecision(6) << totalTime;
 
     int low, high, index = 0;
     char temp;
