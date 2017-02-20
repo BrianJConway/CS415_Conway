@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         dest = 1;
         source = 1;
 
-        for (index = 0; index < 10000; index++)
+        for (index = 0; index < 5000; index++)
         {
             t1 = MPI_Wtime();
             if( !started )
