@@ -3,16 +3,21 @@ CC=mpic++
 CXXFLAGS=-Wall
 LIBS=-lpmi
 # feel free to either add files here (for more compilcated src's), or create more vars, or just manually type them in. Up to you.
+O_FILES=main.o Timer.o
 FILE=../src/main.cpp
-FILE=../src/Timer.cpp
 # uncomment below if/when you have a folder called include that holds potential header files
 INCLUDES=-I../include
 OUTPUT=mpi_pingpong
 
-all: $(OUTPUT)
+all: $(O_FILES)
+	$(CC) $(CXXFLAGS) -o Tutorial $(O_FILES) $(LIBS) #$(PATHI) $(PATHL)
+    
 
-$(OUTPUT): $(FILE)
-	$(CC) $(CXXFLAGS) -o $(OUTPUT) $(FILE) $(LIBS)
+main.o: ../src/main.cpp
+	$(CC) $(CXXFLAGS) -c ../src/main.cpp -o main.o $(INCLUDES)
+
+Timer.o: ../src/Timer.cpp
+	$(CC) $(CXXFLAGS) -c ../src/Timer.cpp -o Timer.o $(INCLUDES)
 
 # use this to run
 run: $(OUTPUT)
