@@ -11,7 +11,7 @@
 using namespace std;
 
 const double NUM_MESSAGES = 10000;
-const double NUM_ITERATIONS = 100;
+const double NUM_ITERATIONS = 1000;
 
 void calcStatistics(vector<double> measurements);
 void outputToFile(vector<double> measurements);
@@ -124,7 +124,7 @@ void calcStatistics(vector<double> measurements)
     average = sum / NUM_ITERATIONS;
 
     // Output average
-    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES 
+    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES
          << " messages each, the average for one ping pong was "
          << average << " seconds." << endl;
 }
