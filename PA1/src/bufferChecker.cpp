@@ -96,6 +96,8 @@ int main(int argc, char *argv[])
 
         for (outerIndex = 0; outerIndex < MAX_INTEGERS; outerIndex++)
         {
+            int numbers[outerIndex];
+
             for (index = 0; index < NUM_MESSAGES; index++)
             {
                 // Receive the integer and send it back
