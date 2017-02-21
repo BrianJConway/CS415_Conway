@@ -4,24 +4,35 @@
 #include <iostream>
 #include "Timer.h"
 #include <iomanip>
+#include <algorithm>
+#include <fstream>
 
 using namespace std;
+
 const double NUM_MESSAGES = 10000;
+const double NUM_ITERATIONS = 100;
+
+void calcStatistics(vector<double> measurements);
+void outputToFile(vector<double> measurements);
 
 int main(int argc, char *argv[])
 {
+    // Initialization
     int numtasks, rank, dest, source, rc, tag = 1;
     int inmsg, outmsg = 1;
     MPI_Status Stat;
-    int index;
+    int index, outerIndex;
     Timer timer;
     double totalTime = 0;
     bool started = false;
+    vector<double> measurements;
 
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+        // Initialize MPI
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+    // Check if not enough tasks specified
     if (numtasks < 2)
     {
         cout << "Must specify at least two tasks. Terminating..." << endl;
@@ -29,51 +40,108 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
+    // Check if task 1
     if (rank == 0)
     {
+        // Check if more than 2 tasks specified
         if (numtasks > 2)
         {
-            printf("Numtasks=%d. Only 2 needed. Ignoring extra tasks...\n", numtasks);
+            cout << "Ignoring extra tasks..." << endl;
         }
 
         dest = 1;
         source = 1;
-
-        for (index = 0; index < NUM_MESSAGES; index++)
+        
+        for (outerIndex = 0; outerIndex < NUM_ITERATIONS; outerIndex++)
         {
-            if( !started )
+            for (index = 0; index < NUM_MESSAGES; index++)
             {
-                started = true;
-                timer.start();
-            }
-            else
-            {
-                timer.resume();
-            }
+                // Check if timer not started
+                if (!started)
+                {
+                    // Set flag and start timer
+                    started = true;
+                    timer.start();
+                }
+                // Otherwise, assume timer already started
+                else
+                {
+                    // Resume the timer
+                    timer.resume();
+                }
 
-            rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-            rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-            timer.stop();
+                // Send and receive the single integer
+                rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+                rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+
+                // Stop the timer
+                timer.stop();
+            }            measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
+
+            // Store time taken for single ping pong
+            measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
         }
     }
-
+    // Otherwise, check if rank 2
     else if (rank == 1)
     {
         dest = 0;
         source = 0;
 
-        for (index = 0; index < NUM_MESSAGES; index++)
-        {   
-            rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-            rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+        for (outerIndex = 0; outerIndex < NUM_ITERATIONS; outerIndex++)
+        {
+            for (index = 0; index < NUM_MESSAGES; index++)
+            {
+                // Receive the integer and send it back
+                rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+                rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+            }
         }
     }
 
+    // Check if rank 1 for calculations and output
     if (rank == 0)
     {
-        totalTime = timer.getElapsedTime();
-        cout << "Time: " << setprecision(6) << totalTime << endl;
+        calcStatistics(measurements);
     }
 
+    // Shut down
     MPI_Finalize();
+}
+
+void calcStatistics(vector<double> measurements)
+{
+    // Initialization
+    double average, sum = 0.0;
+
+    // Calculate average
+    for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
+    {
+        sum += *it;
+    }
+
+    average = sum / ITERATIONS;
+
+    // Output average
+    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES <<
+         << " messages each, the average for one ping pong was "
+         << average << " seconds." << endl;
+}
+
+void outputToFile(vector<double> measurements)
+{
+    // Initialization
+    ofstream fout;
+
+    // Open output file 
+    fout.open("measurements.csv");
+
+    // Output measurements to .csv file 
+    for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
+    {
+        fout << *it << ",";
+    }
+
+    // Close output file 
+    fout.close();
 }
