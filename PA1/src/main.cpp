@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     MPI_Status Stat;
     int index, outerIndex;
     Timer timer;
-    double totalTime = 0;
     bool started = false;
     vector<double> measurements;
 
