@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     if (rank == 0)
     {
-        totalTime = timer.getElapsedTime() / NUM_MESSAGES;
+        totalTime = timer.getElapsedTime();
         cout << "Time: " << setprecision(6) << totalTime << endl;
     }
 
