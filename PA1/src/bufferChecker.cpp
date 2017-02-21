@@ -12,26 +12,31 @@
 using namespace std;
 
 const double NUM_MESSAGES = 1000;
-const double NUM_ITERATIONS = 1000;
+const int MAX_INTEGERS = 1000;
 
-void calcStatistics(vector<double> measurements);
 void outputToFile(vector<double> measurements);
 
 int main(int argc, char *argv[])
 {
     // Initialization
     int numtasks, rank, dest, source, rc, tag = 1;
-    int inmsg, outmsg = 1;
     MPI_Status Stat;
     int index, outerIndex;
     Timer timer;
     bool started = false;
     vector<double> measurements;
+    int numbers[MAX_INTEGERS];
 
         // Initialize MPI
         MPI_Init(&argc, &argv);
         MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+        // Initialize array variables
+        for(index = 0; index < MAX_INTEGERS; index++ )
+        {
+            numbers[index] = 1;
+        }
 
     // Check if not enough tasks specified
     if (numtasks < 2)
@@ -52,8 +57,8 @@ int main(int argc, char *argv[])
 
         dest = 1;
         source = 1;
-        
-        for (outerIndex = 0; outerIndex < NUM_ITERATIONS; outerIndex++)
+
+        for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
             for (index = 0; index < NUM_MESSAGES; index++)
             {
@@ -71,13 +76,13 @@ int main(int argc, char *argv[])
                     timer.resume();
                 }
 
-                // Send and receive the single integer
-                rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
-                rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+                // Send and receive the integer(s)
+                rc = MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
+                rc = MPI_Recv(numbers, outerIndex, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
 
                 // Stop the timer
                 timer.stop();
-            }            measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
+            }            
 
             // Store time taken for single ping pong
             measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
@@ -89,56 +94,25 @@ int main(int argc, char *argv[])
         dest = 0;
         source = 0;
 
-        for (outerIndex = 0; outerIndex < NUM_ITERATIONS; outerIndex++)
+        for (outerIndex = 0; outerIndex < MAX_INTEGERS; outerIndex++)
         {
             for (index = 0; index < NUM_MESSAGES; index++)
             {
                 // Receive the integer and send it back
-                rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-                rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
+                rc = MPI_Recv(numbers, outerIndex, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+                rc = MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
             }
         }
     }
 
-    // Check if rank 1 for calculations and output
+    // Check if rank 1 and output
     if (rank == 0)
     {
-        calcStatistics(measurements);
         outputToFile(measurements);
     }
 
     // Shut down
     MPI_Finalize();
-}
-
-void calcStatistics(vector<double> measurements)
-{
-    // Initialization
-    double average, stdDev, sum = 0.0;
-    vector<double> squaredDistances;
-
-    // Calculate average
-    for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
-    {
-        sum += *it;
-    }
-
-    average = sum / NUM_ITERATIONS;
-
-    // Calculate standard deviation
-    sum = 0.0;
-    for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
-    {
-        sum += pow(*it - average, 2.0);
-    }
-
-    stdDev = sqrt(sum/NUM_ITERATIONS);
-
-    // Output average
-    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES
-         << " messages each, the average for one ping pong was "
-         << average << " seconds with a standard deviation of" 
-         << stdDev << " seconds." << endl;
 }
 
 void outputToFile(vector<double> measurements)
