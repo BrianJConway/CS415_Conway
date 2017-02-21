@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
         dest = 0;
         source = 0;
 
-        for (outerIndex = 0; outerIndex < MAX_INTEGERS; outerIndex++)
+        for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
             int numbers[outerIndex];
 
