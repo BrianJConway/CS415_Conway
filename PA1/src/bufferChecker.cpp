@@ -25,18 +25,11 @@ int main(int argc, char *argv[])
     Timer timer;
     bool started = false;
     vector<double> measurements;
-    int numbers[MAX_INTEGERS];
 
         // Initialize MPI
         MPI_Init(&argc, &argv);
         MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-        // Initialize array variables
-        for(index = 0; index < MAX_INTEGERS; index++ )
-        {
-            numbers[index] = 1;
-        }
 
     // Check if not enough tasks specified
     if (numtasks < 2)
@@ -60,6 +53,13 @@ int main(int argc, char *argv[])
 
         for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
+            // Initialize array variables
+            int numbers[outerIndex];
+            for (index = 0; index < outerIndex; index++)
+            {
+                numbers[index] = 1;
+            }
+
             for (index = 0; index < NUM_MESSAGES; index++)
             {
                 // Check if timer not started
