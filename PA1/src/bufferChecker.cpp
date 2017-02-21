@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const double NUM_MESSAGES = 1000;
+const double NUM_MESSAGES = 100;
 const int MAX_INTEGERS = 10000;
 
 void outputToFile(vector<double> measurements);
