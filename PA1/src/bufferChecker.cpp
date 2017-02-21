@@ -12,7 +12,7 @@
 using namespace std;
 
 const double NUM_MESSAGES = 1000;
-const int MAX_INTEGERS = 1000;
+const int MAX_INTEGERS = 10000;
 
 void outputToFile(vector<double> measurements);
 
