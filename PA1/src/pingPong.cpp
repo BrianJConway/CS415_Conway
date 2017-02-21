@@ -55,6 +55,9 @@ int main(int argc, char *argv[])
         
         for (outerIndex = 0; outerIndex < NUM_ITERATIONS; outerIndex++)
         {
+            // Reset timer 
+            started = false;
+            
             for (index = 0; index < NUM_MESSAGES; index++)
             {
                 // Check if timer not started

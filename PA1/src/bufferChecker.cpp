@@ -53,6 +53,9 @@ int main(int argc, char *argv[])
 
         for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
+            // Reset timer
+            started = false;
+            
             // Initialize array variables
             int numbers[outerIndex];
             for (index = 0; index < outerIndex; index++)
