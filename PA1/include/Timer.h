@@ -18,7 +18,7 @@ class Timer
     void start();
     void stop();
     void resume();
-    void getElapsedTime(char *timeStr);
+    double getElapsedTime();
 
   private:
     struct timeval startData, endData;

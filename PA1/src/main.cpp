@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     if (numtasks < 2)
     {
-        cout << "Must specify at least two tasks. Terminating..."
+        cout << "Must specify at least two tasks. Terminating..." << endl;
         MPI_Abort(MPI_COMM_WORLD, rc);
         exit(0);
     }
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     if (rank == 0)
     {
-        totalTime = timer.getElapsedTime(time) / NUM_MESSAGES;
+        totalTime = timer.getElapsedTime() / NUM_MESSAGES;
         cout << "Time: " << totalTime << endl;
     }
 
