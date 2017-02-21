@@ -10,6 +10,8 @@ INCLUDES=-I../include
 OUTPUT=mpi_pingPong
 OUTPUT2=mpi_bufferChecker
 
+all: pingPong bufferChecker
+
 pingPong: $(O_FILES1)
 	$(CC) $(CXXFLAGS) -o $(OUTPUT) $(O_FILES1) $(LIBS) #$(PATHI) $(PATHL)
 
