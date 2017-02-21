@@ -40,5 +40,5 @@ buffer: $(OUTPUT2)
 clean:
 	rm $(OUTPUT) 
 	rm $(OUTPUT2)
-    rm *.o 
+	rm *.o 
     
