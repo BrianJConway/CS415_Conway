@@ -129,7 +129,6 @@ void calcStatistics(vector<double> measurements)
     sum = 0.0;
     for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
     {
-        cout << *it - average;
         sum += pow(*it - average, 2.0);
     }
 
