@@ -3,6 +3,7 @@
 #include <time.h>
 #include <iostream>
 #include "Timer.h"
+#include <iomanip>
 
 using namespace std;
 const double NUM_MESSAGES = 10000;
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
     if (rank == 0)
     {
         totalTime = timer.getElapsedTime() / NUM_MESSAGES;
-        cout << "Time: " << totalTime << endl;
+        cout << "Time: " << setprecision(6) << totalTime << endl;
     }
 
     MPI_Finalize();
