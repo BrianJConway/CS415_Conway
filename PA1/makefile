@@ -38,4 +38,7 @@ buffer: $(OUTPUT2)
 	srun -N2 $(OUTPUT2)
 
 clean:
-	-@if rm $(OUTPUT) 2>/dev/null || true; then echo "Cleaned"; else echo "Nothing to clean"; fi
+	rm $(OUTPUT) 
+	rm $(OUTPUT2)
+    rm *.o 
+    
