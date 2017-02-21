@@ -121,10 +121,10 @@ void calcStatistics(vector<double> measurements)
         sum += *it;
     }
 
-    average = sum / ITERATIONS;
+    average = sum / NUM_ITERATIONS;
 
     // Output average
-    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES <<
+    cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES 
          << " messages each, the average for one ping pong was "
          << average << " seconds." << endl;
 }
