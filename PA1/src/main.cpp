@@ -5,6 +5,7 @@
 #include "Timer.h"
 
 using namespace std;
+const double NUM_MESSAGES = 10000;
 
 int main(int argc, char *argv[])
 {
@@ -13,8 +14,7 @@ int main(int argc, char *argv[])
     MPI_Status Stat;
     int index;
     Timer timer;
-    double t1, t2, totalTime = 0;
-    char time[11];
+    double totalTime = 0;
     bool started = false;
 
     MPI_Init(&argc, &argv);
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     if (numtasks < 2)
     {
-        printf("ERROR: Must specify two tasks!  Quitting...\n");
+        cout << "Must specify at least two tasks. Terminating..."
         MPI_Abort(MPI_COMM_WORLD, rc);
         exit(0);
     }
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         dest = 1;
         source = 1;
 
-        for (index = 0; index < 10000; index++)
+        for (index = 0; index < NUM_MESSAGES; index++)
         {
             if( !started )
             {
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         dest = 0;
         source = 0;
 
-        for (index = 0; index < 10000; index++)
+        for (index = 0; index < NUM_MESSAGES; index++)
         {   
             rc = MPI_Recv(&inmsg, 1, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
             rc = MPI_Send(&outmsg, 1, MPI_INT, dest, tag, MPI_COMM_WORLD);
@@ -70,9 +70,8 @@ int main(int argc, char *argv[])
 
     if (rank == 0)
     {
-        timer.getElapsedTime(time);
-
-        cout << "Timeval: " << time << endl;
+        totalTime = timer.getElapsedTime(time) / NUM_MESSAGES;
+        cout << "Time: " << totalTime << endl;
     }
 
     MPI_Finalize();
