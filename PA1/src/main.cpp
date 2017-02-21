@@ -137,7 +137,7 @@ void calcStatistics(vector<double> measurements)
     // Output average
     cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES
          << " messages each, the average for one ping pong was "
-         << average << " seconds with a standard deviation of" 
+         << average << " seconds with a standard deviation of " 
          << stdDev << " seconds." << endl;
 }
 
