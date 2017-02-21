@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const double NUM_MESSAGES = 100;
+const double NUM_MESSAGES = 500;
 const double NUM_ITERATIONS = 1000;
 
 void calcStatistics(vector<double> measurements);
