@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const double NUM_MESSAGES = 10000;
+const double NUM_MESSAGES = 1000;
 const double NUM_ITERATIONS = 1000;
 
 void calcStatistics(vector<double> measurements);
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
                 // Stop the timer
                 timer.stop();
-            }            
+            }            measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
 
             // Store time taken for single ping pong
             measurements.push_back(timer.getElapsedTime() / NUM_MESSAGES);
