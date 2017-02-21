@@ -126,9 +126,10 @@ void calcStatistics(vector<double> measurements)
     average = sum / NUM_ITERATIONS;
 
     // Calculate standard deviation
-    for( vector<double>::iterator it = measurements.begin(), sum = 0; it != measurements.end(); it++ )
+    sum = 0.0;
+    for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
     {
-        sum += pow(*it - average, 2.0));
+        sum += pow(*it - average, 2.0);
     }
 
     stdDev = sqrt(sum/NUM_ITERATIONS);
