@@ -49,6 +49,6 @@ double Timer::getElapsedTime()
     {
         seconds = endData.tv_sec - startData.tv_sec;
         microSeconds = endData.tv_usec - startData.tv_usec;
-        return = (double)seconds + (double)microSeconds / 1000000;
+        return (double)seconds + (double)microSeconds / 1000000;
     }
 }
