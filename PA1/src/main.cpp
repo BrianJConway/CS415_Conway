@@ -113,7 +113,8 @@ int main(int argc, char *argv[])
 void calcStatistics(vector<double> measurements)
 {
     // Initialization
-    double average, sum = 0.0;
+    double average, stdDev, sum = 0.0;
+    vector<double> squaredDistances;
 
     // Calculate average
     for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
@@ -123,10 +124,19 @@ void calcStatistics(vector<double> measurements)
 
     average = sum / NUM_ITERATIONS;
 
+    // Calculate standard deviation
+    for( vector<double>::iterator it = measurements.begin(), sum = 0; it != measurements.end(); it++ )
+    {
+        sum += pow(*it - average, 2.0));
+    }
+
+    stdDev = sqrt(sum/NUM_ITERATIONS);
+
     // Output average
     cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES
          << " messages each, the average for one ping pong was "
-         << average << " seconds." << endl;
+         << average << " seconds with a standard deviation of" 
+         << stdDev << " seconds." << endl;
 }
 
 void outputToFile(vector<double> measurements)
