@@ -45,12 +45,6 @@ void Timer::resume()
 
 void Timer::getElapsedTime(char *timeStr)
 {
-    cout << "Seconds: " << seconds << endl << "MicroSeconds: " << microSeconds << endl;
-      
-    totalTime =  (double) seconds + (double) microSeconds / 1000000;
-
-    cout << "Total: " << setprecision(6) << totalTime;
-
     int low, high, index = 0;
     char temp;
 
@@ -58,6 +52,12 @@ void Timer::getElapsedTime(char *timeStr)
     {
         seconds = endData.tv_sec - startData.tv_sec;
         microSeconds = endData.tv_usec - startData.tv_usec;
+
+            cout << "Seconds: " << seconds << endl << "MicroSeconds: " << microSeconds << endl;
+      
+    totalTime =  (double) seconds + (double) microSeconds / 1000000;
+
+    cout << "Total: " << setprecision(6) << totalTime;
 
         if (microSeconds < 0)
         {
