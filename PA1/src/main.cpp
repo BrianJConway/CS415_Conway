@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
