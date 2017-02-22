@@ -24,7 +24,7 @@ pingPong.o: src/pingPong.cpp
 bufferChecker.o: src/bufferChecker.cpp
 	$(CC) $(CXXFLAGS) -c src/bufferChecker.cpp -o bufferChecker.o $(INCLUDES)
 
-Timer.o: ../src/Timer.cpp
+Timer.o: src/Timer.cpp
 	$(CC) $(CXXFLAGS) -c src/Timer.cpp -o Timer.o $(INCLUDES)
 
 # use this to run
