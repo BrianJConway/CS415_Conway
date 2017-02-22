@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # running
 make oneBox
 # be sure to add more commands from your makefile here
