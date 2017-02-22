@@ -41,5 +41,5 @@ clean:
 	rm $(OUTPUT) 
 	rm $(OUTPUT2)
 	rm *.o 
-    rm *.out
+	rm *.out
     
