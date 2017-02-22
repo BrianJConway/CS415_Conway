@@ -6,7 +6,7 @@ LIBS=-lpmi
 O_FILES1=pingPong.o Timer.o 
 O_FILES2=bufferChecker.o Timer.o 
 # uncomment below if/when you have a folder called include that holds potential header files
-INCLUDES=-I../include
+INCLUDES=-I include
 OUTPUT=mpi_pingPong
 OUTPUT2=mpi_bufferChecker
 
