@@ -18,14 +18,14 @@ pingPong: $(O_FILES1)
 bufferChecker: $(O_FILES2)
 	$(CC) $(CXXFLAGS) -o $(OUTPUT2) $(O_FILES2) $(LIBS) #$(PATHI) $(PATHL)
 
-pingPong.o: ../src/pingPong.cpp
-	$(CC) $(CXXFLAGS) -c ../src/pingPong.cpp -o pingPong.o $(INCLUDES)
+pingPong.o: src/pingPong.cpp
+	$(CC) $(CXXFLAGS) -c src/pingPong.cpp -o pingPong.o $(INCLUDES)
 
-bufferChecker.o: ../src/bufferChecker.cpp
-	$(CC) $(CXXFLAGS) -c ../src/bufferChecker.cpp -o bufferChecker.o $(INCLUDES)
+bufferChecker.o: src/bufferChecker.cpp
+	$(CC) $(CXXFLAGS) -c src/bufferChecker.cpp -o bufferChecker.o $(INCLUDES)
 
 Timer.o: ../src/Timer.cpp
-	$(CC) $(CXXFLAGS) -c ../src/Timer.cpp -o Timer.o $(INCLUDES)
+	$(CC) $(CXXFLAGS) -c src/Timer.cpp -o Timer.o $(INCLUDES)
 
 # use this to run
 oneBox: $(OUTPUT)
