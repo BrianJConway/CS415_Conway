@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
 {
     // Initialization
-    double average, stdDev, sum = 0.0;
+    double sum = 0.0;
     vector<double> squaredDistances;
 
     // Calculate average
@@ -127,13 +127,13 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
         sum += *it;
     }
 
-    average = sum / NUM_ITERATIONS;
+    avg = sum / NUM_ITERATIONS;
 
     // Calculate standard deviation
     sum = 0.0;
     for( vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++ )
     {
-        sum += pow(*it - average, 2.0);
+        sum += pow(*it - avg, 2.0);
     }
 
     stdDev = sqrt(sum/NUM_ITERATIONS);
@@ -141,7 +141,7 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
     // Output results
     cout << "For " << NUM_ITERATIONS << " iterations of " << NUM_MESSAGES
          << " messages each, the average for one ping pong was "
-         << average << " seconds with a standard deviation of " 
+         << avg << " seconds with a standard deviation of " 
          << stdDev << " seconds." << endl;
 }
 
@@ -154,7 +154,7 @@ void outputToFile(vector<double> measurements, double avg, double stdDev)
     fout.open("measurements.csv");
 
     // Output statistics 
-    cout << average << endl
+    cout << avg << endl
          << stdDev << endl;
 
     // Output measurements to .csv file 

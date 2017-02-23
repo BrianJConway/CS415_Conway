@@ -51,4 +51,6 @@ double Timer::getElapsedTime()
         microSeconds = endData.tv_usec - startData.tv_usec;
         return (double)seconds + (double)microSeconds / 1000000;
     }
+
+    return 0;
 }
