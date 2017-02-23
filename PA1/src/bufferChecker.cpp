@@ -19,8 +19,8 @@ void outputToFile(vector<double> measurements);
 int main(int argc, char *argv[])
 {
     // Initialization
-    int numtasks, rank, dest, source, rc, tag = 1;
-    MPI_Status Stat;
+    int numTasks, rank, dest, src, tag = 1;
+    MPI_Status status;
     int index, outerIndex;
     Timer timer;
     bool started = false;
@@ -28,28 +28,28 @@ int main(int argc, char *argv[])
 
         // Initialize MPI
         MPI_Init(&argc, &argv);
-        MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+        MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     // Check if not enough tasks specified
-    if (numtasks < 2)
+    if (numTasks < 2)
     {
         cout << "Must specify at least two tasks. Terminating..." << endl;
-        MPI_Abort(MPI_COMM_WORLD, rc);
-        exit(0);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+        return 0;
     }
 
     // Check if task 1
     if (rank == 0)
     {
         // Check if more than 2 tasks specified
-        if (numtasks > 2)
+        if (numTasks > 2)
         {
             cout << "Ignoring extra tasks..." << endl;
         }
 
         dest = 1;
-        source = 1;
+        src = 1;
 
         for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
@@ -80,8 +80,8 @@ int main(int argc, char *argv[])
                 }
 
                 // Send and receive the integer(s)
-                rc = MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
-                rc = MPI_Recv(numbers, outerIndex, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
+                MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
+                MPI_Recv(numbers, outerIndex, MPI_INT, src, tag, MPI_COMM_WORLD, &status);
 
                 // Stop the timer
                 timer.stop();
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     else if (rank == 1)
     {
         dest = 0;
-        source = 0;
+        src = 0;
 
         for (outerIndex = 1; outerIndex < MAX_INTEGERS + 1; outerIndex++)
         {
@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
             for (index = 0; index < NUM_MESSAGES; index++)
             {
                 // Receive the integer and send it back
-                rc = MPI_Recv(numbers, outerIndex, MPI_INT, source, tag, MPI_COMM_WORLD, &Stat);
-                rc = MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
+                MPI_Recv(numbers, outerIndex, MPI_INT, src, tag, MPI_COMM_WORLD, &status);
+                MPI_Send(numbers, outerIndex, MPI_INT, dest, tag, MPI_COMM_WORLD);
             }
         }
     }

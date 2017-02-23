@@ -2,12 +2,8 @@
 #define TIMER_H
 
 #include <sys/time.h>
-#include <cstring>
 
 using namespace std;
-
-const char NULL_CHAR = '\0';
-const char RADIX_POINT = '.';
 
 class Timer
 {
