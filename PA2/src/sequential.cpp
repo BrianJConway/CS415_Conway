@@ -35,6 +35,12 @@ int main(int argc, char *argv[])
     Timer timer;
     int rowIndex, colIndex, color;
     unsigned char colors[INT_WIDTH][INT_HEIGHT];
+    int w = INT_WIDTH;
+    int h = INT_HEIGHT;
+    char** c = colors;
+    char f[10] = "a";
+    char *fPtr = f;
+
     Complex c;
 
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -51,7 +57,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    pim_write_black_and_white("a", INT_WIDTH, INT_HEIGHT, colors);
+    pim_write_black_and_white(fptr, w, h, c);
 }
 
 int cal_pixel(Complex c)
