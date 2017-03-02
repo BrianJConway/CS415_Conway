@@ -18,7 +18,7 @@ mpi_sequential: $(O_FILES1)
 # bufferChecker: $(O_FILES2)
 #	$(CC) $(CXXFLAGS) -o $(OUTPUT2) $(O_FILES2) $(LIBS) #$(PATHI) $(PATHL)
 
-mpi_sequential.o: src/mpi_sequential.cpp
+mpi_sequential.o: src/sequential.cpp
 	$(CC) $(CXXFLAGS) -c src/sequential.cpp -o mpi_sequential.o $(INCLUDES)
 
 #bufferChecker.o: src/bufferChecker.cpp
