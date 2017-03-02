@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     unsigned char colors[INT_WIDTH][INT_HEIGHT];
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
-    char** c = colors;
+    const unsigned char** c = colors;
     char f[10] = "a";
     char *fPtr = f;
 
