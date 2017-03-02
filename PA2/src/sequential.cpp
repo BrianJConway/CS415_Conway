@@ -2,16 +2,12 @@
 #include <cstdlib>
 #include <time.h>
 #include <iostream>
-#include "Timer.h"
-#include <iomanip>
-#include <algorithm>
 #include <fstream>
-#include <vector>
-#include <cmath>
-#include <limits>
+
+#include "Timer.h"
+#include "PIMFuncs.h"
 
 using namespace std;
-
 
 const float IMG_WIDTH = 640;
 const float IMG_HEIGHT = 480;
@@ -28,13 +24,14 @@ struct Complex
     float imag;
 }
 
-int cal_pixel(complex c);
+int cal_pixel(Complex c);
 
 int main(int argc, char *argv[])
 {
     // Initialization
     Timer timer;
-    int rowIndex, colIndex;
+    int rowIndex, colIndex, color;
+    int colors[IMG_WIDTH][IMG_HEIGHT];
     Complex c;
 
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -45,11 +42,16 @@ int main(int argc, char *argv[])
         for( colIndex = 0; colIndex < IMG_HEIGHT; colIndex++ )
         {
             c.real = REAL_MIN + ((float) rowIndeX + scale_real);
+            c.imag = IMAG_MIN + ((float) colIndeX + scale_imag);
+
+            colors[rowIndex][colIndex] = cal_pixel(c);
         }
     }
+
+    pim_write_black_and_white("a", IMG_WIDTH, IMG_HEIGHT, colors);
 }
 
-int cal_pixel(complex c)
+int cal_pixel(Complex c)
 {
     int count, max;
     complex z;
