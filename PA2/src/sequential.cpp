@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    pim_write_black_and_white("a", IMG_WIDTH, IMG_HEIGHT, colors);
+    pim_write_black_and_white("a", INT_WIDTH, INT_HEIGHT, colors);
 }
 
 int cal_pixel(Complex c)
