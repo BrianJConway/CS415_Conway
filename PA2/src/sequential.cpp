@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     // Initialization
     Timer timer;
     int rowIndex, colIndex, color;
-    int colors[IMG_WIDTH][IMG_HEIGHT];
+    char colors[IMG_WIDTH][IMG_HEIGHT];
     Complex c;
 
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 int cal_pixel(Complex c)
 {
     int count, max;
-    complex z;
+    Complex z;
     float temp, lengthsq;
     max = 256;
     z.real = 0;
