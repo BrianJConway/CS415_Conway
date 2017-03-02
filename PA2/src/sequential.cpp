@@ -34,18 +34,18 @@ int main(int argc, char *argv[])
     // Initialization
     Timer timer;
     int rowIndex, colIndex, color;
-    char colors[INT_WIDTH][INT_HEIGHT];
+    unsigned char colors[INT_WIDTH][INT_HEIGHT];
     Complex c;
 
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
     float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
 
-    for( rowIndex = 0; rowIndex < IMG_WIDTH; rowIndeX++ )
+    for( rowIndex = 0; rowIndex < IMG_WIDTH; rowIndex++ )
     {
         for( colIndex = 0; colIndex < IMG_HEIGHT; colIndex++ )
         {
-            c.real = REAL_MIN + ((float) rowIndeX + scale_real);
-            c.imag = IMAG_MIN + ((float) colIndeX + scale_imag);
+            c.real = REAL_MIN + ((float) rowIndex + scale_real);
+            c.imag = IMAG_MIN + ((float) colIndex + scale_imag);
 
             colors[rowIndex][colIndex] = cal_pixel(c);
         }
