@@ -12,6 +12,9 @@ using namespace std;
 const float IMG_WIDTH = 640;
 const float IMG_HEIGHT = 480;
 
+const int INT_WIDTH = IMG_WIDTH;
+const int INT_HEIGHT = IMG_HEIGHT;
+
 const float REAL_MIN = -2;
 const float REAL_MAX = 2;
 
@@ -22,7 +25,7 @@ struct Complex
 {
     float real;
     float imag;
-}
+};
 
 int cal_pixel(Complex c);
 
@@ -31,7 +34,7 @@ int main(int argc, char *argv[])
     // Initialization
     Timer timer;
     int rowIndex, colIndex, color;
-    char colors[IMG_WIDTH][IMG_HEIGHT];
+    char colors[INT_WIDTH][INT_HEIGHT];
     Complex c;
 
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
