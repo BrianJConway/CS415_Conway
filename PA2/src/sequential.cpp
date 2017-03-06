@@ -41,8 +41,6 @@ int main(int argc, char *argv[])
         colors[index] = new unsigned char[INT_HEIGHT];
     }
 
-    cout << "hey" << endl;
-
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
     char f[10] = "a";
@@ -64,7 +62,7 @@ int main(int argc, char *argv[])
         }
     }
    
-    pim_write_black_and_white(fPtr, w, h, colors);
+    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) ,macolors);
 }
 
 int cal_pixel(Complex c)
