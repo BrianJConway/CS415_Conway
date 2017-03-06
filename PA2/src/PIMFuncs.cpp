@@ -10,7 +10,7 @@
 bool pim_write_black_and_white(const char *const fileName,
                                const int width,
                                const int height,
-                               const unsigned char *pixels)
+                               unsigned char *pixels)
 {
     FILE *fp = fopen(fileName, WRITE_FLAGS);
 
@@ -26,7 +26,7 @@ bool pim_write_black_and_white(const char *const fileName,
 bool pim_write_black_and_white(const char *const fileName,
                                const int width,
                                const int height,
-                               const unsigned char **pixels)
+                               unsigned char **pixels)
 {
     int i;
     bool ret;

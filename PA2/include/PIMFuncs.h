@@ -4,12 +4,12 @@
 bool pim_write_black_and_white(const char *const fileName,
                                const int width,
                                const int height,
-                               const unsigned char *pixels);
+                               unsigned char *pixels);
 
 bool pim_write_black_and_white(const char *const fileName,
                                const int width,
                                const int height,
-                               const unsigned char **pixels);
+                               unsigned char **pixels);
 
 bool pim_write_color(const char *const fileName,
                      const int width,

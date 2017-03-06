@@ -33,11 +33,16 @@ int main(int argc, char *argv[])
 {
     // Initialization
     Timer timer;
-    int rowIndex, colIndex, color;
-    unsigned char colors[INT_WIDTH][INT_HEIGHT];
+    int rowIndex, colIndex;
+    unsigned char** colors = new unsigned char*[INT_WIDTH];
+
+    for(int index = 0; index < INT_HEIGHT; index++ )
+    {
+        colors[index] = new unsigned char[INT_HEIGHT];
+    }
+
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
-    const unsigned char** co = colors;
     char f[10] = "a";
     char *fPtr = f;
 
@@ -57,7 +62,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    pim_write_black_and_white(fPtr, w, h, co);
+    pim_write_black_and_white(fPtr, w, h, colors);
 }
 
 int cal_pixel(Complex c)
