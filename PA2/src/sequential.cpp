@@ -34,11 +34,11 @@ int main(int argc, char *argv[])
     // Initialization
     Timer timer;
     int rowIndex, colIndex;
-    unsigned char** colors = new unsigned char*[INT_WIDTH];
+    unsigned char** colors = new unsigned char*[INT_HEIGHT];
 
     for(int index = 0; index < INT_HEIGHT; index++ )
     {
-        colors[index] = new unsigned char[INT_HEIGHT];
+        colors[index] = new unsigned char[INT_WIDTH];
     }
 
     int w = INT_WIDTH;
@@ -51,12 +51,12 @@ int main(int argc, char *argv[])
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
     float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
 
-    for( rowIndex = 0; rowIndex < IMG_WIDTH; rowIndex++ )
+    for( rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++ )
     {
 
         cout << "ROW: " << rowIndex << endl;
 
-        for( colIndex = 0; colIndex < IMG_HEIGHT; colIndex++ )
+        for( colIndex = 0; colIndex < IMG_WIDTH; colIndex++ )
         {
             cout << "COL: " << colIndex << endl;
             
