@@ -86,6 +86,8 @@ int cal_pixel(Complex c)
         lengthsq = z.real * z.real + z.imag * z.imag;
         count++;
     } while ((lengthsq < 4.0) && (count < max));
+
+        cout << count << endl;
+
     return count;
-    cout << count << endl;
 }
