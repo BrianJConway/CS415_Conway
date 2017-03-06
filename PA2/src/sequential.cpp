@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    cout << "hey" << endl;
+    
     pim_write_black_and_white(fPtr, w, h, colors);
 }
 
