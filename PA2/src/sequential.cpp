@@ -53,12 +53,11 @@ int main(int argc, char *argv[])
 
     for( rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++ )
     {
-
-        cout << "ROW: " << rowIndex << endl;
+        //cout << "ROW: " << rowIndex << endl;
 
         for( colIndex = 0; colIndex < IMG_WIDTH; colIndex++ )
         {
-            cout << "COL: " << colIndex << endl;
+            //cout << "COL: " << colIndex << endl;
             
             c.real = REAL_MIN + ((float) rowIndex + scale_real);
             c.imag = IMAG_MIN + ((float) colIndex + scale_imag);
@@ -88,4 +87,5 @@ int cal_pixel(Complex c)
         count++;
     } while ((lengthsq < 4.0) && (count < max));
     return count;
+    cout << count << endl;
 }
