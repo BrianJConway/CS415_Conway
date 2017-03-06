@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         }
     }
    
-    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) ,macolors);
+    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
 }
 
 int cal_pixel(Complex c)
