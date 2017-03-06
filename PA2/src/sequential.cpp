@@ -63,7 +63,10 @@ int main(int argc, char *argv[])
             c.imag = IMAG_MIN + ((float) colIndex + scale_imag);
 
             colors[rowIndex][colIndex] = cal_pixel(c);
+            cout << colors[rowIndex][colIndex] << " ";
         }
+
+        cout << endl;
     }
    
     pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
@@ -86,8 +89,6 @@ int cal_pixel(Complex c)
         lengthsq = z.real * z.real + z.imag * z.imag;
         count++;
     } while ((lengthsq < 4.0) && (count < max));
-
-        cout << count << endl;
 
     return count;
 }
