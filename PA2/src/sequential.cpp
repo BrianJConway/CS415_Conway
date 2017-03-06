@@ -51,16 +51,14 @@ int main(int argc, char *argv[])
     float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
     float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
 
-    cout << "Hey" << endl;
-
     for( rowIndex = 0; rowIndex < IMG_WIDTH; rowIndex++ )
     {
 
-        cout << "Hey2" << endl;
+        cout << "ROW: " << rowIndex << endl;
 
         for( colIndex = 0; colIndex < IMG_HEIGHT; colIndex++ )
         {
-            cout << "Hey3" << endl;
+            cout << "COL: " << colIndex << endl;
             
             c.real = REAL_MIN + ((float) rowIndex + scale_real);
             c.imag = IMAG_MIN + ((float) colIndex + scale_imag);
