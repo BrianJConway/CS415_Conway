@@ -15,11 +15,11 @@ const float IMG_HEIGHT = 480;
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
 
-const float REAL_MIN = -2;
-const float REAL_MAX = 2;
+const float REAL_MIN = -1.5;
+const float REAL_MAX = 0.0;
 
-const float IMAG_MIN = -2;
-const float IMAG_MAX = 2;
+const float IMAG_MIN = -1.0;
+const float IMAG_MAX = 1.0;
 
 struct Complex
 {
