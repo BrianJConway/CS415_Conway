@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
             c.imag = IMAG_MIN + ((float) colIndex + scale_imag);
 
             colors[rowIndex][colIndex] = cal_pixel(c);
-            cout << ((int) colors[rowIndex][colIndex] << " ";
+            cout << (int) colors[rowIndex][colIndex] << " ";
         }
 
         cout << endl;
