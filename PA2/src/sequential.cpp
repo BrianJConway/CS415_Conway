@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
         {
             //cout << "COL: " << colIndex << endl;
             
-            c.real = REAL_MIN + colIndex * ((float) rowIndex + scale_real);
-            c.imag = IMAG_MIN + rowIndex * ((float) colIndex + scale_imag);
+            c.real = REAL_MIN + ((float) rowIndex * scale_real);
+            c.imag = IMAG_MIN + ((float) colIndex * scale_imag);
 
             colors[rowIndex][colIndex] = cal_pixel(c);
             cout << (int) colors[rowIndex][colIndex] << " ";
