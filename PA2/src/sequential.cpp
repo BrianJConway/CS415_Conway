@@ -9,8 +9,8 @@
 
 using namespace std;
 
-const float IMG_WIDTH = 640;
-const float IMG_HEIGHT = 480;
+const float IMG_WIDTH = 1920;
+const float IMG_HEIGHT = 1080;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
