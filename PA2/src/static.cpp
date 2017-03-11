@@ -19,7 +19,7 @@ const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
 
 const float REAL_MIN = -2.0;
-const float REAL_MAX = 2.0;
+const float REAL_MAX = 2.0;s
 
 const float IMAG_MIN = -2.0;
 const float IMAG_MAX = 2.0;
@@ -38,9 +38,12 @@ int main(int argc, char *argv[])
 {
     // Initialization
     Timer timer;
-    int rowIndex, colIndex, index;
+    int numTasks, rank, dest, src, tag = 1;
+    int inmsg, outmsg = 1;
+    int rowIndex, colIndex, index, procNum, rowsToSend;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
+    MPI_Status status;
     double average, stdDev;
     char f[10] = "image.pim";
     char *fPtr = f;
@@ -55,21 +58,53 @@ int main(int argc, char *argv[])
             colors[index] = new unsigned char[INT_WIDTH];
         }
 
-    // Scale image based on coordinates of rea/imaginary plane
-    float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
-    float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
+        // Initialize MPI
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    // Loop specified amount of times to get measurements
-    for(index = 0; index < NUM_MEASUREMENTS; index++)
-       {
-        // Start the timer
-        timer.start();
-
-        // Loop through all rows of the image
-        for( rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++ )
+        // Check for proper number of tasks/proper number of rows
+        if( numTasks < 2 || IMG_HEIGHT % ( (float) numTasks - 1.0 ) != 0 )
         {
-            // Loop through each pixel of the current row
-            for( colIndex = 0; colIndex < IMG_WIDTH; colIndex++ )
+            cout << "Improper number of tasks. Terminating..." << endl;
+            MPI_Abort(MPI_COMM_WORLD, 1);
+            return 0;
+        }
+
+        // Calculate number of rows to send to each processor
+        rowsTosend = IMG_HEIGHT / (numTasks - 1);
+
+        // Scale image based on coordinates of rea/imaginary plane
+        float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
+        float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
+
+    // Check if task 1
+    if (rank == 0)
+    {
+        // Loop specified amount of times to get measurements
+        for(index = 0; index < NUM_MEASUREMENTS; index++)
+        {
+            // Start the timer
+            timer.start();
+
+            // Loop through all rows of the image
+            for( rowIndex = 0, rocNum = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
+            {
+                cout << rowIndex << endl;
+            }
+            // end row loop
+
+            // Stop the timer and store the time
+            timer.stop();
+            timings.push_back(timer.getElapsedTime());
+        }
+        // end outer loop
+    }
+    // Otherwise, assume not task 1
+    else
+    {
+        // Loop through each pixel of the current row
+        for( colIndex = 0; colIndex < IMG_WIDTH; colIndex++ )
             {            
                 // Calculate current pixel's color
                 c.real = REAL_MIN + ((float) colIndex * scale_real);
@@ -78,20 +113,13 @@ int main(int argc, char *argv[])
                 colors[rowIndex][colIndex] = cal_pixel(c);
             }
             // end pixel loop
-        }
-        // end row loop
-
-        // Stop the timer and store the time
-        timer.stop();
-        timings.push_back(timer.getElapsedTime());
-       }
-    // end outer loop
+    }
 
     // Calculate statistics of timings
-    calcStatistics(timings, average, stdDev);
+//    calcStatistics(timings, average, stdDev);
 
     // Write pixel colors to file
-    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
+//    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
 }
 
 void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
