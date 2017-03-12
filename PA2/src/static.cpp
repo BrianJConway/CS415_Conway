@@ -110,10 +110,12 @@ cout << "Sending row " << rowIndex << " to process " << procNum << endl;
                     // Receive computed rows from any process
                     MPI_Recv(setOfRows, 1, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
 
-cout << "Master got rows from " << status.MPI_SOURCE << endl;
+                    startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
+
+cout << "Master got rows from " << status.MPI_SOURCE << "starting row is, " << startingRow << endl;
 
                     // Copy rows to 2D array of colors
-                    for(currentRow = (status.MPI_SOURCE - 1) * rowsToSend; currentRow < currentRow + rowsToSend; currentRow++ )
+                    for(currentRow = startingRow; currentRow < startingRow + rowsToSend; currentRow++ )
                     {
                         for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                         {  
