@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
         // Check for proper number of tasks/proper number of rows
-        if( numTasks < 2 || IMG_HEIGHT % (float)(numTasks - 1) != 0 )
+        if( numTasks < 2 || IMG_HEIGHT % (const float)(numTasks - 1) != 0 )
         {
             cout << "Improper number of tasks. Terminating..." << endl;
             MPI_Abort(MPI_COMM_WORLD, 1);
