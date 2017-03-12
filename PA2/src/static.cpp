@@ -77,6 +77,8 @@ int main(int argc, char *argv[])
         // Calculate number of rows to send to each processor
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
+
+if(rank == 0)
 cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
 
         // Scale image based on coordinates of rea/imaginary plane
@@ -131,7 +133,7 @@ cout << "Master got rows from " << status.MPI_SOURCE << endl;
         // Receive initial row number
         MPI_Recv(&rowIndex, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + rowsToSend << endl;
+cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + rowsToSend - 1 << endl;
 
         // Loop through rows to calculate 
         for(; rowIndex < rowIndex + rowsToSend; rowIndex++)
@@ -151,6 +153,7 @@ cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + ro
 
         // Send finished rows back 
         MPI_Send(setOfRows, 1, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
+cout << "Process " << rank << " finished and sent back rows " << endl;
     }
 
     // Calculate statistics of timings
