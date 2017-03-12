@@ -144,7 +144,7 @@ cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + ro
                         c.real = REAL_MIN + ((float) pixelIndex * scale_real);
                         c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
             
-cout << "Process " << rank << " doing row " << rowIndex << " pixel " << pixelIndex;
+cout << "Process " << rank << " doing row " << rowIndex << " pixel " << pixelIndex << endl;
 
                         setOfRows[pixelIndex] = cal_pixel(c);
                     }
