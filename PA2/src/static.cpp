@@ -122,6 +122,7 @@ cout << "Master got rows from " << status.MPI_SOURCE << "starting row is, " << s
                             colors[currentRow][pixelIndex] = setOfRows[rowIndex * INT_WIDTH + pixelIndex];
                         }   
                     }
+cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
                 }
 
                 // Stop the timer and store the time
