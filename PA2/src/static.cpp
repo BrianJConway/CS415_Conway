@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
         // Calculate number of rows to send to each processor
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
-        unsigned char setOfRows[IMG_WIDTH * rowsToSend];
+        unsigned char setOfRows[INT_WIDTH * rowsToSend];
 
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     else
     {
         // Receive initial row number
-        MPI_Recv(&rowIndex, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+        MPI_Recv(&rowIndex, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
         // Loop through rows to calculate 
         for(; rowIndex < rowIndex + rowsToSend; rowIndex++)
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
             // end row loop
 
         // Send finished rows back 
-        MPI_Send(setOfRows, 1, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD, &status);
+        MPI_Send(setOfRows, 1, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
     }
 
     // Calculate statistics of timings
