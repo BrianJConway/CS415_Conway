@@ -11,10 +11,11 @@
 
 using namespace std;
 
+const int NUM_MEASUREMENTS = 10;
+
 const float IMG_WIDTH = 500;
 const float IMG_HEIGHT = 500;
 
-const int NUM_MEASUREMENTS = 10;
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
 
@@ -67,7 +68,7 @@ int main(int argc, char *argv[])
         // Check for proper number of tasks/proper number of rows
         if( numTasks < 2 || fmod(height, (float)(numTasks - 1)) != 0 )
         {
-            cout << numTasks << endl << fmod(height, (float)(numTasks - 1)) << endl << "Improper number of tasks. Terminating..." << endl;
+            cout << "Improper number of tasks. Terminating..." << endl;
             MPI_Abort(MPI_COMM_WORLD, 1);
             return 0;
         }
