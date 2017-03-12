@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     Timer timer;
     int numTasks, rank, dest, src, tag = 1;
     int inmsg, outmsg = 1;
-    int rowIndex, colIndex, index, procNum, rowsToSend;
+    int rowIndex, colIndex, index, procNum, rowsToSend, rowNum;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
     MPI_Status status;
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
         // Check for proper number of tasks/proper number of rows
-        if( numTasks < 2 || ((IMG_HEIGHT % ( (float) numTasks - 1.0 )) != 0) )
+        if( numTasks < 2 || ((IMG_HEIGHT % ( (float) numTasks - 1 )) != 0) )
         {
             cout << "Improper number of tasks. Terminating..." << endl;
             MPI_Abort(MPI_COMM_WORLD, 1);
