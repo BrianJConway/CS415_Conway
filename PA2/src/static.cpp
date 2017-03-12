@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
         // Calculate number of rows to send to each processor
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
+cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl
 
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -95,6 +96,7 @@ int main(int argc, char *argv[])
             for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
             {
                 // Send current row to corresponding process
+cout << "Sending row " << rowIndex << " to process " << procNum << endl;
                 MPI_Send(&rowIndex, 1, MPI_INT, procNum, tag, MPI_COMM_WORLD);
             }
             // end row loop
@@ -104,7 +106,9 @@ int main(int argc, char *argv[])
             {
                 // Receive computed rows from any process
                 MPI_Recv(setOfRows, 1, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
-                
+
+cout << "Master got rows from " << status.MPI_SOURCE << endl;
+
                 // Copy rows to 2D array of colors
                 for(currentRow = (status.MPI_SOURCE - 1) * rowsToSend; currentRow < currentRow + rowsToSend; currentRow++ )
                 {
@@ -127,6 +131,8 @@ int main(int argc, char *argv[])
         // Receive initial row number
         MPI_Recv(&rowIndex, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
+cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + rowsToSend << endl;
+
         // Loop through rows to calculate 
         for(; rowIndex < rowIndex + rowsToSend; rowIndex++)
             {            
@@ -137,7 +143,7 @@ int main(int argc, char *argv[])
                     c.real = REAL_MIN + ((float) pixelIndex * scale_real);
                     c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
 
-                    setOfRows[rowIndex * pixelIndex] = cal_pixel(c);
+                    setOfRows[rowIndex * INT_WIDTH + pixelIndex] = cal_pixel(c);
                 }
                 //end pixel loop
             }
