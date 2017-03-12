@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
                 {
                     for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                     {  
-                        colors[currentRow][pixelIndex] = setOfRows[rowIndex * IMG_WIDTH + pixelIndex];
+                        colors[currentRow][pixelIndex] = setOfRows[rowIndex * INT_WIDTH + pixelIndex];
                     }   
                 }
             }
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
                     c.real = REAL_MIN + ((float) pixelIndex * scale_real);
                     c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
 
-                    setOfRows[rowIndex][pixelIndex] = cal_pixel(c);
+                    setOfRows[rowIndex * pixelIndex] = cal_pixel(c);
                 }
                 //end pixel loop
             }
