@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -n 21
+#SBATCH -n 11
 #SBATCH --mem=2048MB
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=YOUR_EMAIL@DOMAIN.COM
