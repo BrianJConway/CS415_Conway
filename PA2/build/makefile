@@ -22,7 +22,7 @@ mpi_sequential.o: ../src/sequential.cpp
 	$(CC) $(CXXFLAGS) -c ../src/sequential.cpp -o mpi_sequential.o $(INCLUDES)
 
 mpi_static.o: ../src/static.cpp
-	$(CC) $(CXXFLAGS) -c src/static.cpp -o mpi_static.o $(INCLUDES)
+	$(CC) $(CXXFLAGS) -c ../src/static.cpp -o mpi_static.o $(INCLUDES)
 
 Timer.o: ../src/Timer.cpp
 	$(CC) $(CXXFLAGS) -c ../src/Timer.cpp -o Timer.o $(INCLUDES)
