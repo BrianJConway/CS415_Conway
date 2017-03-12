@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     int rowIndex, colIndex, index, procNum, rowsToSend, rowNum;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
-    int height = IMG_HEIGHT;
+    float height = IMG_HEIGHT;
     MPI_Status status;
     double average, stdDev;
     char f[10] = "image.pim";
