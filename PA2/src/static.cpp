@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int numTasks, rank, dest, src, tag = 1;
     int inmsg, outmsg = 1;
     int rowIndex, pixelIndex, index, procNum, rowsToSend, rowNum,
-        currentRow;
+        currentRow, startingRow;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
     float height = IMG_HEIGHT;
@@ -130,14 +130,14 @@ cout << "Master got rows from " << status.MPI_SOURCE << endl;
         else
         {
             // Receive initial row number
-            MPI_Recv(&rowIndex, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+            MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
 cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + rowsToSend - 1 << endl;
 
             // Loop through rows to calculate 
-            for(; rowIndex < rowIndex + rowsToSend; rowIndex++)
+            for(rowIndex = startingRow; rowIndex < startingRow + rowsToSend; rowIndex++)
                 {            
-cout << "rowIndex : " << rowIndex << "stopping point: " << rowIndex + rowsToSend - 1 << endl;
+// cout << "rowIndex : " << rowIndex << "  stopping point: " << rowIndex + rowsToSend - 1 << endl;
                     // Loop through each pixel of the current row
                     for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                     {
