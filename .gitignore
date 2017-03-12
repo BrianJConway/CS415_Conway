@@ -1,2 +1,4 @@
 # Any executables
 *.out
+*.o
+
