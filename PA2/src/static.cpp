@@ -132,7 +132,7 @@ cout << "Master got rows from " << status.MPI_SOURCE << endl;
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + rowsToSend - 1 << endl;
+cout << "Process " << rank << " got row " << startingRow << " to " << startingRow + rowsToSend - 1 << endl;
 
             // Loop through rows to calculate 
             for(rowIndex = startingRow; rowIndex < startingRow + rowsToSend; rowIndex++)
@@ -160,11 +160,14 @@ cout << "Process " << rank << " finished and sent back rows " << endl;
     }
     // end outer loop
 
-    // Calculate statistics of timings
-    calcStatistics(timings, average, stdDev);
+    if( rank == 0 )
+    {
+        // Calculate statistics of timings
+        calcStatistics(timings, average, stdDev);
 
-    // Write pixel colors to file
-    pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
+        // Write pixel colors to file
+        pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
+    }
 }
 
 void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
