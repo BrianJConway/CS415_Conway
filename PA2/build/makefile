@@ -1,6 +1,6 @@
 # set flags and compiler, as well as file var
 CC=mpic++
-CXXFLAGS=-Wall
+CXXFLAGS=
 LIBS=-lpmi
 # feel free to either add files here (for more compilcated src's), or create more vars, or just manually type them in. Up to you.
 O_FILES1=mpi_sequential.o Timer.o PIMFuncs.o

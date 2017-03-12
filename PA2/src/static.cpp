@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
         // Check for proper number of tasks/proper number of rows
-        if( numTasks < 2 || IMG_HEIGHT % ( (float) numTasks - 1.0 ) != 0 )
+        if( numTasks < 2 || ((IMG_HEIGHT % ( (float) numTasks - 1.0 )) != 0) )
         {
             cout << "Improper number of tasks. Terminating..." << endl;
             MPI_Abort(MPI_COMM_WORLD, 1);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
             timer.start();
 
             // Loop through all rows of the image
-            for( rowIndex = 0, rocNum = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
+            for( rowIndex = 0, rowNum = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
             {
                 cout << rowIndex << endl;
             }
