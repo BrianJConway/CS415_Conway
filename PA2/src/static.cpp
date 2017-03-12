@@ -112,7 +112,7 @@ cout << "Sending row " << rowIndex << " to process " << procNum << endl;
 
                     startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
 
-cout << "Master got rows from " << status.MPI_SOURCE << "starting row is, " << startingRow << endl;
+cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " << startingRow << endl;
 
                     // Copy rows to 2D array of colors
                     for(currentRow = startingRow; currentRow < startingRow + rowsToSend; currentRow++ )
@@ -121,6 +121,7 @@ cout << "Master got rows from " << status.MPI_SOURCE << "starting row is, " << s
                         {  
                             colors[currentRow][pixelIndex] = setOfRows[rowIndex * INT_WIDTH + pixelIndex];
                         }   
+cout << "Master finished copying row " << currentRow << endl;
                     }
 cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
                 }
