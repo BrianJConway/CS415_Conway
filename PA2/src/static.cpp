@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         // Calculate number of rows to send to each processor
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
-cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl
+cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
 
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
