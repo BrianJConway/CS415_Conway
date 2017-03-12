@@ -19,7 +19,7 @@ const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
 
 const float REAL_MIN = -2.0;
-const float REAL_MAX = 2.0;s
+const float REAL_MAX = 2.0;
 
 const float IMAG_MIN = -2.0;
 const float IMAG_MAX = 2.0;
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         }
 
         // Calculate number of rows to send to each processor
-        rowsTosend = IMG_HEIGHT / (numTasks - 1);
+        rowsToSend = IMG_HEIGHT / (numTasks - 1);
 
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
