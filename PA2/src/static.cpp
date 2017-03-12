@@ -144,6 +144,8 @@ cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + ro
                     // Calculate current pixel's color
                     c.real = REAL_MIN + ((float) pixelIndex * scale_real);
                     c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
+        
+cout << "Process " << rank << " doing row " << rowIndex << " pixel " << pixelIndex;
 
                     setOfRows[pixelIndex] = cal_pixel(c);
                 }
