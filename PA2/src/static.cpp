@@ -137,6 +137,7 @@ cout << "Process " << rank << " got row " << rowIndex << " to " << rowIndex + ro
             // Loop through rows to calculate 
             for(; rowIndex < rowIndex + rowsToSend; rowIndex++)
                 {            
+cout << "rowIndex : " << rowIndex << "stopping point: " << rowIndex + rowsToSend - 1 << endl;
                     // Loop through each pixel of the current row
                     for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                     {
