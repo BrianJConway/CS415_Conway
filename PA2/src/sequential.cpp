@@ -90,6 +90,16 @@ int main(int argc, char *argv[])
     // Calculate statistics of timings
     calcStatistics(timings, average, stdDev);
 
+
+for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
+{
+    for(colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
+    {
+        cout << colors[rowIndex][colIndex] << ," ";
+    }
+    cout << endl;
+}
+
     // Write pixel colors to file
     pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
 }

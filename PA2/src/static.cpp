@@ -13,8 +13,8 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 10;
 
-const float IMG_WIDTH = 2000;
-const float IMG_HEIGHT = 2000;
+const float IMG_WIDTH = 10;
+const float IMG_HEIGHT = 10;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
@@ -89,7 +89,7 @@ cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
     // Loop specified amount of times to get measurements
     for(index = 0; index < NUM_MEASUREMENTS; index++)
     {
-        // Check if task 1
+        // Check if task 0
         if (rank == 0)
         {
                 // Start the timer
@@ -121,7 +121,6 @@ cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " <<
                         {  
                             colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
                         }   
-cout << "Master finished copying row " << currentRow << endl;
                     }
 cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
                 }
@@ -168,6 +167,15 @@ cout << "Process " << rank << " finished and sent back rows " << endl;
     {
         // Calculate statistics of timings
         calcStatistics(timings, average, stdDev);
+
+for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
+{
+    for(colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
+    {
+        cout << colors[rowIndex][colIndex] << ," ";
+    }
+    cout << endl;
+}
 
         // Write pixel colors to file
         pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
