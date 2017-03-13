@@ -170,7 +170,7 @@ cout << "Process " << rank << " finished and sent back rows " << endl;
 
 for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
 {
-    for(colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
+    for( int colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
     {
         cout << colors[rowIndex][colIndex] << ", ";
     }
