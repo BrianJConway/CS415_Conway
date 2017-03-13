@@ -139,7 +139,7 @@ cout << "Master finished copying rows from process " << status.MPI_SOURCE << end
 cout << "Process " << rank << " got row " << startingRow << " to " << startingRow + rowsToSend - 1 << endl;
 
             // Loop through rows to calculate 
-            for(rowIndex = startingRow; rowIndex < startingRow + rowsToSend; rowIndex++)
+            for(rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
                 {            
 // cout << "rowIndex : " << rowIndex << "  stopping point: " << rowIndex + rowsToSend - 1 << endl;
                     // Loop through each pixel of the current row
@@ -151,7 +151,7 @@ cout << "Process " << rank << " got row " << startingRow << " to " << startingRo
             
 //cout << "Process " << rank << " doing row " << rowIndex << " pixel " << pixelIndex << endl;
 
-                        setOfRows[pixelIndex] = cal_pixel(c);
+                        setOfRows[rowNum * INT_WIDTH + pixelIndex] = cal_pixel(c);
                     }
                     //end pixel loop
                 }
