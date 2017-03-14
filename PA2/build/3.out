@@ -1,0 +1,44 @@
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 2 got data
+RANK 1 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 1 got data
+RANK 2 got data
+Measurements: 10
+Image Size: 1750 x 1750
+Average Time: 0.303577s
+Standard Deviation: 0.00415492s
