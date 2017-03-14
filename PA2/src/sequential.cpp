@@ -95,7 +95,7 @@ for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
 {
     for(colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
     {
-        cout << colors[rowIndex][colIndex] << ", ";
+        cout << (int) colors[rowIndex][colIndex] << ", ";
     }
     cout << endl;
 }

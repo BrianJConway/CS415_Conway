@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
 
 if(rank == 0)
-cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
+//cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
 
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
@@ -99,7 +99,7 @@ cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
                 for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
                 {
                     // Send current row to corresponding process
-cout << "Sending row " << rowIndex << " to process " << procNum << endl;
+//cout << "Sending row " << rowIndex << " to process " << procNum << endl;
                     MPI_Send(&rowIndex, 1, MPI_INT, procNum, tag, MPI_COMM_WORLD);
                 }
                 // end row loop
@@ -112,7 +112,7 @@ cout << "Sending row " << rowIndex << " to process " << procNum << endl;
 
                     startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
 
-cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " << startingRow << endl;
+//cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " << startingRow << endl;
 
                     // Copy rows to 2D array of colors
                     for(currentRow = startingRow, rowNum = 0; currentRow < startingRow + rowsToSend; currentRow++, rowNum++ )
@@ -122,7 +122,7 @@ cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " <<
                             colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
                         }   
                     }
-cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
+//cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
                 }
 
                 // Stop the timer and store the time
@@ -135,7 +135,7 @@ cout << "Master finished copying rows from process " << status.MPI_SOURCE << end
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process " << rank << " got row " << startingRow << " to " << startingRow + rowsToSend - 1 << endl;
+//cout << "Process " << rank << " got row " << startingRow << " to " << startingRow + rowsToSend - 1 << endl;
 
             // Loop through rows to calculate 
             for(rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
@@ -158,7 +158,7 @@ cout << "Process " << rank << " got row " << startingRow << " to " << startingRo
 
             // Send finished rows back 
             MPI_Send(setOfRows, 1, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
-cout << "Process " << rank << " finished and sent back rows " << endl;
+//cout << "Process " << rank << " finished and sent back rows " << endl;
         }
     }
     // end outer loop
@@ -172,7 +172,7 @@ for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
 {
     for( int colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
     {
-        cout << colors[rowIndex][colIndex] << ", ";
+        cout << (int) colors[rowIndex][colIndex] << ", ";
     }
     cout << endl;
 }
