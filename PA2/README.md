@@ -1,19 +1,23 @@
-# PA1: "Ping Pong"
+# PA2: "Mandelbrot"
 
 # Building and Running
 
 ## Building and Running
-This project includes a makefile which will generate object files and two executables, one for sending a single integer between two nodes and one for sending 
-bigger and bigger arrays of integers between two nodes. The script One_box.sh will run the mpi_pingPong exectuable for two nodes within the same machine. 
-The script Two_box.sh will run the mpi_pingPong executable for two nodes in different machines. The script Timing.sh will run the mpi_bufferChecker 
-executable for two nodes in different machines. Each exectuable, when run, will output results as a file called "measurements.csv.".
+This project includes a makefile which will generate object files and two executables, one for calculating mandelbrot sequentially and one calculating
+mandelbrot in parallel with static task allocation. 
+
+There is one script for running sequentially.
+
+There are many scripts for running static in parallel depending on number of
+tasks you want to specify. The static scripts are formatted as 
+"static" and then an odd number for the amount of tasks, then ".sh".
 
 ### Makefile Instructions
 
 ```bash
+cd build
 make
-sbatch One_box.sh
-sbatch Two_Box.sh
-sbatch Timing.sh
+sbatch sequential.sh
+sbatch static[ODD NUMBER].sh
 make clean
 ```
