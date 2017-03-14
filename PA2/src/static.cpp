@@ -134,8 +134,10 @@ int main(int argc, char *argv[])
         // Otherwise, assume not task 1
         else if( rank < numTasks )
         {
+            cout << "RANK " <<rank " waiting to recv" << endl;
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+            cout << "RANK " <<rank " got data" << endl;
 
             // Loop through rows to calculate 
             for(rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
@@ -158,6 +160,11 @@ int main(int argc, char *argv[])
         }
     }
     // end outer loop
+
+    if(rank >= numTasks)
+    {
+        cout << "rank " << rank <<  " skipped" << endl;
+    }
 
     if( rank == 0 )
     {
