@@ -1,0 +1,212 @@
+RANK 1 waiting to recv
+RANK 9 waiting to recv
+RANK 2 waiting to recv
+RANK 3 waiting to recv
+RANK 4 waiting to recv
+RANK 6 waiting to recv
+NUM TASKS ADJUSTED TO 14
+NUM TASKS ADJUSTED TO 13
+RANK 5 waiting to recv
+NUM TASKS ADJUSTED TO 12
+NUM TASKS ADJUSTED TO 11
+RANK 7 waiting to recv
+RANK 1 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 6 got data
+RANK 7 got data
+RANK 2 got data
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 3 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 6 waiting to recv
+RANK 5 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 6 got data
+RANK 7 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 3 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 6 got data
+RANK 7 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 3 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 10 waiting to recv
+rank 11 skipped
+RANK 8 waiting to recv
+rank 12 skipped
+rank 14 skipped
+RANK 8 got data
+rank 13 skipped
+RANK 9 got data
+RANK 10 got data
+RANK 9 waiting to recv
+RANK 10 waiting to recv
+RANK 8 waiting to recv
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 9 waiting to recv
+RANK 10 waiting to recv
+RANK 8 waiting to recv
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 10 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 10 waiting to recv
+RANK 3 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 8 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 10 waiting to recv
+RANK 9 waiting to recv
+RANK 3 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 3 waiting to recv
+RANK 10 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 10 waiting to recv
+RANK 3 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 10 waiting to recv
+RANK 3 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 7 got data
+RANK 6 got data
+RANK 8 got data
+RANK 9 got data
+RANK 10 got data
+RANK 2 waiting to recv
+RANK 1 waiting to recv
+RANK 10 waiting to recv
+RANK 3 waiting to recv
+RANK 9 waiting to recv
+RANK 8 waiting to recv
+RANK 4 waiting to recv
+RANK 7 waiting to recv
+RANK 5 waiting to recv
+RANK 6 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 8 got data
+RANK 7 got data
+RANK 6 got data
+RANK 9 got data
+RANK 10 got data
+Measurements: 10
+Image Size: 500 x 500
+Average Time: 0.0163172s
+Standard Deviation: 0.00148997s
