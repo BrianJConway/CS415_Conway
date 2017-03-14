@@ -13,8 +13,8 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 1;
 
-const float IMG_WIDTH = 100;
-const float IMG_HEIGHT = 100;
+const float IMG_WIDTH = 1000;
+const float IMG_HEIGHT = 1000;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
@@ -78,9 +78,6 @@ int main(int argc, char *argv[])
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
 
-//if(rank == 0)
-//cout << "Pixels per message: " << INT_WIDTH * rowsToSend << endl;
-
         // Scale image based on coordinates of rea/imaginary plane
         float scale_real = ( REAL_MAX - REAL_MIN )/ IMG_WIDTH;
         float scale_imag = ( IMAG_MAX - IMAG_MIN )/ IMG_HEIGHT;
@@ -99,7 +96,6 @@ int main(int argc, char *argv[])
                 for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
                 {
                     // Send current row to corresponding process
-//cout << "Sending row " << rowIndex << " to process " << procNum << endl;
                     MPI_Send(&rowIndex, 1, MPI_INT, procNum, tag, MPI_COMM_WORLD);
                 }
                 // end row loop
@@ -112,8 +108,6 @@ int main(int argc, char *argv[])
 
                     startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
 
-//cout << "Master got rows from " << status.MPI_SOURCE << ", starting row is, " << startingRow << endl;
-
                     // Copy rows to 2D array of colors
                     for(currentRow = startingRow, rowNum = 0; currentRow < startingRow + rowsToSend; currentRow++, rowNum++ )
                     {                        
@@ -122,7 +116,6 @@ int main(int argc, char *argv[])
                             colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
                         }   
                     }
-//cout << "Master finished copying rows from process " << status.MPI_SOURCE << endl;
                 }
 
                 // Stop the timer and store the time
@@ -135,20 +128,15 @@ int main(int argc, char *argv[])
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-//cout << "Process " << rank << " got row " << startingRow << " to " << startingRow + rowsToSend - 1 << endl;
-
             // Loop through rows to calculate 
             for(rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
                 {            
-// cout << "rowIndex : " << rowIndex << "  stopping point: " << rowIndex + rowsToSend - 1 << endl;
                     // Loop through each pixel of the current row
                     for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                     {
                         // Calculate current pixel's color
                         c.real = REAL_MIN + ((float) pixelIndex * scale_real);
                         c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
-            
-//cout << "Process " << rank << " doing row " << rowIndex << " pixel " << pixelIndex << endl;
 
                         setOfRows[rowNum * INT_WIDTH + pixelIndex] = cal_pixel(c);
                     }
@@ -158,33 +146,18 @@ int main(int argc, char *argv[])
 
             // Send finished rows back 
             MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
-//cout << "Process " << rank << " finished and sent back rows " << endl;
         }
     }
     // end outer loop
 
     if( rank == 0 )
     {
-        cout << "RANK: " << rank << endl;
-
         // Calculate statistics of timings
         calcStatistics(timings, average, stdDev);
-
-for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
-{
-    for( int colIndex = 0; colIndex < IMG_WIDTH; colIndex++)
-    {
-        cout << (int) colors[rowIndex][colIndex] << ", ";
-    }
-    cout << endl << endl << endl;
-}
 
         // Write pixel colors to file
         pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
     }
-
-    if(rank!=0)
-    cout << "RANK " << rank << "ENDING" << endl;
 }
 
 void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
@@ -209,13 +182,12 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
     }
 
     stdDev = sqrt(sum/NUM_MEASUREMENTS);
-    /*
+    
     // Output results
     cout << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Image Size: " << IMG_WIDTH << " x " << IMG_HEIGHT << endl 
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
-*/
 }
 
 int cal_pixel(Complex c)
