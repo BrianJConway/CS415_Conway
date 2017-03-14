@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
                 for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend)
                 {
                     // Receive computed rows from any process
-                    MPI_Recv(setOfRows, 1, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+                    MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
 
                     startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
 
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
                 // end row loop
 
             // Send finished rows back 
-            MPI_Send(setOfRows, 1, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
+            MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
 //cout << "Process " << rank << " finished and sent back rows " << endl;
         }
     }
