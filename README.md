@@ -5,3 +5,5 @@
 # Projects
 
 ## PA1: Ping Pong
+
+## PA2: Mandelbrot
