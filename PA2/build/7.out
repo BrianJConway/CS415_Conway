@@ -1,0 +1,106 @@
+RANK 1 waiting to recv
+RANK 3 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 5 waiting to recv
+NUM TASKS ADJUSTED TO 6
+rank 6 skipped
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 1 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+RANK 5 waiting to recv
+RANK 1 waiting to recv
+RANK 2 waiting to recv
+RANK 4 waiting to recv
+RANK 3 waiting to recv
+RANK 1 got data
+RANK 2 got data
+RANK 3 got data
+RANK 4 got data
+RANK 5 got data
+Measurements: 10
+Image Size: 4000 x 4000
+Average Time: 2.07635s
+Standard Deviation: 0.00250176s
