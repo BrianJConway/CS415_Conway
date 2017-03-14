@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
                 timings.push_back(timer.getElapsedTime());
         }
         // Otherwise, assume not task 1
-        else
+        else if( rank < numTasks )
         {
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
