@@ -12,6 +12,9 @@ There are many scripts for running static in parallel depending on number of
 tasks you want to specify. The static scripts are formatted as 
 "static" and then an odd number for the amount of tasks, then ".sh".
 
+Image resolution can be adjusted by editing constants in either
+static.cpp or sequential.cpp in the /src folder
+
 The sequential image is output to "imageSeq.pim" and the parallel image is
 output to "imageStat.pim". The time taken to calculate all the pixel colors
 is output to the console.
