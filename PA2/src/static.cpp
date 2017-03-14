@@ -165,6 +165,8 @@ int main(int argc, char *argv[])
 
     if( rank == 0 )
     {
+        cout << "RANK: " << rank << endl;
+        
         // Calculate statistics of timings
         calcStatistics(timings, average, stdDev);
 
@@ -174,7 +176,7 @@ for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
     {
         cout << (int) colors[rowIndex][colIndex] << ", ";
     }
-    cout << endl;
+    cout << endl << endl << endl;
 }
 
         // Write pixel colors to file
@@ -204,12 +206,13 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
     }
 
     stdDev = sqrt(sum/NUM_MEASUREMENTS);
-
+    /*
     // Output results
     cout << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Image Size: " << IMG_WIDTH << " x " << IMG_HEIGHT << endl 
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
+*/
 }
 
 int cal_pixel(Complex c)
