@@ -11,10 +11,10 @@
 
 using namespace std;
 
-const int NUM_MEASUREMENTS = 1;
+const int NUM_MEASUREMENTS = 10;
 
-const float IMG_WIDTH = 1000;
-const float IMG_HEIGHT = 1000;
+const float IMG_WIDTH = 500;
+const float IMG_HEIGHT = 500;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
