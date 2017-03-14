@@ -2,6 +2,7 @@
     "files.associations": {
         "cstdio": "cpp",
         "ostream": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "type_traits": "cpp"
     }
 }
