@@ -13,8 +13,8 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 1;
 
-const float IMG_WIDTH = 10;
-const float IMG_HEIGHT = 10;
+const float IMG_WIDTH = 500;
+const float IMG_HEIGHT = 500;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     if( rank == 0 )
     {
         cout << "RANK: " << rank << endl;
-        
+
         // Calculate statistics of timings
         calcStatistics(timings, average, stdDev);
 
