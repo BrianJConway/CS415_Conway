@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
     double average, stdDev;
-    char f[10] = "image.pim";
+    char f[10] = "imageSeq.pim";
     char *fPtr = f;
     Complex c;
     vector<double> timings;

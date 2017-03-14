@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     float height = IMG_HEIGHT;
     MPI_Status status;
     double average, stdDev;
-    char f[10] = "image.pim";
+    char f[10] = "imageStat.pim";
     char *fPtr = f;
     Complex c;
     vector<double> timings;
