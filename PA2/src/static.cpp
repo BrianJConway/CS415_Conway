@@ -182,6 +182,9 @@ for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex++)
         // Write pixel colors to file
         pim_write_black_and_white(fPtr, w, h, (const unsigned char**) colors);
     }
+
+    if(rank!=0)
+    cout << "RANK " << rank << "ENDING" << endl;
 }
 
 void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
