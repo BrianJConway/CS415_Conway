@@ -78,6 +78,8 @@ int main(int argc, char *argv[])
         while( fmod(height, (float)(numTasks - 1)) != 0 )
         {
             numTasks--;
+
+            if(rank == 0)
             cout << "NUM TASKS ADJUSTED TO " << numTasks << endl;
         }
 
