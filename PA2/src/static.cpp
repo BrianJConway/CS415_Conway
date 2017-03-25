@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
                 int count = 1;
 
                 // Collect results
-                for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend)
+                for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += initialRows)
                 {
                     // Get the current set of rows from a task
                     for(splitIndex = 0; splitIndex <= timesToSplit; splitIndex++ )
