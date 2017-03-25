@@ -177,8 +177,10 @@ int main(int argc, char *argv[])
 
                 // Send finished rows back
                 currentRow = startingRow + (splitIndex * rowsToSend);
+                cout << "Task " << rank << " sending row " << currentRow << endl;
                 MPI_Send(&currentRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
                 MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
+                cout << "Task " << rank << "finished sending row " << currentRow << endl;
             }
             // end split loop
         }
