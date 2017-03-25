@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     int numTasks, rank, dest, src, tag = 1;
     int inmsg, outmsg = 1;
     int rowIndex, pixelIndex, index, procNum, rowsToSend, rowNum,
-        currentRow, startingRow;
+        currentRow, startingRow, initialRows;
     int splitIndex, timesToSplit = 0;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
         // Determine how many rows to send, ensuring no more than 2,000,000
         // elements in the buffer
-        rowsToSend = IMG_HEIGHT / (numTasks - 1);
+        rowsToSend = initialRows = IMG_HEIGHT / (numTasks - 1);
 
         while( INT_WIDTH * rowsToSend > 2000000 )
         {
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
                 timer.start();
 
                 // Loop through all rows of the image
-                for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend, procNum++ )
+                for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += initialRows, procNum++ )
                 {
                     // Send current row to corresponding process
                     MPI_Send(&rowIndex, 1, MPI_INT, procNum, tag, MPI_COMM_WORLD);
