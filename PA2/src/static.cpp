@@ -186,6 +186,7 @@ int main(int argc, char *argv[])
                 MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
 
                 cout << "TASK " << rank << " " << count << endl;
+                count++;
             }
             // end split loop
         }
