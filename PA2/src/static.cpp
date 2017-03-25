@@ -119,6 +119,8 @@ int main(int argc, char *argv[])
                 }
                 // end row loop
 
+                int count = 1;
+
                 // Collect results
                 for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend)
                 {
@@ -142,11 +144,11 @@ int main(int argc, char *argv[])
                             }   
                         }
 
-                        cout << "Master finished copying rows" << startingRow << endl;
+                        cout << "GOT " << count << " of " << numTasks * (timesToSplit + 1) << endl;
+                        count++;
                     }
      
                 }
-                cout << "Master got everything" << endl;
 
                 // Stop the timer and store the time
                 timer.stop();
