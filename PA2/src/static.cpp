@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
                             }   
                         }
 
-                        cout << "GOT " << count << " of " << numTasks * (timesToSplit + 1) << endl;
+                        cout << "GOT " << count << " of " << (numTasks  -1) * (timesToSplit + 1) << endl;
                         count++;
                     }
      
