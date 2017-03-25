@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
                     for(splitIndex = 0; splitIndex <= timesToSplit; splitIndex++ )
                     {
                         // Receive computed set of rows from any process
-                        MPI_Recv(startingRow, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+                        MPI_Recv(&startingRow, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
 
                         // Receive computed set of rows from any process
                         MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
@@ -172,7 +172,8 @@ int main(int argc, char *argv[])
                 // end row loop
 
                 // Send finished rows back
-                MPI_Send(startingRow + (splitIndex * rowsToSend), 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+                currentRow = startingRow + (splitIndex * rowsToSend);
+                MPI_Send(&currentRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
                 MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
             }
             // end split loop
