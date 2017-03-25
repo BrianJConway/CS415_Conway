@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
 
     // Loop specified amount of times to get measurements
-    for(index = 0; index < NUM_MEASUREMENTS; timingsindex++)
+    for(index = 0; index < NUM_MEASUREMENTS; index++)
     {
         // Check if task 0
         if (rank == 0)
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
                 // end row loop
 
                 // Send finished rows back
-                MPI_Send(startingrow + (splitIndex * rowsToSend), 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+                MPI_Send(startingRow + (splitIndex * rowsToSend), 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
                 MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
             }
             // end split loop
