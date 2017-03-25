@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     int inmsg, outmsg = 1;
     int rowIndex, pixelIndex, index, procNum, rowsToSend, rowNum,
         currentRow, startingRow;
+    int splitIndex, timesToSplit = 0;
     int w = INT_WIDTH;
     int h = INT_HEIGHT;
     float height = IMG_HEIGHT;
@@ -82,8 +83,18 @@ int main(int argc, char *argv[])
             cout << "NUM TASKS ADJUSTED TO " << numTasks << endl;
         }
 
-        // Calculate number of rows to send to each processor
+        // Determine how many rows to send, ensuring no more than 2,000,000
+        // elements in the buffer
         rowsToSend = IMG_HEIGHT / (numTasks - 1);
+
+        while( INT_WIDTH * rowsToSend > 2000000 )
+        {
+            // Half the size of the buffer
+            rowstoSend /= 2;
+            timesToSplit++;
+        }
+
+        // Calculate number of rows to send to each processor
         unsigned char setOfRows[INT_WIDTH * rowsToSend];
 
         // Scale image based on coordinates of rea/imaginary plane
@@ -92,7 +103,7 @@ int main(int argc, char *argv[])
 
 
     // Loop specified amount of times to get measurements
-    for(index = 0; index < NUM_MEASUREMENTS; index++)
+    for(index = 0; index < NUM_MEASUREMENTS; timingsindex++)
     {
         // Check if task 0
         if (rank == 0)
@@ -111,19 +122,25 @@ int main(int argc, char *argv[])
                 // Collect results
                 for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += rowsToSend)
                 {
-                    // Receive computed rows from any process
-                    MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+                    // Get the current set of rows from a task
+                    for(splitIndex = 0; splitIndex <= timesToSplit; splitIndex++ )
+                    {
+                        // Receive computed set of rows from any process
+                        MPI_Recv(startingRow, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
 
-                    startingRow = (status.MPI_SOURCE - 1) * rowsToSend;
+                        // Receive computed set of rows from any process
+                        MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
 
-                    // Copy rows to 2D array of colors
-                    for(currentRow = startingRow, rowNum = 0; currentRow < startingRow + rowsToSend; currentRow++, rowNum++ )
-                    {                        
-                        for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
-                        {  
-                            colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
-                        }   
+                        // Copy rows to 2D array of colors
+                        for(currentRow = startingRow, rowNum = 0; currentRow < startingRow + rowsToSend; currentRow++, rowNum++ )
+                        {                        
+                            for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
+                            {  
+                                colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
+                            }   
+                        }
                     }
+     
                 }
 
                 // Stop the timer and store the time
@@ -131,20 +148,22 @@ int main(int argc, char *argv[])
                 timings.push_back(timer.getElapsedTime());
         }
         // Otherwise, assume not task 1
-        else if( rank < numTasks )
+        else if (rank < numTasks)
         {
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-            // Loop through rows to calculate 
-            for(rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
-                {            
+            for (splitIndex = 0; splitIndex <= timesToSplit; splitIndex++)
+            {
+                // Loop through rows to calculate
+                for (rowIndex = startingRow, rowNum = 0; rowIndex < startingRow + rowsToSend; rowIndex++, rowNum++)
+                {
                     // Loop through each pixel of the current row
-                    for(pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
+                    for (pixelIndex = 0; pixelIndex < IMG_WIDTH; pixelIndex++)
                     {
                         // Calculate current pixel's color
-                        c.real = REAL_MIN + ((float) pixelIndex * scale_real);
-                        c.imag = IMAG_MIN + ((float) rowIndex * scale_imag);
+                        c.real = REAL_MIN + ((float)pixelIndex * scale_real);
+                        c.imag = IMAG_MIN + ((float)rowIndex * scale_imag);
 
                         setOfRows[rowNum * INT_WIDTH + pixelIndex] = cal_pixel(c);
                     }
@@ -152,8 +171,11 @@ int main(int argc, char *argv[])
                 }
                 // end row loop
 
-            // Send finished rows back 
-            MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
+                // Send finished rows back
+                MPI_Send(startingrow + (splitIndex * rowsToSend), 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+                MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
+            }
+            // end split loop
         }
     }
     // end outer loop
