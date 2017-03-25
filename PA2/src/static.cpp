@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
                 timer.start();
 
                 // Loop through all rows of the image
-                for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += initialRows, procdNum++ )
+                for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += initialRows, procNum++ )
                 {
                     // Send current row to corresponding process
                     MPI_Send(&rowIndex, 1, MPI_INT, procNum, tag, MPI_COMM_WORLD);
