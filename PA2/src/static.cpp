@@ -150,6 +150,8 @@ int main(int argc, char *argv[])
      
                 }
 
+                cout << "DONE NOW AAAAAAAAAAAAAAA" << endl;
+                
                 // Stop the timer and store the time
                 timer.stop();
                 timings.push_back(timer.getElapsedTime());
