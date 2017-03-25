@@ -146,6 +146,7 @@ int main(int argc, char *argv[])
                     }
      
                 }
+                cout << "Master got everything" << endl;
 
                 // Stop the timer and store the time
                 timer.stop();
