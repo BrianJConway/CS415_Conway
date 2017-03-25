@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         while( INT_WIDTH * rowsToSend > 2000000 )
         {
             // Half the size of the buffer
-            rowstoSend /= 2;
+            rowsToSend /= 2;
             timesToSplit++;
         }
 
