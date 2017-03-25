@@ -119,8 +119,6 @@ int main(int argc, char *argv[])
                 }
                 // end row loop
 
-                int count = 1;
-
                 // Collect results
                 for(rowIndex = 0; rowIndex < IMG_HEIGHT; rowIndex += initialRows)
                 {
@@ -129,8 +127,6 @@ int main(int argc, char *argv[])
                     {
                         // Receive computed set of rows from any process
                         MPI_Recv(&startingRow, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
-
-                        cout << "Master got row: " << startingRow << endl;
 
                         // Receive computed set of rows from any process
                         MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
@@ -143,14 +139,9 @@ int main(int argc, char *argv[])
                                 colors[currentRow][pixelIndex] = setOfRows[rowNum * INT_WIDTH + pixelIndex];
                             }   
                         }
-
-                        cout << "GOT " << count << " of " << (numTasks  -1) * (timesToSplit + 1) << endl;
-                        count++;
                     }
      
                 }
-
-                cout << "DONE NOW AAAAAAAAAAAAAAA" << endl;
                 
                 // Stop the timer and store the time
                 timer.stop();
