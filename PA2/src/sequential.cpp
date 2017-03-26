@@ -11,8 +11,8 @@
 
 using namespace std;
 
-const float IMG_WIDTH = 32000;
-const float IMG_HEIGHT = 32000;
+const float IMG_WIDTH = 36000;
+const float IMG_HEIGHT = 36000;
 
 const int NUM_MEASUREMENTS = 1;
 const int INT_WIDTH = IMG_WIDTH;
