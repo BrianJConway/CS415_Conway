@@ -13,8 +13,8 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 5;
 
-const float IMG_WIDTH = 36000;
-const float IMG_HEIGHT = 36000;
+const float IMG_WIDTH = 40000;
+const float IMG_HEIGHT = 40000;
 
 const int INT_WIDTH = IMG_WIDTH;
 const int INT_HEIGHT = IMG_HEIGHT;
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
                 // Start the timer
                 timer.start();
 
-                // Loop through all rows of the image
+                // Static task assignment of rows to all other tasks
                 for( rowIndex = 0, procNum = 1; rowIndex < IMG_HEIGHT; rowIndex += initialRows, procNum++ )
                 {
                     // Send current row to corresponding process
@@ -125,10 +125,10 @@ int main(int argc, char *argv[])
                     // Get the current set of rows from a task
                     for(splitIndex = 0; splitIndex <= timesToSplit; splitIndex++ )
                     {
-                        // Receive computed set of rows from any process
+                        // Receive starting row number
                         MPI_Recv(&startingRow, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
 
-                        // Receive computed set of rows from any process
+                        // Receive computed set of rows from process that send starting row number
                         MPI_Recv(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
 
                         // Copy rows to 2D array of colors
