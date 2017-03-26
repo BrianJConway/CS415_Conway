@@ -150,8 +150,6 @@ int main(int argc, char *argv[])
         // Otherwise, assume not task 1
         else if (rank < numTasks)
         {
-            int count = 1;
-
             // Receive initial row number
             MPI_Recv(&startingRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
@@ -177,9 +175,6 @@ int main(int argc, char *argv[])
                 currentRow = startingRow + (splitIndex * rowsToSend);
                 MPI_Send(&currentRow, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
                 MPI_Send(setOfRows, INT_WIDTH * rowsToSend, MPI_UNSIGNED_CHAR, 0, tag, MPI_COMM_WORLD);
-
-                cout << "TASK " << rank << " " << count << endl;
-                count++;
             }
             // end split loop
         }
