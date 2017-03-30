@@ -7,3 +7,5 @@
 ## PA1: Ping Pong
 
 ## PA2: Mandelbrot
+
+## PA3: Bucket Sort
