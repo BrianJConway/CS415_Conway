@@ -17,8 +17,9 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev);
 int main(int argc, char *argv[])
 {
     // Initialization
-    Timer timer;
+    int index;
     double average, stdDev;
+    Timer timer;
     vector<double> timings;
 
     // Loop specified amount of times to get measurements
@@ -63,7 +64,6 @@ void calcStatistics(vector<double> measurements, double& avg, double& stdDev)
 
     // Output results
     cout << "Measurements: " << NUM_MEASUREMENTS << endl
-         << "Image Size: " << IMG_WIDTH << " x " << IMG_HEIGHT << endl 
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
 }

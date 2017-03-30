@@ -1,6 +1,6 @@
 # PA3: "Bucket Sort"
 
-# Building and Running
+# This project is incomplete as of the due date. I plan to submit a completed version late for reduced credit.
 
 ## Building and Running
 There is one script for running sequentially.
