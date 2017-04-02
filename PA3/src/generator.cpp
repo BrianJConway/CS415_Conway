@@ -6,7 +6,7 @@
 using namespace std;
 
 const int MIN_NUM = 0;
-const int MAX_NUM = 1000000;
+const int MAX_NUM = 999999;
 
 int main(int argc, char **argv)
 {

@@ -25,10 +25,7 @@ int main(int argc, char *argv[])
 {
     // Initialization
     int index, numItems = 0;
-    double average, stdDev;
-    Timer timer;
-    vector<double> timings;
-    int* data;
+    int* data = NULL;
 
     // Check if filename specified
     if (argc >= 2)
@@ -36,23 +33,8 @@ int main(int argc, char *argv[])
         // Read data from file
         readFromFile(argv[1], numItems, data);
 
-        // Loop specified amount of times to get measurements
-        for (index = 0; index < NUM_MEASUREMENTS; index++)
-        {
-            // Start the timer
-            timer.start();
-
-            // Bucket sort
-            buckeSort(numItems, data);
-
-            // Stop the timer and store the time
-            timer.stop();
-            timings.push_back(timer.getElapsedTime());
-        }
-        // end outer loop
-
-        // Calculate statistics of timings
-        calcStatistics(timings, average, stdDev);
+        // Bucket sort
+        bucketSort(numItems, data);
 
         // Deallocate array of items
         if( data != NULL)
@@ -92,24 +74,42 @@ void bucketSort(int numItems, int* data)
 {
     // Initialize function/variables
     int index, bucketNum;
-    vector<vector<int> buckets;
+    double average, stdDev;
+    Timer timer;
+    vector<double> timings;
+    vector< vector<int> > buckets(NUM_BUCKETS);
 
-    // Loop through all numbers
-    for(index = 0; index < numItems; index++)
+    // Loop specified amount of times to get measurements
+    for (index = 0; index < NUM_MEASUREMENTS; index++)
     {
-        // Place current number into proper bucket
-        bucketNum = data[index] / (MAX_NUM / NUM_BUCKETS);
-        buckets[bucketNum].push_back(data[index]);
-    }
-    // end loop
+        // Start the timer
+        timer.start();
 
-    // Loop through all buckets
-    for(index = 0; index < NUM_BUCKETS; index++)
-    {
-        // Sort the current bucket
-        sort(buckets[index].begin(), buckets[index].end());
+        // Loop through all numbers
+        for(index = 0; index < numItems; index++)
+        {
+            // Place current number into proper bucket
+            bucketNum = data[index] / (MAX_NUM / NUM_BUCKETS);
+            buckets[bucketNum].push_back(data[index]);
+        }
+        // end loop
+
+        // Loop through all buckets
+        for(index = 0; index < NUM_BUCKETS; index++)
+        {
+            // Sort the current bucket
+            sort(buckets[index].begin(), buckets[index].end());
+        }
+        // end loop
+
+        // Stop the timer and store the time
+        timer.stop();
+        timings.push_back(timer.getElapsedTime());
     }
-    // end loop
+    // end outer loop
+
+    // Calculate statistics of timings
+    calcStatistics(timings, average, stdDev);    
 }
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
