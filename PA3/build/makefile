@@ -6,11 +6,11 @@ LIBS=-lpmi
 O_FILES1=mpi_sequential.o Timer.o 
 # uncomment below if/when you have a folder called include that holds potential header files
 INCLUDES=-I ../include
-OUTPUT=mpi_bucket
+OUTPUT=mpi_sequential
 
-all: mpi_bucket 
+all: mpi_sequential
 
-mpi_bucket: $(O_FILES1)
+mpi_sequential: $(O_FILES1)
 	$(CC) $(CXXFLAGS) -o $(OUTPUT) $(O_FILES1) $(LIBS) #$(PATHI) $(PATHL)
 
 mpi_sequential.o: ../src/sequential.cpp
