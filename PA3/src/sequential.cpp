@@ -14,7 +14,7 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 10;
 const int MAX_NUM = 1000000;
-const int NUM_BUCKETS = 16;
+const int NUM_BUCKETS = 8;
 
 bool outputSorted = false;
 
