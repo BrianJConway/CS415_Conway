@@ -6,7 +6,8 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-
+#include <stdio.h>
+#include <string.h>
 #include "Timer.h"
 
 using namespace std;
@@ -15,11 +16,15 @@ const int NUM_MEASUREMENTS = 1;
 const int MAX_NUM = 1000000;
 const int NUM_BUCKETS = 16;
 
+bool outputSorted = false;
+
 void readFromFile(char* fileName, int& numItems, int*& data);
 
 void bucketSort(int numItems, int* data);
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
+
+void outputBuckets(vector< vector<int> > buckets);
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +35,12 @@ int main(int argc, char *argv[])
     // Check if filename specified
     if (argc >= 2)
     {
+        // Check if argument specified file output
+        if( argc >= 3 && strcmp(argv[2], "y") == 0)
+        {
+            outputSorted = true;
+        }
+
         // Read data from file
         readFromFile(argv[1], numItems, data);
 
@@ -108,6 +119,11 @@ void bucketSort(int numItems, int* data)
     }
     // end outer loop
 
+    if(outputSorted)
+    {
+        outputBuckets(buckets);
+    }
+
     // Calculate statistics of timings
     calcStatistics(timings, average, stdDev);    
 }
@@ -139,4 +155,33 @@ void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
     cout << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
+}
+
+void outputBuckets(vector< vector<int> > buckets)
+{
+    // Initialization
+    int index;
+    ofstream fout;
+
+    cout << "AAAA" << endl;
+    
+    // Open output file
+    fout.open("sorted.txt");
+
+    // Loop through all buckets 
+    for(index = 0; index < NUM_BUCKETS; index++)
+    {
+        // Loop through current bucket
+        for(vector<int>::iterator it = buckets[index].begin();
+         it != buckets[index].end(); ++it)
+         {
+             // Output current item
+             fout << *it << endl;
+         }
+         // end inner loop
+    }
+    // end outer loop
+
+    // Close file
+    fout.close();
 }

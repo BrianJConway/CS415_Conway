@@ -6,7 +6,7 @@ LIBS=-lpmi
 O_FILES1=mpi_sequential.o Timer.o 
 # uncomment below if/when you have a folder called include that holds potential header files
 INCLUDES=-I ../include
-OUTPUT=mpi_sequential
+OUTPUT=mpi_bucket
 
 all: mpi_bucket 
 
