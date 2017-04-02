@@ -5,4 +5,4 @@
 #SBATCH --mail-user=YOUR_EMAIL@DOMAIN.COM
 #SBATCH --mail-type=ALL
 
-srun mpi_bucket data.txt y
+srun mpi_bucket data.txt
