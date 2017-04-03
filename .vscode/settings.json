@@ -5,6 +5,7 @@
         "cstdlib": "cpp",
         "type_traits": "cpp",
         "iostream": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "array": "cpp"
     }
 }
