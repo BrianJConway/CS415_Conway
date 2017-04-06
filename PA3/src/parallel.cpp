@@ -88,7 +88,7 @@ cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
 
                 // Copy numbers from data array into region array
                 for(dataIndex = startNumber, index = 0;
-                 dataIndex < startNumber + reegionSize; dataIndex++, index++)
+                 dataIndex < startNumber + regionSize; dataIndex++, index++)
                 {
                     region[index] = data[dataIndex];
                 }
