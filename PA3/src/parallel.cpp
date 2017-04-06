@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
     // Initialization
     int numTasks, rank, dest, src, tag = 1;
     int index, regionIndex, regionSize, bucketSize, bucketNum,
-        startNumber, dataIndex, srcProcess, numItems = 0;
+        startNumber, dataIndex, srcProcess, lastRegSize, numItems = 0;
+    double floatSize;
     vector<int> data, region, oneBucket;
     vector< vector<int> > smallBuckets;
     Timer timer;
@@ -66,10 +67,16 @@ int main(int argc, char *argv[])
 
             // Send regions to other processes
             regionSize  = numItems / numTasks;
+
+            if( fmod((float) numItems, (float) numTasks) != 0)
+            {
+                lastRegSize = numItems - (numTasks - 1) * regionSize;
+            }
+
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
 
-cout << "regionsize: " << regionSize << endl;
+cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
 
             for(regionIndex = 1; regionIndex < numTasks; regionIndex++)
             {
@@ -81,11 +88,11 @@ cout << "regionsize: " << regionSize << endl;
 
                 // Copy numbers from data array into region array
                 for(dataIndex = startNumber, index = 0;
-                 dataIndex < startNumber + regionSize; dataIndex++, index++)
+                 dataIndex < startNumber + reegionSize; dataIndex++, index++)
                 {
                     region[index] = data[dataIndex];
                 }
-cout << "Process: " << index << " gets numbers: " << endl;
+cout << "Process: " << regionIndex << " gets numbers: " << endl;
 for(index = 0; index < regionSize; index++)
 {
     cout << region[index] << endl;
@@ -103,7 +110,8 @@ cout << endl << endl;
             timer.start();
 
             // Sort master's region into small buckets
-            for(index = 0; index < regionSize; index++, dataIndex++)
+            region.resize(lastRegSize);
+            for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
                 smallBuckets[bucketNum].push_back(data[index]);
