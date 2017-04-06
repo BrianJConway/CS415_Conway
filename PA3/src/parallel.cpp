@@ -93,12 +93,6 @@ cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
                 {
                     region[index] = data[dataIndex];
                 }
-cout << "Process: " << regionIndex << " gets numbers: " << endl;
-for(index = 0; index < regionSize; index++)
-{
-    cout << region[index] << endl;
-}
-cout << endl << endl;
 
                 // Send current region to appropriate processes
                 MPI_Send(&(region[0]), regionSize, MPI_INT, regionIndex, tag, MPI_COMM_WORLD);
@@ -181,6 +175,7 @@ cout << endl << endl;
             for(index = 0; index < regionSize; index++)
             {
                 bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
+cout << "Process: " << rank << " sorted " << region[index] << " into bucket " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[index]);
             }
 
