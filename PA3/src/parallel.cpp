@@ -201,7 +201,7 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
                         {
                             region.push_back(oneBucket[dataIndex]);
-                            cout << rank << ": " << data[index] << endl;
+                            cout << rank << ": " << oneBucket[index] << endl;
                         }
                     }
                 }
