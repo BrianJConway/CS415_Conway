@@ -66,12 +66,13 @@ int main(int argc, char *argv[])
             generateNumbers(numItems, data);
 
             // Send regions to other processes
-            regionSize  = numItems / numTasks;
+            regionSize = lastRegSize =numItems / numTasks;
 
             if( fmod((float) numItems, (float) numTasks) != 0)
             {
                 lastRegSize = numItems - (numTasks - 1) * regionSize;
             }
+
 
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
