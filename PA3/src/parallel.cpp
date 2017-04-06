@@ -173,6 +173,13 @@ cout << endl << endl;
             region.resize(regionSize);
             MPI_Recv(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
+cout << "Slave: " << rank << " with region size " << regionSize <<  " got numbers: " << endl;
+for(index = 0; index < regionSize; index++)
+{
+    cout << region[index] << endl;
+}
+cout << endl << endl;
+
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
