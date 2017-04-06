@@ -1,6 +1,9 @@
 # PA3: "Bucket Sort"
 
 ## Building and Running
+
+Note: This project is incomplete, I plan to resubmit within the next day or so for reduced credit
+
 This project includes a makefile which will generate object files and two executable files, one for sequential bucket sort and one for parallel bucket sort.
 
 There are a number of scripts depending on what exectuable you want, how many numbers you want to be sorted, and how many processes you want to participate in the sorting.
