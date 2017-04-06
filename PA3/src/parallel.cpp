@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
             // Sort master's region into small buckets
             for(index = 0; index < regionSize; index++, dataIndex++)
             {
-                bucketNum = data[dataIndex] / (MAX_NUM + 1 / numTasks);
+                bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
                 smallBuckets[bucketNum].push_back(data[index]);
             }
 
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
             smallBuckets.resize(numTasks);
             for(index = 0; index < regionSize; index++)
             {
-                bucketNum = region[index] / (MAX_NUM + 1 / numTasks);
+                bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
                 smallBuckets[bucketNum].push_back(data[index]);
             }
 
