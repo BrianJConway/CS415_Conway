@@ -1,42 +1,44 @@
 # PA3: "Bucket Sort"
 
 ## Building and Running
-I have included a program for generating uniformly distributed numbers between 0 and 999,999. 
-If you follow the instructions below, it will generate an executable called "generator" which
-you pass a command line parameter to for specifying how many numbers to generate. Items
-will be output to a file called "data.txt" in the build folder.
+This project includes a makefile which will generate object files and two executable files, one for sequential bucket sort and one for parallel bucket sort.
 
-### Number Generation Instructions
+There are a number of scripts depending on what exectuable you want, how many numbers you want to be sorted, and how many processes you want to participate in the sorting.
 
-```bash
-cd build
-g++ -std=c++11 -o generator ../src/generator.cpp
-./generator [NUMBER OF ITEMS TO GENERATE]
-```
+For sequential bucket sort, scripts are run like so:
 
-## Building and Running
-This project includes a makefile which will generate object files and and executable for sorting numbers using bucket sort.
+sbatch seq_[1/10/100][K,M,B].sh
 
-There is one script for running sequentially. By default, the script "sequential.sh"
-will take input from a file named "data.txt" and use 16 buckets to sort. Timing
-information will be output to the console.
-
-If you have your numbers in a file other than "data.txt" in the build folder,
-simply change the command line parameter in the script "sequential.sh" from "data.txt"
-to what your input file is called.
+In general, you first specify one of three numbers and then a letter that will
+represent thousands (K), millions (M), or billions (B). You cannot specify
+10 billion or 100 billion numbers.
 
 If you want to view the sorted numbers, add the letter "y" as a command line parameter
-at the end of the last line of "sequential.sh". Sorted numbers will be output
+to the end of any of the script files themselves. Sorted numbers will be output
 to the file "sorted.txt" after the script is run.
 
-If you want to change the number of buckets, edi the NUM_BUCKETS constant in the
-"sequential.cpp" file in the /src folder. 
+If you want to change the number of buckets in the sequential version,
+edit the NUM_BUCKETS constant in the "sequential.cpp" file in the /src folder. 
 
 ### Makefile Instructions
 
 ```bash
 cd build
 make
-sbatch sequential.sh
+sbatch seq_[1/10/100][K,M,B].sh
+sbatch par_[1/10/100][K,M,B]_[NUMBER].sh
 make clean
 ```
+
+For example:
+
+Sequential, 10 million items to sort
+```bash
+sbatch seq_10M.sh
+```
+
+Parallel, 10 million items to sort with 16 processes
+```bash
+sbatch par_10M_16.sh
+```
+
