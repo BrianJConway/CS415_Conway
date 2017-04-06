@@ -176,7 +176,7 @@ cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
             {
                 bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
 cout << "Process: " << rank << " sorted " << region[index] << " into bucket " << bucketNum << endl;
-                smallBuckets[bucketNum].push_back(data[index]);
+                smallBuckets[bucketNum].push_back(region[index]);
             }
 
             // Send and receive buckets
