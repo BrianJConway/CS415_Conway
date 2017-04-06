@@ -173,13 +173,6 @@ cout << endl << endl;
             region.resize(regionSize);
             MPI_Recv(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
 
-cout << "Slave: " << rank << " with region size " << regionSize <<  " got numbers: " << endl;
-for(index = 0; index < regionSize; index++)
-{
-    cout << region[index] << endl;
-}
-cout << endl << endl;
-
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
@@ -207,10 +200,13 @@ cout << endl << endl;
                         oneBucket.resize(bucketSize);
                         MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
+cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
+
                         // Copy contents to region (big bucket)
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
                         {
                             region.push_back(oneBucket[dataIndex]);
+                            cout << rank << ": " << data[index] << endl;
                         }
                     }
                 }
