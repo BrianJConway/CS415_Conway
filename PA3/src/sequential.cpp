@@ -97,7 +97,7 @@ void bucketSort(int numItems, int* data)
     Timer timer;
     vector<double> timings;
     vector< vector<int> > buckets(NUM_BUCKETS);
-
+/*
     // Loop specified amount of times to get measurements
     for (index = 0; index < NUM_MEASUREMENTS; index++)
     {
@@ -131,7 +131,18 @@ void bucketSort(int numItems, int* data)
     {
         outputBuckets(buckets);
     }
+*/
+    vector<int> bucket;
+    for(index = 0; index < numItems; index++)
+    {
+        bucket.push_back(data[index]);
+    }
 
+    timer.start();
+    bubbleSort(bucket);
+    timer.stop();
+    timings.push_back(timer.getElapsedTime());
+    
     // Calculate statistics of timings
     calcStatistics(timings, average, stdDev);    
 }
