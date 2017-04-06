@@ -9,22 +9,30 @@
 #include <stdio.h>
 #include <string.h>
 #include "Timer.h"
+#include <random>
 
 using namespace std;
 
-const int NUM_MEASUREMENTS = 5;
-const int MAX_NUM = 1000000;
+const int NUM_MEASUREMENTS = 1;
+const int MIN_NUM = 0;
+const int MAX_NUM = 999999;
 const int NUM_BUCKETS = 16;
 
 bool outputSorted = false;
 
-void readFromFile(char* fileName, int& numItems, int*& data);
+
+void generateNumbers(int numItems, int*& data);
 
 void bucketSort(int numItems, int* data);
+
+void bubbleSort(vector<int>& data);
+
+void swap(int& one, int& other);
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
 void outputBuckets(vector< vector<int> > buckets);
+
 
 int main(int argc, char *argv[])
 {
@@ -32,23 +40,26 @@ int main(int argc, char *argv[])
     int index, numItems = 0;
     int* data = NULL;
 
-    // Check if filename specified
-    if (argc >= 2)
+    // Check if number of elements specified
+    if(argc >= 2)
     {
+        // Get number of items to generate
+        numItems = atoi(argv[1]);
+        
         // Check if argument specified file output
-        if( argc >= 3 && strcmp(argv[2], "y") == 0)
+        if (argc >= 3 && strcmp(argv[2], "y") == 0)
         {
             outputSorted = true;
         }
 
-        // Read data from file
-        readFromFile(argv[1], numItems, data);
+        // Generate specified amount of numbers
+        generateNumbers(numItems, data);
 
         // Bucket sort
         bucketSort(numItems, data);
 
         // Deallocate array of items
-        if( data != NULL)
+        if (data != NULL)
         {
             delete[] data;
         }
@@ -58,29 +69,26 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void readFromFile(char* filename, int& numItems, int*& data)
+void generateNumbers(int numItems, int*& data)
 {
     // Initialize function/variables
     int index;
-    ifstream fin;
+    random_device rd;
+    default_random_engine generator( rd() );
+    string str = "this string seeds the engine";
+    seed_seq seed(str.begin(),str.end());
+    generator.seed(seed);
+    uniform_int_distribution<int> dist1( MIN_NUM, MAX_NUM );
 
-    // Clear and open input file
-    fin.clear();
-    fin.open(filename);
-
-    // Get number of items, allocate array
-    fin >> numItems;
+    // Allocate array
     data = new int[numItems];
-
-    // Loop through all items
+    
+    // Fill array with random numbers
     for(index = 0; index < numItems; index++)
     {
-        // Read current item into array
-        fin >> data[index];
+        data[index] = dist1(generator);
     }
-    // end loop
 }
-
 void bucketSort(int numItems, int* data)
 {
     // Initialize function/variables
@@ -93,23 +101,23 @@ void bucketSort(int numItems, int* data)
     // Loop specified amount of times to get measurements
     for (index = 0; index < NUM_MEASUREMENTS; index++)
     {
-        // Start the timer
-        timer.start();
-
         // Loop through all numbers
         for(index = 0; index < numItems; index++)
         {
             // Place current number into proper bucket
-            bucketNum = data[index] / (MAX_NUM / NUM_BUCKETS);
+            bucketNum = data[index] / ((MAX_NUM + 1) / NUM_BUCKETS);
             buckets[bucketNum].push_back(data[index]);
         }
         // end loop
+
+        // Start the timer
+        timer.start();
 
         // Loop through all buckets
         for(index = 0; index < NUM_BUCKETS; index++)
         {
             // Sort the current bucket
-            sort(buckets[index].begin(), buckets[index].end());
+            bubbleSort(buckets[index]);
         }
         // end loop
 
@@ -126,6 +134,41 @@ void bucketSort(int numItems, int* data)
 
     // Calculate statistics of timings
     calcStatistics(timings, average, stdDev);    
+}
+
+void bubbleSort(vector<int>& data)
+{
+    // Initialize function/variables
+    bool swapped = true;
+    int index;
+    
+    // Check if swap occured
+    while(swapped)
+    {
+        // Unset swapped flag
+        swapped = false;
+
+        // Loop through all items
+        for(int index = 0; index < data.size() - 1; index++)
+        {
+            // Check if current item needs to be swapped
+            if(data[index] > data[index+1])
+            {
+                // Swap current item
+                swap(data[index], data[index + 1]);
+
+                // set swapped flag
+                swapped = true;
+            }
+        }
+    }
+}
+
+void swap(int& one, int& other)
+{
+    int temp = one;
+    one = other;
+    other = temp;
 }
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
@@ -162,8 +205,6 @@ void outputBuckets(vector< vector<int> > buckets)
     // Initialization
     int index;
     ofstream fout;
-
-    cout << "AAAA" << endl;
     
     // Open output file
     fout.open("sorted.txt");
