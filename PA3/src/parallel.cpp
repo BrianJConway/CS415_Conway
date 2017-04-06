@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
 
+cout << "regionsize: " << regionSize << endl;
+
             for(regionIndex = 1; regionIndex < numTasks; regionIndex++)
             {
                 // Send size of one region to current process
@@ -83,6 +85,12 @@ int main(int argc, char *argv[])
                 {
                     region[index] = data[dataIndex];
                 }
+cout << "Process: " << index << " gets numbers: " << endl;
+for(index = 0; index < regionSize; index++)
+{
+    cout << region[index] << endl;
+}
+cout << endl << endl;
 
                 // Send current region to appropriate processes
                 MPI_Send(&(region[0]), regionSize, MPI_INT, regionIndex, tag, MPI_COMM_WORLD);
