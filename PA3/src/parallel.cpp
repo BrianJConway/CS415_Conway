@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
+cout << "MASTER SORTED " << data[dataIndex] << " INTO BUCKET " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[index]);
             }
 
@@ -116,6 +117,7 @@ int main(int argc, char *argv[])
             for(index = 1; index < numTasks; index++)
             {
                 // Send bucket size and bucket contents to current process
+cout << "MASTER SENDING BUCKET TO PROCESS: " << index << endl;
                 bucketSize = smallBuckets[index].size();
                 MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
                 MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
