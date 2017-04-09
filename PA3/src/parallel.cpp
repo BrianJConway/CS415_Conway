@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     int numTasks, rank, dest, src, tag = 1;
     int index, regionIndex, regionSize, bucketSize, bucketNum, bucketIndex,
         startNumber, dataIndex, srcProcess, lastRegSize, numItems = 0;
-    double floatSize;
+    double floatSize, average, stdDev;
     vector<int> data, region, oneBucket;
     vector< vector<int> > smallBuckets;
     Timer timer;
@@ -76,8 +76,6 @@ int main(int argc, char *argv[])
 
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
-
-cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
 
             for(regionIndex = 1; regionIndex < numTasks; regionIndex++)
             {
@@ -159,6 +157,8 @@ cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
                 }
                 MPI_Barrier(MPI_COMM_WORLD);
             }
+
+            calcStatistics(timings, average, stdDev);
         }
         else
         {
@@ -175,7 +175,6 @@ cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
             for(index = 0; index < regionSize; index++)
             {
                 bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
-cout << "Process: " << rank << " sorted " << region[index] << " into bucket " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(region[index]);
             }
 
@@ -195,13 +194,10 @@ cout << "Process: " << rank << " sorted " << region[index] << " into bucket " <<
                         oneBucket.resize(bucketSize);
                         MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
-
                         // Copy contents to region (big bucket)
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
                         {
                             region.push_back(oneBucket[dataIndex]);
-                            cout << rank << ": " << oneBucket[dataIndex] << endl;
                         }
                     }
                 }
