@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 {
     // Initialization
     int numTasks, rank, dest, src, tag = 1;
-    int index, regionIndex, regionSize, bucketSize, bucketNum,
+    int index, regionIndex, regionSize, bucketSize, bucketNum, bucketIndex,
         startNumber, dataIndex, srcProcess, lastRegSize, numItems = 0;
     double floatSize;
     vector<int> data, region, oneBucket;
@@ -187,7 +187,7 @@ cout << "Process: " << rank << " sorted " << region[index] << " into bucket " <<
                 if( rank == index)
                 {
                     // Get buckets from all other processes
-                    for(int bucketIndex = 0; bucketIndex < numTasks - 1; bucketIndex++)
+                    for(bucketIndex = 0; bucketIndex < numTasks - 1; bucketIndex++)
                     {
                         // Receive bucket size and bucket contents from current process
                         MPI_Recv(&bucketSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
