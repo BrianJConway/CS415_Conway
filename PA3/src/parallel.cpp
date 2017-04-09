@@ -18,13 +18,13 @@ const int MAX_NUM = 999999;
 
 bool outputSorted = false;
 
-void generateNumbers(int numItems, vector<int>& data);
+void generateNumbers(int numItems, vector<int> &data);
 
 void bucketSort(int numItems, int *data);
 
-void bubbleSort(vector<int>& data);
+void bubbleSort(vector<int> &data);
 
-void swap(int& one, int& other);
+void swap(int &one, int &other);
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         startNumber, dataIndex, srcProcess, lastRegSize, numItems = 0;
     double floatSize;
     vector<int> data, region, oneBucket;
-    vector< vector<int> > smallBuckets;
+    vector<vector<int>> smallBuckets;
     Timer timer;
     vector<double> timings;
     MPI_Status status;
@@ -48,211 +48,47 @@ int main(int argc, char *argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    // Check if number of elements specified
-    if (argc >= 2)
+    if (rank == 0)
     {
-        // Get number of items to generate
-        numItems = atoi(argv[1]);
-
-        // Check if argument specified file output
-        if (argc >= 3 && strcmp(argv[2], "y") == 0)
+        bucketSize = 100;
+        oneBucket.resize(100);
+        
+        for(index = 0; index < bucketSize; index++)
         {
-            outputSorted = true;
+            oneBucket[index] = index;
         }
 
-        if (rank == 0)
+        MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
+        MPI_Send(&(oneBucket[0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
+    }
+    else
+    {
+        MPI_Recv(&bucketSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+        srcProcess = status.MPI_SOURCE;
+        oneBucket.resize(bucketSize);
+        MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
+
+        cout << "Process " << rank << " got bucket from " << status.MPI_SOURCE << " of size " << bucketSize << ", contents: " << endl;
+
+        for(index = 0; index < bucketSize; index++)
         {
-            // Generate specified amount of numbers
-            generateNumbers(numItems, data);
-
-            // Send regions to other processes
-            regionSize = lastRegSize =numItems / numTasks;
-
-            if( fmod((float) numItems, (float) numTasks) != 0)
-            {
-                lastRegSize = numItems - (numTasks - 1) * regionSize;
-            }
-
-
-            region.resize(regionSize);
-            smallBuckets.resize(numTasks);
-
-cout << "regionsize: " << regionSize << "lastRegSize: " << lastRegSize << endl;
-
-            for(regionIndex = 1; regionIndex < numTasks; regionIndex++)
-            {
-                // Send size of one region to current process
-                MPI_Send(&regionSize, 1, MPI_INT, regionIndex, tag, MPI_COMM_WORLD);
-
-                // Set starting index of region
-                startNumber =  ( regionIndex - 1 ) * regionSize;
-
-                // Copy numbers from data array into region array
-                for(dataIndex = startNumber, index = 0;
-                 dataIndex < startNumber + regionSize; dataIndex++, index++)
-                {
-                    region[index] = data[dataIndex];
-                }
-
-                // Send current region to appropriate processes
-                MPI_Send(&(region[0]), regionSize, MPI_INT, regionIndex, tag, MPI_COMM_WORLD);
-            }
-
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            // Start timer
-            timer.start();
-
-            // Sort master's region into small buckets
-            region.resize(lastRegSize);
-            for(index = 0; index < lastRegSize; index++, dataIndex++)
-            {
-                bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
-                smallBuckets[bucketNum].push_back(data[index]);
-            }
-
-            // Send and receive buckets
-            region.clear();
-
-            for(index = 1; index < numTasks; index++)
-            {
-                // Send bucket size and bucket contents to current process
-                bucketSize = smallBuckets[index].size();
-                MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
-                MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
-            }
-            for(index = 1; index < numTasks; index++)
-            {
-                // Receive bucket size and bucket contents from current process
-                MPI_Recv(&bucketSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
-                srcProcess = status.MPI_SOURCE;
-                oneBucket.resize(bucketSize);
-                MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
-
-                // Copy contents to region (big bucket)
-                for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
-                {
-                    region.push_back(oneBucket[dataIndex]);
-                }
-            }
-
-            // Sort final bucket
-            bubbleSort(region);
-
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            // Stop timer
-            timer.stop();
-            timings.push_back(timer.getElapsedTime());
-
-            if(outputSorted)
-            {
-                for(index = 1; index < numTasks - 1; index++)
-                {
-                    MPI_Barrier(MPI_COMM_WORLD);
-                }
-                for(index = 0; index < region.size(); index++)
-                {
-                    cout << region[index] << endl;
-                }
-                MPI_Barrier(MPI_COMM_WORLD);
-            }
+            cout << oneBucket[index] << endl;
         }
-        else
-        {
-            // Receive region
-            MPI_Recv(&regionSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
-            region.resize(regionSize);
-            MPI_Recv(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+        
 
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            // Sort numbers into small buckets
-            smallBuckets.resize(numTasks);
-            for(index = 0; index < regionSize; index++)
-            {
-                bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
-cout << "Process: " << rank << " sorted " << region[index] << " into bucket " << bucketNum << endl;
-                smallBuckets[bucketNum].push_back(region[index]);
-            }
-
-            // Send and receive buckets
-            region.clear();
-
-            for(index = 1; index < numTasks; index++)
-            {
-                if( rank == index)
-                {
-                    // Get buckets from all other processes
-                    for(int bucketIndex = 0; bucketIndex < numTasks - 1; bucketIndex++)
-                    {
-                        // Receive bucket size and bucket contents from current process
-                        MPI_Recv(&bucketSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
-                        srcProcess = status.MPI_SOURCE;
-                        oneBucket.resize(bucketSize);
-                        MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
-
-cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
-
-                        // Copy contents to region (big bucket)
-                        for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
-                        {
-                            region.push_back(oneBucket[dataIndex]);
-                            cout << rank << ": " << oneBucket[index] << endl;
-                        }
-                    }
-                }
-                else
-                {
-                    // Send bucket size and bucket contents to current process
-                    bucketSize = smallBuckets[index].size();
-                    MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
-                    MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
-                }
-            }
-            // Send last bucket to master
-            bucketSize = smallBuckets[index].size();
-            MPI_Send(&bucketSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
-            MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, 0, tag, MPI_COMM_WORLD);
-
-            // Sort final bucket
-            bubbleSort(region);
-
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            if(outputSorted)
-            {
-                for(index = 1; index < numTasks - 1; index++)
-                {
-                    if(index == rank)
-                    {
-                        for(dataIndex = 0; dataIndex < region.size(); dataIndex++)
-                        {
-                            cout << region[dataIndex] << endl;
-                        }
-                    }
-                    MPI_Barrier(MPI_COMM_WORLD);
-                }
-                MPI_Barrier(MPI_COMM_WORLD);
-            }
-        }
     }
 
     // Exit program
     return 0;
 }
 
-void generateNumbers(int numItems, vector<int>& data)
+void generateNumbers(int numItems, vector<int> &data)
 {
     // Initialize function/variables
     int index;
     random_device rd;
     default_random_engine generator(rd());
-    string str = "this string seeds the engine";
+    string str = "new seed";
     seed_seq seed(str.begin(), str.end());
     generator.seed(seed);
     uniform_int_distribution<int> dist1(MIN_NUM, MAX_NUM);
@@ -264,23 +100,23 @@ void generateNumbers(int numItems, vector<int>& data)
     }
 }
 
-void bubbleSort(vector<int>& data)
+void bubbleSort(vector<int> &data)
 {
     // Initialize function/variables
     bool swapped = true;
     int index;
-    
+
     // Check if swap occured
-    while(swapped)
+    while (swapped)
     {
         // Unset swapped flag
         swapped = false;
 
         // Loop through all items
-        for(int index = 0; index < data.size() - 1; index++)
+        for (int index = 0; index < data.size() - 1; index++)
         {
             // Check if current item needs to be swapped
-            if(data[index] > data[index+1])
+            if (data[index] > data[index + 1])
             {
                 // Swap current item
                 swap(data[index], data[index + 1]);
@@ -292,13 +128,12 @@ void bubbleSort(vector<int>& data)
     }
 }
 
-void swap(int& one, int& other)
+void swap(int &one, int &other)
 {
     int temp = one;
     one = other;
     other = temp;
 }
-
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
 {
@@ -336,7 +171,7 @@ void outputBucket(vector<int> bucket, int process)
 
     // Loop through current bucket
     for (vector<int>::iterator it = bucket.begin();
-        it != bucket.end(); ++it)
+         it != bucket.end(); ++it)
     {
         // Output current item
         cout << *it << endl;
