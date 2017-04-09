@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
                         oneBucket.resize(bucketSize);
                         MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
-//cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
+cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
 
                         // Copy contents to region (big bucket)
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
