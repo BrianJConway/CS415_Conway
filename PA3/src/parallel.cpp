@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
-            
+
             for(regionIndex = 1; regionIndex < numTasks; regionIndex++)
             {
                 // Send size of one region to current process
@@ -201,7 +201,6 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
                         {
                             region.push_back(oneBucket[dataIndex]);
-                            cout << rank << ": " << oneBucket[dataIndex] << endl;
                         }
                     }
                 }
