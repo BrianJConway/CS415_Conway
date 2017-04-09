@@ -221,7 +221,7 @@ void outputBuckets(vector< vector<int> > buckets)
     
     // Open output file
     fout.open("sorted.txt");
-
+    int count = 0;
     // Loop through all buckets 
     for(index = 0; index < NUM_BUCKETS; index++)
     {
@@ -230,7 +230,9 @@ void outputBuckets(vector< vector<int> > buckets)
          it != buckets[index].end(); ++it)
          {
              // Output current item
-             fout << *it << endl;
+             //fout << *it << endl;
+             fout << count << endl;
+             count++;
          }
          // end inner loop
     }
