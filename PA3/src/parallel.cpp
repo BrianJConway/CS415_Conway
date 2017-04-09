@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         }
 
         MPI_Send(&bucketSize, 1, MPI_INT, 1, tag, MPI_COMM_WORLD);
-        MPI_Send(&(oneBucket[0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
+        MPI_Send(&(oneBucket[0]), bucketSize, MPI_INT, 1, tag, MPI_COMM_WORLD);
     }
     else
     {
