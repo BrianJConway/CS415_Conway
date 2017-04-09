@@ -175,7 +175,6 @@ int main(int argc, char *argv[])
             for(index = 0; index < regionSize; index++)
             {
                 bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
-cout << "Process: " << rank << " sorted " << region[index] << " into bucket " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(region[index]);
             }
 
