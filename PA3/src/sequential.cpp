@@ -75,7 +75,7 @@ void generateNumbers(int numItems, int*& data)
     int index;
     random_device rd;
     default_random_engine generator( rd() );
-    string str = "this string seeds the engine";
+    string str = "new seed";
     seed_seq seed(str.begin(),str.end());
     generator.seed(seed);
     uniform_int_distribution<int> dist1( MIN_NUM, MAX_NUM );
