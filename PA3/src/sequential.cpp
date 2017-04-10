@@ -40,6 +40,11 @@ int main(int argc, char *argv[])
     int index, numItems = 0;
     int* data = NULL;
 
+    // Initialize MPI
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
     // Check if number of elements specified
     if(argc >= 2)
     {
@@ -64,6 +69,9 @@ int main(int argc, char *argv[])
             delete[] data;
         }
     }
+
+    // Shut down
+    MPI_Finalize();
 
     // Exit program
     return 0;
