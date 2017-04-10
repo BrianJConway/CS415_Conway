@@ -117,7 +117,8 @@ void bucketSort(int numItems, int* data)
         for(bucketIndex = 0; bucketIndex < NUM_BUCKETS; bucketIndex++)
         {
             // Sort the current bucket
-            bubbleSort(buckets[bucketIndex]);
+            //bubbleSort(buckets[bucketIndex]);
+            sort(buckets[index].begin(), buckets[index].end());
         }
         // end loop
 
