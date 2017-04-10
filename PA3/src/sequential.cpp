@@ -39,7 +39,9 @@ int main(int argc, char *argv[])
     // Initialization
     int index, numItems = 0;
     int* data = NULL;
-
+    int numTasks, rank, dest, src, tag = 1;
+    MPI_Status status;
+    
     // Initialize MPI
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
