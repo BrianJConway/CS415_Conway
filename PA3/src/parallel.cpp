@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
             generateNumbers(numItems, data);
 
             // Send regions to other processes
-            regionSize = lastRegSize =numItems / numTasks;
+            regionSize = lastRegSize = numItems / numTasks;
 
             if( fmod((float) numItems, (float) numTasks) != 0)
             {
@@ -104,11 +104,14 @@ int main(int argc, char *argv[])
 
             // Sort master's region into small buckets
             region.resize(lastRegSize);
+
+cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
                 smallBuckets[bucketNum].push_back(data[index]);
             }
+cout << "MASTER FINISHED SORTING INTO BUCKETS" << endl;
 
             // Send and receive buckets
             region.clear();
