@@ -151,17 +151,33 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             timer.stop();
             timings.push_back(timer.getElapsedTime());
 
+            // Optionally output to file
             if(outputSorted)
             {
+                smallBuckets.resize(regionSize);
                 for(index = 1; index < numTasks - 1; index++)
                 {
+                    MPI_Recv(&regionSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+                    smallBuckets[index - 1].resize(regionSize);
+                    MPI_Recv(&(smallBuckets[index - 1][0]), regionSize, MPI_INT, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
                     MPI_Barrier(MPI_COMM_WORLD);
                 }
+
+                ofstream fout;
+                fout.open("par_sorted.txt");
+                for(bucketIndex = 0; bucketIndex < numTasks; bucketIndex++)
+                {
+                    for(index = 0; index < smallBuckets[bucketIndex].size(); index++)
+                    {
+                        fout << smallBuckets[bucketIndex][index] << endl;
+                    }
+                }
+
                 for(index = 0; index < region.size(); index++)
                 {
-                    cout << region[index] << endl;
+                    fout << region[index] << endl;
                 }
-                MPI_Barrier(MPI_COMM_WORLD);
+                fout.close();
             }
 
             calcStatistics(timings, average, stdDev);
@@ -234,20 +250,19 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
+            regionSize = region.size();
+
             if(outputSorted)
             {
                 for(index = 1; index < numTasks - 1; index++)
                 {
-                    if(index == rank)
+                    if(rank == index)
                     {
-                        for(dataIndex = 0; dataIndex < region.size(); dataIndex++)
-                        {
-                            cout << region[dataIndex] << endl;
-                        }
+                        MPI_Send(&regionSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
+                        MPI_Send(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD);
                     }
                     MPI_Barrier(MPI_COMM_WORLD);
                 }
-                MPI_Barrier(MPI_COMM_WORLD);
             }
         }
     }
