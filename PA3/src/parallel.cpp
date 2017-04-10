@@ -155,17 +155,17 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             if(outputSorted)
             {
                 smallBuckets.resize(regionSize);
-                for(index = 1; index < numTasks - 1; index++)
+                for(index = 1; index < numTasks; index++)
                 {
-                    MPI_Recv(&regionSize, 1, MPI_INT, MPI_ANY_SOURCE, tag, MPI_COMM_WORLD, &status);
+                    MPI_Recv(&regionSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD, &status);
                     smallBuckets[index - 1].resize(regionSize);
-                    MPI_Recv(&(smallBuckets[index - 1][0]), regionSize, MPI_INT, status.MPI_SOURCE, tag, MPI_COMM_WORLD, &status);
+                    MPI_Recv(&(smallBuckets[index - 1][0]), regionSize, MPI_INT, index, tag, MPI_COMM_WORLD, &status);
                     MPI_Barrier(MPI_COMM_WORLD);
                 }
 
                 ofstream fout;
                 fout.open("par_sorted.txt");
-                for(bucketIndex = 0; bucketIndex < numTasks; bucketIndex++)
+                for(bucketIndex = 0; bucketIndex < numTasks - 1; bucketIndex++)
                 {
                     for(index = 0; index < smallBuckets[bucketIndex].size(); index++)
                     {
