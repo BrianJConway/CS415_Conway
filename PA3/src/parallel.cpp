@@ -139,9 +139,10 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             }
             MPI_Barrier(MPI_COMM_WORLD);
 
-
+            cout << "MASTER " << rank << "STARTING REGION SORT" << endl;
             // Sort final bucket
             bubbleSort(region);
+            cout << "MASTER " << rank << "FINISHED REGION SORT" << endl;
 
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
@@ -226,9 +227,10 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
 
             MPI_Barrier(MPI_COMM_WORLD);
 
+            cout << "TASK " << rank << "STARTING REGION SORT" << endl;
             // Sort final bucket
             bubbleSort(region);
-
+            cout << "TASK " << rank << "FINISHED REGION SORT" << endl;
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
