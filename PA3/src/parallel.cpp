@@ -216,7 +216,7 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
                         oneBucket.resize(bucketSize);
                         MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << ", contents: " << endl;
+cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << endl;
 
                         // Copy contents to region (big bucket)
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
@@ -243,10 +243,10 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
 
             MPI_Barrier(MPI_COMM_WORLD);
 
-            cout << "TASK " << rank << "STARTING REGION SORT" << endl;
+            cout << "TASK " << rank << " STARTING REGION SORT" << endl;
             // Sort final bucket
             bubbleSort(region);
-            cout << "TASK " << rank << "FINISHED REGION SORT" << endl;
+            cout << "TASK " << rank << " FINISHED REGION SORT" << endl;
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
