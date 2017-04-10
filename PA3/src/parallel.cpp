@@ -107,7 +107,6 @@ int main(int argc, char *argv[])
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
-cout << "MASTER SORTED " << data[dataIndex] << " INTO BUCKET " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[index]);
             }
 
