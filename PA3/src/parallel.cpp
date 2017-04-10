@@ -254,7 +254,7 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
 
             if(outputSorted)
             {
-                for(index = 1; index < numTasks - 1; index++)
+                for(index = 1; index < numTasks; index++)
                 {
                     if(rank == index)
                     {
