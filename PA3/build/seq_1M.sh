@@ -1,8 +1,10 @@
 #!/bin/bash
 #SBATCH -n 1
-#SBATCH --mem=2048MB
-#SBATCH --time=00:05:30
-#SBATCH --mail-user=YOUR_EMAIL@DOMAIN.COM
+#SBATCH -N 1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=8192MB
+#SBATCH --time=00:05:00
+#SBATCH --mail-user=brianc@nevada.unr.edu
 #SBATCH --mail-type=ALL
 
-srun mpi_sequential 1000000 y
+srun mpi_sequential 1500000
