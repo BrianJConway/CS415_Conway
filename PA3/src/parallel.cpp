@@ -110,7 +110,7 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             {
                 cout << dataIndex << endl;
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
-                cout << bucketNum << endl;
+                cout << data[dataIndex] << "    " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
 cout << "MASTER FINISHED SORTING INTO BUCKETS" << endl;
