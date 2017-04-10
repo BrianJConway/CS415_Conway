@@ -7,4 +7,4 @@
 #SBATCH --mail-user=brianc@nevada.unr.edu
 #SBATCH --mail-type=ALL
 
-srun mpi_parallel 10000000
+srun mpi_parallel 1500000
