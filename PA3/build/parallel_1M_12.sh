@@ -5,4 +5,4 @@
 #SBATCH --mail-user=YOUR_EMAIL@DOMAIN.COM
 #SBATCH --mail-type=ALL
 
-srun mpi_parallel 1000000
+srun mpi_parallel 1500000
