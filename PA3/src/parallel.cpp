@@ -109,7 +109,7 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
                 cout << dataIndex << endl;
-                bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
+                bucketNum = (float) data[dataIndex] / (( (float) MAX_NUM + 1) / (float) numTasks);
                 cout << data[dataIndex] << "    " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
@@ -183,7 +183,7 @@ cout << "MASTER SENDING BUCKET TO PROCESS: " << index << endl;
             smallBuckets.resize(numTasks);
             for(index = 0; index < regionSize; index++)
             {
-                bucketNum = region[index] / ((MAX_NUM + 1) / numTasks);
+                bucketNum = (float) region[index] / (( (float) MAX_NUM + 1) / (float) numTasks);
                 smallBuckets[bucketNum].push_back(region[index]);
             }
 

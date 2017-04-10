@@ -92,20 +92,20 @@ void generateNumbers(int numItems, int*& data)
 void bucketSort(int numItems, int* data)
 {
     // Initialize function/variables
-    int index, bucketNum;
+    int index, bucketNum, mIndex, bucketIndex;
     double average, stdDev;
     Timer timer;
     vector<double> timings;
     vector< vector<int> > buckets(NUM_BUCKETS);
 
     // Loop specified amount of times to get measurements
-    for (index = 0; index < NUM_MEASUREMENTS; index++)
+    for ( mIndex = 0; mIndex < NUM_MEASUREMENTS; mIndex++)
     {
         // Loop through all numbers
         for(index = 0; index < numItems; index++)
         {
             // Place current number into proper bucket
-            bucketNum = data[index] / ((MAX_NUM + 1) / NUM_BUCKETS);
+            bucketNum = (float) data[index] / (( (float) MAX_NUM + 1) / (float) NUM_BUCKETS);
             buckets[bucketNum].push_back(data[index]);
         }
         // end loop
@@ -114,10 +114,10 @@ void bucketSort(int numItems, int* data)
         timer.start();
 
         // Loop through all buckets
-        for(index = 0; index < NUM_BUCKETS; index++)
+        for(bucketIndex = 0; bucketIndex < NUM_BUCKETS; bucketIndex++)
         {
             // Sort the current bucket
-            bubbleSort(buckets[index]);
+            bubbleSort(buckets[bucketIndex]);
         }
         // end loop
 
