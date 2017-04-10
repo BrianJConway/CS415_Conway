@@ -162,13 +162,13 @@ void bubbleSort(vector<int>& data)
         swapped = false;
 
         // Loop through all items
-        for(int index = 0; index < data.size() - 1; index++)
+        for(int index = 1; index < data.size(); index++)
         {
             // Check if current item needs to be swapped
-            if(data[index] > data[index+1])
+            if(data[index - 1] > data[index])
             {
                 // Swap current item
-                swap(data[index], data[index + 1]);
+                swap(data[index - 1 ], data[index]);
 
                 // set swapped flag
                 swapped = true;
