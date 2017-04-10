@@ -108,8 +108,10 @@ int main(int argc, char *argv[])
 cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
+                cout << dataIndex << endl;
                 bucketNum = data[dataIndex] / ((MAX_NUM + 1) / numTasks);
-                smallBuckets[bucketNum].push_back(data[index]);
+                cout << bucketNum << endl;
+                smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
 cout << "MASTER FINISHED SORTING INTO BUCKETS" << endl;
 
