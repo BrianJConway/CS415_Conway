@@ -229,7 +229,7 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
 
             cout << "TASK " << rank << "STARTING REGION SORT" << endl;
             // Sort final bucket
-            bubbleSort(region);
+            sort(region.begin(), region.end());
             cout << "TASK " << rank << "FINISHED REGION SORT" << endl;
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
