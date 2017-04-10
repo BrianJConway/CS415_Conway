@@ -267,6 +267,9 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
         }
     }
 
+    // Shut down
+    MPI_Finalize();
+
     // Exit program
     return 0;
 }
