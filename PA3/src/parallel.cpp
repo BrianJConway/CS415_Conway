@@ -139,10 +139,10 @@ cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             }
             MPI_Barrier(MPI_COMM_WORLD);
 
-            cout << "MASTER " << rank << "STARTING REGION SORT" << endl;
+            cout << "MASTER STARTING REGION SORT" << endl;
             // Sort final bucket
-            bubbleSort(region);
-            cout << "MASTER " << rank << "FINISHED REGION SORT" << endl;
+            sort(region.begin(), region.end());
+            cout << "MASTER FINISHED REGION SORT" << endl;
 
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
