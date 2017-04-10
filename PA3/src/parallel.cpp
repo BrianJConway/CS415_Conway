@@ -108,12 +108,9 @@ int main(int argc, char *argv[])
 cout << "MASTER STARTED SORTING INTO BUCKETS" << endl;
             for(index = 0; index < lastRegSize; index++, dataIndex++)
             {
-                cout << dataIndex << endl;
                 bucketNum = (float) data[dataIndex] / (( (float) MAX_NUM + 1) / (float) numTasks);
-                cout << data[dataIndex] << "    " << bucketNum << endl;
                 smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
-cout << "MASTER FINISHED SORTING INTO BUCKETS" << endl;
 
             // Send and receive buckets
             region.clear();
@@ -121,7 +118,6 @@ cout << "MASTER FINISHED SORTING INTO BUCKETS" << endl;
             for(index = 1; index < numTasks; index++)
             {
                 // Send bucket size and bucket contents to current process
-cout << "MASTER SENDING BUCKET TO PROCESS: " << index << endl;
                 bucketSize = smallBuckets[index].size();
                 MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
                 MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
