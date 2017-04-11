@@ -217,10 +217,12 @@ cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
             }
             cout << "PROCESS " << rank << " SELF: " << smallBuckets[rank - 1].size() << endl;
 
+int sum = 0;
     for(index = 0; index < numTasks; index++)
     {
-        cout << "RANK " << rank << " BUCKET " << index << " SIZE: " << smallBuckets[index].size() << endl;
+        sum += smallBuckets[index].size();
     }
+        cout << "RANK " << rank << " BUCKET SUM: " << sum << endl;
 
             // Send and receive buckets
 int count = 0;
