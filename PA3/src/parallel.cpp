@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
                 MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
                 MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
                 MPI_Barrier(MPI_COMM_WORLD);
-cout << "Process: 0 SENT bucket TO " << index << " of size " << bucketSize << endl;
+//cout << "Process: 0 SENT bucket TO " << index << " of size " << bucketSize << endl;
 
             }
             for(index = 1; index < numTasks; index++)
@@ -133,7 +133,7 @@ cout << "Process: 0 SENT bucket TO " << index << " of size " << bucketSize << en
                 oneBucket.resize(bucketSize);
                 MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process: 0 got bucket from " << srcProcess << " of size " << bucketSize << endl;
+//cout << "Process: 0 got bucket from " << srcProcess << " of size " << bucketSize << endl;
 
                 // Copy contents to region (big bucket)
                 for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
@@ -192,6 +192,7 @@ cout << "TASK " << rank << " HAS " << region.size() << " ITEMS." << endl;
             MPI_Recv(&regionSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
             region.resize(regionSize);
             MPI_Recv(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
 
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
@@ -206,7 +207,7 @@ cout << "TASK " << rank << " HAS " << region.size() << " ITEMS." << endl;
 
             // Send and receive buckets
             region.clear();
-
+int count = 0;
             for(index = 1; index < numTasks; index++)
             {
                 if( rank == index)
@@ -220,7 +221,7 @@ cout << "TASK " << rank << " HAS " << region.size() << " ITEMS." << endl;
                         oneBucket.resize(bucketSize);
                         MPI_Recv(&(oneBucket[0]), bucketSize, MPI_INT, srcProcess, tag, MPI_COMM_WORLD, &status);
 
-cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << endl;
+//cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " << bucketSize << endl;
 
                         // Copy contents to region (big bucket)
                         for(dataIndex = 0; dataIndex < bucketSize; dataIndex++)
@@ -237,8 +238,8 @@ cout << "Process: " << rank << " got bucket from " << srcProcess << " of size " 
                     bucketSize = smallBuckets[index].size();
                     MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
                     MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
-
-cout << "Process: " << rank << " SENT bucket TO " << index << " of size " << bucketSize << endl;
+count += bucketSize;
+//cout << "Process: " << rank << " SENT bucket TO " << index << " of size " << bucketSize << endl;
 
                     MPI_Barrier(MPI_COMM_WORLD);
                 }
@@ -247,8 +248,8 @@ cout << "Process: " << rank << " SENT bucket TO " << index << " of size " << buc
             bucketSize = smallBuckets[bucketIndex].size();
             MPI_Send(&bucketSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
             MPI_Send(&(smallBuckets[bucketIndex][0]), bucketSize, MPI_INT, 0, tag, MPI_COMM_WORLD);
-
-cout << "Process: " << rank << " SENT bucket TO 0 of size " << bucketSize << endl;
+count += bucketSize;
+cout << "Process: " << rank << " SENT " << count << endl;
 
             MPI_Barrier(MPI_COMM_WORLD);
 
