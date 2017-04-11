@@ -112,13 +112,6 @@ int main(int argc, char *argv[])
                 smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
 
-int sum = 0;
-    for(index = 0; index < numTasks; index++)
-    {
-        sum += smallBuckets[index].size();
-    }
-        cout << "RANK " << rank << " BUCKET SUM: " << sum << endl;
-        
             // Send and receive buckets
             region.clear();
             for(index = 0; index < smallBuckets[numTasks - 1].size(); index++)
@@ -129,9 +122,9 @@ int sum = 0;
             for(index = 1; index < numTasks; index++)
             {
                 // Send bucket size and bucket contents to current process
-                bucketSize = smallBuckets[index].size();
+                bucketSize = smallBuckets[index -1].size();
                 MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
-                MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
+                MPI_Send(&(smallBuckets[index - 1][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
                 MPI_Barrier(MPI_COMM_WORLD);
 //cout << "Process: 0 SENT bucket TO " << index << " of size " << bucketSize << endl;
 
@@ -260,9 +253,9 @@ int count = 0;
                 else
                 {
                     // Send bucket size and bucket contents to current process
-                    bucketSize = smallBuckets[index].size();
+                    bucketSize = smallBuckets[index - 1].size();
                     MPI_Send(&bucketSize, 1, MPI_INT, index, tag, MPI_COMM_WORLD);
-                    MPI_Send(&(smallBuckets[index][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
+                    MPI_Send(&(smallBuckets[index - 1][0]), bucketSize, MPI_INT, index, tag, MPI_COMM_WORLD);
 count += bucketSize;
 //cout << "Process: " << rank << " SENT bucket TO " << index << " of size " << bucketSize << endl;
 
