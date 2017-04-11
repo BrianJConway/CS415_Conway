@@ -6,6 +6,9 @@
         "type_traits": "cpp",
         "iostream": "cpp",
         "algorithm": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "chrono": "cpp"
     }
 }
