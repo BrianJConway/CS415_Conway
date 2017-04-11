@@ -215,8 +215,14 @@ cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
             {
                 region.push_back(smallBuckets[rank - 1][index]);
             }
-            cout << "PROCESS " << rank << "SELF: " << smallBuckets[rank - 1].size() << endl;
-
+            cout << "PROCESS " << rank << " SELF: " << smallBuckets[rank - 1].size() << endl;
+if(rank == 1)
+{
+    for(index = 0; index < numTasks; index++)
+    {
+        cout << "RANK 1 BUCKET " << index << " SIZE: " << smallBuckets[index].size() << endl;
+    }
+}
             // Send and receive buckets
 int count = 0;
             for(index = 1; index < numTasks; index++)
@@ -256,9 +262,9 @@ count += bucketSize;
                 }
             }
             // Send last bucket to master
-            bucketSize = smallBuckets[bucketIndex].size();
+            bucketSize = smallBuckets[numTasks - 1].size();
             MPI_Send(&bucketSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD);
-            MPI_Send(&(smallBuckets[bucketIndex][0]), bucketSize, MPI_INT, 0, tag, MPI_COMM_WORLD);
+            MPI_Send(&(smallBuckets[numTasks - 1][0]), bucketSize, MPI_INT, 0, tag, MPI_COMM_WORLD);
 count += bucketSize;
 cout << "Process: " << rank << " SENT " << count << endl;
 
