@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
             // Sort final bucket
             bubbleSort(region);
 //cout << "MASTER FINISHED REGION SORT" << endl;
-
+cout << "TASK " << rank << " HAS " << region.size() << " ITEMS." << endl;
             // Barrier
             MPI_Barrier(MPI_COMM_WORLD);
 
