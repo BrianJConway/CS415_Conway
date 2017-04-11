@@ -112,6 +112,13 @@ int main(int argc, char *argv[])
                 smallBuckets[bucketNum].push_back(data[dataIndex]);
             }
 
+int sum = 0;
+    for(index = 0; index < numTasks; index++)
+    {
+        sum += smallBuckets[index].size();
+    }
+        cout << "RANK " << rank << " BUCKET SUM: " << sum << endl;
+        
             // Send and receive buckets
             region.clear();
             for(index = 0; index < smallBuckets[numTasks - 1].size(); index++)
