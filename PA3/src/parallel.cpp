@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
             {
                 region.push_back(smallBuckets[numTasks - 1][index]);
             }
-            
+
             for(index = 1; index < numTasks; index++)
             {
                 // Send bucket size and bucket contents to current process
@@ -215,6 +215,7 @@ cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
             {
                 region.push_back(smallBuckets[rank - 1][index]);
             }
+            cout << "PROCESS " << rank << "SELF: " << smallBuckets[rank - 1].size() << endl;
 
             // Send and receive buckets
 int count = 0;
