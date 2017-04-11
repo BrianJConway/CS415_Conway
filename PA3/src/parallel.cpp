@@ -216,13 +216,12 @@ cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
                 region.push_back(smallBuckets[rank - 1][index]);
             }
             cout << "PROCESS " << rank << " SELF: " << smallBuckets[rank - 1].size() << endl;
-if(rank == 1)
-{
+
     for(index = 0; index < numTasks; index++)
     {
         cout << "RANK 1 BUCKET " << index << " SIZE: " << smallBuckets[index].size() << endl;
     }
-}
+
             // Send and receive buckets
 int count = 0;
             for(index = 1; index < numTasks; index++)
