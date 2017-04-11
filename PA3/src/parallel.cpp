@@ -114,7 +114,11 @@ int main(int argc, char *argv[])
 
             // Send and receive buckets
             region.clear();
-
+            for(index = 0; index < smallBuckets[numTasks - 1].size(); index++)
+            {
+                region.push_back(smallBuckets[numTasks - 1][index]);
+            }
+            
             for(index = 1; index < numTasks; index++)
             {
                 // Send bucket size and bucket contents to current process
@@ -205,8 +209,14 @@ cout << "Process: " << rank << " REGION SIZE " << regionSize << endl;
                 smallBuckets[bucketNum].push_back(region[index]);
             }
 
-            // Send and receive buckets
+            // Copy bucket from self into region
             region.clear();
+            for(index = 0; index < smallBuckets[rank - 1].size(); index++)
+            {
+                region.push_back(smallBuckets[rank - 1][index]);
+            }
+
+            // Send and receive buckets
 int count = 0;
             for(index = 1; index < numTasks; index++)
             {

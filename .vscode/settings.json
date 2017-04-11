@@ -9,6 +9,9 @@
         "array": "cpp",
         "hash_map": "cpp",
         "hash_set": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "*.ipp": "cpp",
+        "slist": "cpp",
+        "system_error": "cpp"
     }
 }
