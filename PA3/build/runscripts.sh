@@ -2,7 +2,6 @@
 
 BATCHFILES="scripts/test"
 
-
 for batchfile in $BATCHFILES
 do
 

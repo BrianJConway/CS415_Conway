@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -n 8
+#SBATCH -n 1
 #SBATCH -N 1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8192MB
@@ -7,4 +7,4 @@
 #SBATCH --mail-user=brianc@nevada.unr.edu
 #SBATCH --mail-type=ALL
 
-srun mpi_parallel 1000 y
+srun mpi_sequential 800000 y
