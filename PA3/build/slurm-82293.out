@@ -1,0 +1,10 @@
+TASKS: 2
+NUMBERS: 1000000
+TASKS: 2
+NUMBERS: 1000000
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** JOB 82293 CANCELLED AT 2017-04-12T10:33:24 DUE TO TIME LIMIT on compute-0-5 ***
+slurmstepd: *** STEP 82293.0 CANCELLED AT 2017-04-12T10:33:24 DUE TO TIME LIMIT on compute-0-5 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-5: tasks 0-1: Terminated
