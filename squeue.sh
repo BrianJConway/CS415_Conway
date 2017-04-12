@@ -3,7 +3,8 @@
 while true
 do
 	squeue
-	sleep 15
+	sleep 5
+	clear
 done
 
 
