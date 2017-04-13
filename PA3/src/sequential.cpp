@@ -16,7 +16,8 @@ using namespace std;
 const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
 const int MAX_NUM = 999999;
-const int NUM_BUCKETS = 16;
+
+int NUM_BUCKETS = 16;
 
 bool outputSorted = false;
 
@@ -56,6 +57,12 @@ int main(int argc, char *argv[])
         if (argc >= 3 && strcmp(argv[2], "y") == 0)
         {
             outputSorted = true;
+        }
+
+        // Check if number of buckets specified
+        if (argc >= 4)
+        {
+            NUM_BUCKETS = atoi(argv[3]);
         }
 
         // Generate specified amount of numbers
