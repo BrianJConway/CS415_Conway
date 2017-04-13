@@ -70,7 +70,8 @@ int main(int argc, char *argv[])
 
         // Bucket sort
         bucketSort(numItems, data);
-        cout << numItems << endl << numBuckets << endl;
+        cout << numItems << endl << NUM_BUCKETS << endl << endl;
+
         // Deallocate array of items
         if (data != NULL)
         {
