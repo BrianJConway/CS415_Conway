@@ -53,8 +53,6 @@ int main(int argc, char *argv[])
     {
         // Get number of items to generate
         numItems = atoi(argv[1]);
-
-        cout << "TASKS: " << numTasks << endl << "NUMBERS: " << numItems << endl;
         
         // Check if argument specified file output
         if (argc >= 3 && strcmp(argv[2], "y") == 0)
@@ -74,7 +72,6 @@ int main(int argc, char *argv[])
             {
                 lastRegSize = numItems - (numTasks - 1) * regionSize;
             }
-
 
             region.resize(regionSize);
             smallBuckets.resize(numTasks);
