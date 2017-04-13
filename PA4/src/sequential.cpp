@@ -19,10 +19,10 @@ const int MAX_NUM = 999999;
 
 bool output = false;
 
-void generateNumbers(int numItems, vector<vector<int>> &A,
+void generateNumbers(int matrixSize, vector<vector<int>> &A,
                      vector<vector<int>> &B, vector<vector<int>> &C);
 
-void matrixMult(int numItems, vector<vector<int>> A,
+void matrixMult(int matrixSize, vector<vector<int>> A,
                 vector<vector<int>> B, vector<vector<int>> &C);
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
@@ -33,14 +33,14 @@ void outputMatrices(vector<vector<int>> A,
 int main(int argc, char *argv[])
 {
     // Initialization
-    int index, numItems = 0;
+    int index, matrixSize = 0;
     vector<vector<int>> A, B, C;
 
     // Check if number of elements specified
     if (argc >= 2)
     {
         // Get number of items to generate
-        numItems = atoi(argv[1]);
+        matrixSize = atoi(argv[1]);
 
         // Check if argument specified file output
         if (argc >= 3 && strcmp(argv[2], "y") == 0)
@@ -49,17 +49,17 @@ int main(int argc, char *argv[])
         }
 
         // Generate specified amount of numbers
-        generateNumbers(numItems, A, B, C);
+        generateNumbers(matrixSize, A, B, C);
 
         // Bucket sort
-        matrixMult(numItems, A, B, C);
+        matrixMult(matrixSize, A, B, C);
     }
 
     // Exit program
     return 0;
 }
 
-void generateNumbers(int numItems, vector<vector<int>> &A,
+void generateNumbers(int matrixSize, vector<vector<int>> &A,
                      vector<vector<int>> &B, vector<vector<int>> &C)
 {
     // Initialize function/variables
@@ -72,15 +72,15 @@ void generateNumbers(int numItems, vector<vector<int>> &A,
     uniform_int_distribution<int> dist1(MIN_NUM, MAX_NUM);
 
     // Size matrices appropriately
-    A.resize(numItems);
-    B.resize(numItems);
-    C.resize(numItems);
+    A.resize(matrixSize);
+    B.resize(matrixSize);
+    C.resize(matrixSize);
 
     // Set A and C matrices
-    for (rowIndex = 0; rowIndex < numItems; rowIndex++)
+    for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
     {
         // Loop through each column
-        for (colIndex = 0; colIndex < numItems; colIndex++)
+        for (colIndex = 0; colIndex < matrixSize; colIndex++)
         {
             // Set random value for A, set zero for C
             A[rowIndex].push_back(dist1(generator));
@@ -90,10 +90,10 @@ void generateNumbers(int numItems, vector<vector<int>> &A,
     // end loop
 
     // Set B matrix
-    for (rowIndex = 0; rowIndex < numItems; rowIndex++)
+    for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
     {
         // Loop through each column
-        for (colIndex = 0; colIndex < numItems; colIndex++)
+        for (colIndex = 0; colIndex < matrixSize; colIndex++)
         {
             // Set random value for A, set zero for C
             B[rowIndex].push_back(dist1(generator));
@@ -102,7 +102,7 @@ void generateNumbers(int numItems, vector<vector<int>> &A,
     // end loop
 }
 
-void matrixMult(int numItems, vector<vector<int>> A,
+void matrixMult(int matrixSize, vector<vector<int>> A,
                 vector<vector<int>> B, vector<vector<int>> &C)
 {
     // Initialize function/variables
@@ -119,12 +119,12 @@ void matrixMult(int numItems, vector<vector<int>> A,
         timer.start();
 
         // Multiply matrices
-        for (rowIndex = 0; rowIndex < numItems; rowIndex++)
+        for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
         {
             // Loop through each column
-            for (colIndex = 0; colIndex < numItems; colIndex++)
+            for (colIndex = 0; colIndex < matrixSize; colIndex++)
             {
-                for (index = 0; index < numItems; index++)
+                for (index = 0; index < matrixSize; index++)
                 {
                     C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
                 }
