@@ -145,6 +145,7 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
     }
 
     // Calculate statistics of timings
+    cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl;
     calcStatistics(timings, average, stdDev);
 }
 
@@ -172,8 +173,7 @@ void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
     stdDev = sqrt(sum / NUM_MEASUREMENTS);
 
     // Output results
-    cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl
-         << "Measurements: " << NUM_MEASUREMENTS << endl
+    cout << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
 }
