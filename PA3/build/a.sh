@@ -2,6 +2,7 @@
 
 BATCHFILES="./scripts/*.sh"
 
+
 for batchfile in $BATCHFILES
 do
 

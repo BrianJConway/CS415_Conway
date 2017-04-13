@@ -1,0 +1,2 @@
+srun: error: compute-0-5: task 0: Exited with exit code 2
+slurmstepd: execve(): mpi_sequential: No such file or directory
