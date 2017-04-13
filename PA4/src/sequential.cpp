@@ -172,7 +172,8 @@ void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
     stdDev = sqrt(sum / NUM_MEASUREMENTS);
 
     // Output results
-    cout << "Measurements: " << NUM_MEASUREMENTS << endl
+    cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl
+         << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
 }
