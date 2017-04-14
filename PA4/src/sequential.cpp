@@ -144,6 +144,8 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
         outputMatrices(A, B, C);
     }
 
+    cout << "A" << endl;
+
     // Calculate statistics of timings
     cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl;
     
