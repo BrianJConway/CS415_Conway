@@ -4,12 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 #include <stdio.h>
-#include <string.h>
 #include "Timer.h"
 #include <random>
+#include <cmath>
 
 using namespace std;
 
@@ -17,7 +15,7 @@ const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
 const int MAX_NUM = 999999;
 
-bool output = false;
+bool outputSorted = false;
 
 void generateNumbers(int matrixSize, vector<vector<int>> &A,
                      vector<vector<int>> &B, vector<vector<int>> &C);
@@ -27,33 +25,86 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
-void outputMatrices(vector<vector<int>> A,
-                    vector<vector<int>> B, vector<vector<int>> C);
-
 int main(int argc, char *argv[])
 {
     // Initialization
+    int numTasks, rank, dest, src, tag = 1;
     int index, matrixSize = 0;
     vector<vector<int>> A, B, C;
+    double average, stdDev;
+    Timer timer;
+    vector<double> timings;
+    int periods[2] = {1,1};
+    int dimensions[2] = {0,0};
+    int coords[2] = {-1,-1};
+    MPI_Status status;
+    MPI_Comm cartComm;
+
+    // Initialize MPI
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numTasks);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Dims_create(numTasks, 2, dimensions);
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dimensions, periods, 0, &cartComm); 
+    MPI_Cart_coords(cartComm, rank, 2, coords);
 
     // Check if number of elements specified
     if (argc >= 2)
     {
+        for(int index = 0; index < numTasks; index++)
+        {
+            if(rank == index)
+            {
+                cout << "Rank: " << rank 
+                     << " at coords " << coords[0] << " " << coords[1] 
+                     << endl;
+            }
+            MPI_Barrier(cartComm);
+        }
+    
+
+/*
         // Get number of items to generate
         matrixSize = atoi(argv[1]);
 
         // Check if argument specified file output
         if (argc >= 3 && strcmp(argv[2], "y") == 0)
         {
-            output = true;
+            outputSorted = true;
         }
 
-        // Generate specified amount of numbers
-        generateNumbers(matrixSize, A, B, C);
+        // Check if master
+        if (rank == 0)
+        {
+            // Generate specified amount of numbers
+            generateNumbers(matrixSize, A, B, C);
 
-        // Bucket sort
-        matrixMult(matrixSize, A, B, C);
+            // Barrier
+            MPI_Barrier(MPI_COMM_WORLD);
+        }
+        else
+        {
+            // Receive region
+            MPI_Recv(&regionSize, 1, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+            region.resize(regionSize);
+            MPI_Recv(&(region[0]), regionSize, MPI_INT, 0, tag, MPI_COMM_WORLD, &status);
+
+            // Barrier
+            MPI_Barrier(MPI_COMM_WORLD);
+
+            // Barrier
+            MPI_Barrier(MPI_COMM_WORLD);
+
+            if (outputSorted)
+            {
+
+            }
+        }
+*/
     }
+
+    // Shut down
+    MPI_Finalize();
 
     // Exit program
     return 0;
@@ -108,16 +159,10 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
     // Initialize function/variables
     int index, rowIndex, colIndex, mIndex;
     double average, stdDev;
-    Timer timer;
-    vector<double> timings;
 
     // Loop specified amount of times to get measurements
     for (mIndex = 0; mIndex < NUM_MEASUREMENTS; mIndex++)
     {
-
-        // Start the timer
-        timer.start();
-
         // Multiply matrices
         for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
         {
@@ -132,22 +177,8 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
             // end innest loop
         }
         // end inner loop
-
-        // Stop the timer, store time
-        timer.stop();
-        timings.push_back(timer.getElapsedTime());
     }
     // end outer loop
-
-    if (output)
-    {
-        outputMatrices(A, B, C);
-    }
-
-    // Calculate statistics of timings
-    cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl;
-    
-    calcStatistics(timings, average, stdDev);
 }
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
@@ -177,61 +208,4 @@ void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
     cout << "Measurements: " << NUM_MEASUREMENTS << endl
          << "Average Time: " << avg << "s" << endl
          << "Standard Deviation: " << stdDev << "s" << endl;
-}
-
-void outputMatrices(vector<vector<int>> A,
-                    vector<vector<int>> B, vector<vector<int>> C)
-{
-    // Initialization
-    int rowIndex, colIndex;
-    ofstream fout;
-
-    // Open output file
-    fout.open("output.txt");
-    int count = 0;
-
-    // Output matrix A
-    for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
-    {
-        for (colIndex = 0; colIndex < A.size(); colIndex++)
-        {
-            // Output current item
-            fout << A[rowIndex][colIndex] << " ";
-        }
-        fout << endl;
-        // end inner loop
-    }
-    fout << endl << endl << endl;
-    // end outer loop
-
-    // Output matrix B
-    for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
-    {
-        for (colIndex = 0; colIndex < B.size(); colIndex++)
-        {
-            // Output current item
-            fout << B[rowIndex][colIndex] << " ";
-        }
-        fout << endl;
-        // end inner loop
-    }
-    fout << endl << endl << endl;
-    // end outer loop
-
-    // Output matrix C
-    for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
-    {
-        for (colIndex = 0; colIndex < C.size(); colIndex++)
-        {
-            // Output current item
-            fout << C[rowIndex][colIndex] << " ";
-        }
-        fout << endl;
-        // end inner loop
-    }
-    fout << endl << endl << endl;
-    // end outer loop
-
-    // Close file
-    fout.close();
 }
