@@ -28,7 +28,7 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
 int main(int argc, char *argv[])
-{
+{df
     // Initialization
     int numTasks, rank, dest, src, tag = 1;
     int index, rowIndex, colIndex, procIndex, offset, matrixSize = 0;
@@ -55,6 +55,8 @@ int main(int argc, char *argv[])
     while(fmod(sqrt((double) numTasks), 1.0) != 0)
     {
         numTasks--;
+
+        if(rank == 0)
         cout << "Task count adjusted to " << numTasks << endl;
     }
 
@@ -68,6 +70,8 @@ int main(int argc, char *argv[])
         while( (int) pow(matrixSize, 2) % numTasks != 0)
         {
             matrixSize--;
+
+            if(rank == 0)
             cout << "Matrix size adjusted to " << matrixSize << "x" << matrixSize <<endl;
         }
 
