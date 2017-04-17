@@ -120,6 +120,9 @@ int main(int argc, char *argv[])
         }
         cout << endl << endl;
 
+        // DEBUG Barrier
+        MPI_Barrier(cartComm);
+
         // Initialization
         if (coords[0] != 0)
         {
@@ -133,6 +136,8 @@ int main(int argc, char *argv[])
             }
         }
 
+        // DEBUG Barrier
+        MPI_Barrier(cartComm);
         // DEBUG
         if (src == 3)
         {
