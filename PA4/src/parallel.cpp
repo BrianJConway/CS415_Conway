@@ -108,11 +108,6 @@ int main(int argc, char *argv[])
             // Barrier after chunks sent
             MPI_Barrier(cartComm);
 
-for( int aIndex = 1; aIndex < numTasks; aIndex ++)
-{
-    MPI_Barrier(cartComm);
-}
-
 /*
             // Copy own chunks of A and B
              for(index = 0; index < offset; index++)
@@ -151,24 +146,6 @@ for( int aIndex = 1; aIndex < numTasks; aIndex ++)
             // Barrier after chunks sent
             MPI_Barrier(cartComm);
 
-for( int aIndex = 1; aIndex < numTasks; aIndex ++)
-{
-    if(rank == aIndex )
-    {
-            cout << "RANK " << rank << " CHUNK" << endl;
-
-            for(index = 0; index < offset; index++)
-            {
-                    for(int r = 0; r < offset; r++)
-                    {
-                        cout << chunkA[index][r] << " ";
-                    }
-                    cout << endl;
-            }
-            cout << endl << endl;
-    }
-    MPI_Barrier(cartComm);
-}
 /*
             // Initialization and multiply once
 
@@ -250,24 +227,12 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
             // Make sure master is skipped
             if(procIndex != 0)
             {
-
-cout << "Master sending ROW " << rowIndex << " COL " << colIndex << " to " << procIndex << endl;
-cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colIndex * offset << endl;
-
                 // Send current process their chunks of A and B
                 for(index = 0; index < offset; index++)
                 {
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
-
-cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
-cout << "           Contents: ";
-for(int aIndex = 0; aIndex < offset; aIndex++)
-{
-    cout << A[rowIndex * offset + index][colIndex * offset + aIndex] << " ";
-}
-cout << endl;
 
                     // Send current row portion of B
                     MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
@@ -276,8 +241,6 @@ cout << endl;
             }
         }
     }
-
-    cout << "ALL SENT" << endl;
 }
 
 void matrixMult(int matrixSize, vector<vector<int>> A,
