@@ -245,7 +245,7 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
-cout << "       SENT ROW " << rowIndex * offset + index << endl << "   START COL: " << colIndex * offset << endl;
+cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
 
                     // Send current row portion of B
                     MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
