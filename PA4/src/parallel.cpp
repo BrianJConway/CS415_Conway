@@ -14,7 +14,7 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
-const int MAX_NUM = 999999;
+const int MAX_NUM = 9;
 
 void generateNumbers(int matrixSize, vector<vector<int>> &A,
                                 vector<vector<int>> &B, vector<vector<int>> &C);
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
                     }
                     cout << endl;
                 }
-                
+
                 MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
 
@@ -260,7 +260,14 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
+
 cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
+cout << "           Contents: ";
+for(int aIndex = 0; aIndex < offset; aIndex++)
+{
+    cout << A[rowIndex * offset + index][colIndex * offset];
+}
+cout << endl;
 
                     // Send current row portion of B
                     MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
