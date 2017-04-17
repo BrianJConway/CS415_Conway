@@ -138,10 +138,11 @@ int main(int argc, char *argv[])
 
         // DEBUG Barrier
         MPI_Barrier(cartComm);
+        
         // DEBUG
         if (src == 3)
         {
-            cout << "RANK " << dest << " A" << endl;
+            cout << "RANK " << rank << " A" << endl;
             for (rowIndex = 0; rowIndex < offset; rowIndex++)
             {
                 for( colIndex = 0; colIndex < offset; colIndex++)
