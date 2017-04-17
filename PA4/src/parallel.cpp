@@ -265,7 +265,7 @@ cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex 
 cout << "           Contents: ";
 for(int aIndex = 0; aIndex < offset; aIndex++)
 {
-    cout << A[rowIndex * offset + index][colIndex * offset];
+    cout << A[rowIndex * offset + index][colIndex * offset + aIndex] << " ";
 }
 cout << endl;
 
