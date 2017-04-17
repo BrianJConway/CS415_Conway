@@ -216,13 +216,13 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
     int procIndex, rowIndex, colIndex, index, tag = 1;
 
     // Send each process their chunks
-    procIndex = 1;
+    procIndex = 0;
     for(rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
     {
         for(colIndex = 0; colIndex < sqrt(numTasks); colIndex++, procIndex++)
         {
             // Make sure master is skipped
-            if(rowIndex != 0 && colIndex != 0)
+            if(procIndex != 0)
             {
 cout << "Master sending ROW " << rowIndex << " COL " << colIndex << " to " << procIndex << endl;
                 // Send current process their chunks of A and B
