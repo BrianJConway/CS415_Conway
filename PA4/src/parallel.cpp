@@ -150,8 +150,8 @@ int main(int argc, char *argv[])
                 }
 
                 // Get current row of chunks for A and B
-                MPI_Recv(&(chunkA[index]), offset, MPI_INT, 0, tag, cartComm, &status);
-                MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
+                MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
+                MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
 
                 if(rank == 1)
                 {
