@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
         // Initialization
         if (coords[0] != 0)
         {
-            MPI_Cart_shift(cartComm, 1, coords[0], &src, &dest);
+            MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends A to rank " << dest << endl;
 /*
             for (index = 0; index < offset; index++)
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
         for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
         {
             // Shift A rows once
-            MPI_Cart_shift(cartComm, 0, 1, &src, &dest);
+            MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
                 MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
