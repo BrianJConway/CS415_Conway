@@ -16,7 +16,7 @@ const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
 const int MAX_NUM = 9;
 
-void adjustAndAllocate(int rank, int numTasks, int &matrixSize, int &offset,
+void adjustAndAllocate(int rank, int &numTasks, int &matrixSize, int &offset,
                        vector<vector<int>> &chunkA, vector<vector<int>> &chunkB,
                        vector<vector<int>> &chunkC);
 
@@ -26,8 +26,8 @@ void generateNumbers(int matrixSize, vector<vector<int>> &A,
 void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
                           vector<vector<int>> A, vector<vector<int>> B);
 
-void matrixMult(int matrixSize, vector<vector<int>> A,
-                vector<vector<int>> B, vector<vector<int>> &C);
+void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
+                vector<vector<int>> &C);
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
@@ -55,22 +55,14 @@ int main(int argc, char *argv[])
     MPI_Cart_create(MPI_COMM_WORLD, 2, dimensions, periods, 0, &cartComm);
     MPI_Cart_coords(cartComm, rank, 2, coords);
 
-    // Make sure number of tasks is a perfect square
-    while (fmod(sqrt((double)numTasks), 1.0) != 0)
-    {
-        numTasks--;
-
-        if (rank == 0)
-            cout << "Task count adjusted to " << numTasks << endl;
-    }
-
     // Check if size of matrix specified
     if (argc >= 2 && numTasks > 3)
     {
         // Get number of items to generate
         matrixSize = atoi(argv[1]);
 
-        // Adjust number of items if necessary, set offset and allocate matrices
+        // Adjust matrix size if necessary, set offset value,
+        // and allocate chunk matrices to proper sizes
         adjustAndAllocate(rank, numTasks, matrixSize, offset, chunkA, chunkB, chunkC);
 
         // Check if argument 3 specified file output
@@ -79,17 +71,11 @@ int main(int argc, char *argv[])
             outputMatrices = true;
         }
 
-        // Check if master
+        // Master generates matrices and sends chunks out
         if (rank == 0)
         {
             // Generate specified amount of numbers
             generateNumbers(matrixSize, A, B, C);
-
-            // Send each process their portion
-            sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
-
-            // Barrier after chunks sent
-            MPI_Barrier(cartComm);
 
             // Copy own chunks of A and B
             for (index = 0; index < offset; index++)
@@ -101,21 +87,10 @@ int main(int argc, char *argv[])
                 }
             }
 
-            // Initialization and multiply once
-
-            /*
-            // Shift and multiply sqrt(numTasks) times
-            
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            if (outputMatrices)
-            {
-
-            }
-*/
+            // Send each other process their portion
+            sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
         }
-        // Check if not master
+        // Other nodes receive their chunk from master
         else if (rank < numTasks)
         {
             // Receive chunks of A and B
@@ -125,26 +100,72 @@ int main(int argc, char *argv[])
                 MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
+        }
 
-            // Barrier after chunks sent
-            MPI_Barrier(cartComm);
+        // Barrier
+        MPI_Barrier(cartComm);
 
-            /*
-            // Initialization and multiply once
-
-            // Shift and multiply sqrt(numTasks) times
-
-            // Barrier
-            MPI_Barrier(MPI_COMM_WORLD);
-
-            if (outputMatrices)
+        // Initialization
+        if (coords[0] != 0)
+        {
+            MPI_Cart_shift(cartComm, 1, coords[0], &src, &dest);
+            cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends A to rank " << dest << endl;
+/*
+            for (index = 0; index < offset; index++)
             {
+                MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, status);
+*/
+            }
+        }
 
+        if (coords[1] != 0)
+        {
+            MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
+            cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends B to rank " << dest << endl;
+/*
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, status);
             }
 */
         }
-    }
+/*
+        // Multiply and store
+        matrixMult(chunkA, chunkB, chunkC);
 
+        // Shift and multiply sqrt(numTasks) times
+        for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
+        {
+            // Shift A rows once
+            MPI_Cart_shift(cartComm, 0, 1, &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, status);
+            }
+
+            // Shift B cols once
+            MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, status);
+            }
+
+            // Multiply?
+            matrixMult(chunkA, chunkB, chunkC);
+        }
+
+        // Barrier
+        MPI_Barrier(MPI_COMM_WORLD);
+
+        if (outputMatrices)
+        {
+        }
+    }
+*/
     // Shut down
     MPI_Finalize();
 
@@ -152,14 +173,23 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void adjustAndAllocate(int rank, int numTasks, int &matrixSize, int &offset,
+void adjustAndAllocate(int rank, int &numTasks, int &matrixSize, int &offset,
                        vector<vector<int>> &chunkA, vector<vector<int>> &chunkB,
                        vector<vector<int>> &chunkC)
 {
     // Initialize function/variables
     int index;
-    
-    // Adjust matrix size if necessary
+
+    // Make sure number of tasks is a perfect square
+    while (fmod(sqrt((double)numTasks), 1.0) != 0)
+    {
+        numTasks--;
+
+        if (rank == 0)
+            cout << "Task count adjusted to " << numTasks << endl;
+    }
+
+    // Adjust matrix size to be compatible with number of tasks
     while ((int)pow(matrixSize, 2) % numTasks != 0)
     {
         matrixSize--;
@@ -169,10 +199,10 @@ void adjustAndAllocate(int rank, int numTasks, int &matrixSize, int &offset,
                  << matrixSize << "x" << matrixSize << endl;
     }
 
-    // Set proper offset
+    // Set proper offset value
     offset = matrixSize / sqrt(numTasks);
 
-    // Set size of single chunk of matrix
+    // Resize chunk vectors to match task count and matrix sizes
     chunkA.resize(offset);
     chunkB.resize(offset);
     chunkC.resize(offset);
@@ -258,28 +288,22 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
     }
 }
 
-void matrixMult(int matrixSize, vector<vector<int>> A,
-                vector<vector<int>> B, vector<vector<int>> &C)
+void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
+                vector<vector<int>> &C)
 {
     // Initialize function/variables
-    int index, rowIndex, colIndex, mIndex;
-    double average, stdDev;
+    int index, rowIndex, colIndex;
 
-    // Loop specified amount of times to get measurements
-    for (mIndex = 0; mIndex < NUM_MEASUREMENTS; mIndex++)
+    // Multiply matrices
+    for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
     {
-        // Multiply matrices
-        for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
+        // Loop through each column
+        for (colIndex = 0; colIndex < C.size(); colIndex++)
         {
-            // Loop through each column
-            for (colIndex = 0; colIndex < matrixSize; colIndex++)
+            for (index = 0; index < C.size(); index++)
             {
-                for (index = 0; index < matrixSize; index++)
-                {
-                    C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
-                }
+                C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
             }
-            // end innest loop
         }
         // end inner loop
     }
