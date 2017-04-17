@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
         chunkA.resize(offset);
         chunkB.resize(offset);
         chunkC.resize(offset);
+
         for(index = 0; index < offset; index++)
         {
             chunkA[index].resize(offset);
@@ -138,7 +139,7 @@ int main(int argc, char *argv[])
             {
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index]), offset, MPI_INT, 0, tag, cartComm, &status);
-                
+
                 if(rank == 1)
                 {
                     for(int r = 0; r < offset; r++)
@@ -244,6 +245,7 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
+cout << "       SENT ROW " << rowIndex * offset + index << endl << "   START COL: " << colIndex * offset << endl;
 
                     // Send current row portion of B
                     MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
