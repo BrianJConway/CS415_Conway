@@ -262,9 +262,7 @@ for(int aIndex = 0; aIndex < offset; aIndex++)
     tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
     tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
 }
-                    MPI_Send(tempA,
-                        offset, MPI_INT, procIndex, tag, comm);
-                    MPI_Send(tempB,
+                    MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
 
 cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
@@ -276,8 +274,8 @@ for(int aIndex = 0; aIndex < offset; aIndex++)
 cout << endl;
 
                     // Send current row portion of B
- //                   MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
-  //                      offset, MPI_INT, procIndex, tag, comm);
+                    MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
+                        offset, MPI_INT, procIndex, tag, comm);
                 }
             }
         }
