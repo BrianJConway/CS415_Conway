@@ -283,7 +283,8 @@ cout << endl;
         }
     }
 
-    delete[] temp;
+    delete[] tempA;
+    delete[] tempB;
 
     cout << "ALL SENT" << endl;
 }
