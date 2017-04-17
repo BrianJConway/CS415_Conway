@@ -152,6 +152,17 @@ int main(int argc, char *argv[])
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
+
+                if(rank == 1)
+                {
+                    cout << "AFTER: "; 
+
+                    for(int r = 0; r < offset; r++)
+                    {
+                        cout << chunkA[index][r] << " ";
+                    }
+                    cout << endl;
+                }
             }
 
  //           // Barrier after chunks sent
@@ -227,7 +238,8 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
 {
     // Initialization
     int procIndex, rowIndex, colIndex, index, tag = 1;
-    int *temp = new int[offset];
+    int *tempA = new int[offset];
+    int *tempB = new int[offset];
 
     // Send each process their chunks
     procIndex = 0;
@@ -247,9 +259,12 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                     // Send current row portion of A
 for(int aIndex = 0; aIndex < offset; aIndex++)
 {
-    temp[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
+    tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
+    tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
 }
-                    MPI_Send(temp,
+                    MPI_Send(tempA,
+                        offset, MPI_INT, procIndex, tag, comm);
+                    MPI_Send(tempB,
                         offset, MPI_INT, procIndex, tag, comm);
 
 cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
@@ -261,8 +276,8 @@ for(int aIndex = 0; aIndex < offset; aIndex++)
 cout << endl;
 
                     // Send current row portion of B
-                    MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
-                        offset, MPI_INT, procIndex, tag, comm);
+ //                   MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
+  //                      offset, MPI_INT, procIndex, tag, comm);
                 }
             }
         }
