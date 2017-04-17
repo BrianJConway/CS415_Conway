@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
                 {
                     for(colIndex = 0; colIndex < offset; colIndex++)
                     {
-                        cout << A[index][colIndex];
+                        cout << A[index][colIndex] << " ";
                     }
                     cout << endl;
                 }
