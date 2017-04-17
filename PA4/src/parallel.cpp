@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
             {
                 for( colIndex = 0; colIndex < offset; colIndex++)
                 {
-                    cout << chunkA[rowIndex][colIndex] << " ";
+                   // cout << chunkA[rowIndex][colIndex] << " ";
                 }
                 cout << endl;
             }
