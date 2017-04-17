@@ -106,7 +106,12 @@ int main(int argc, char *argv[])
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
 
             // Barrier after chunks sent
-            MPI_Barrier(MPI_COMM_WORLD);
+            MPI_Barrier(cartComm);
+
+for( int aIndex = 1; aIndex < numTasks; aIndex ++)
+{
+    MPI_Barrier(cartComm);
+}
 
 /*
             // Copy own chunks of A and B
@@ -144,22 +149,26 @@ int main(int argc, char *argv[])
             }
 
             // Barrier after chunks sent
-            MPI_Barrier(MPI_COMM_WORLD);
+            MPI_Barrier(cartComm);
+
+for( int aIndex = 1; aIndex < numTasks; aIndex ++)
+{
+    if(rank == aIndex )
+    {
+            cout << "RANK " << rank << " CHUNK" << endl;
 
             for(index = 0; index < offset; index++)
             {
-                if(rank == 1)
-                {
-                    cout << "AFTER: "; 
-
                     for(int r = 0; r < offset; r++)
                     {
                         cout << chunkA[index][r] << " ";
                     }
                     cout << endl;
-                }
             }
-
+            cout << endl << endl;
+    }
+    MPI_Barrier(cartComm);
+}
 /*
             // Initialization and multiply once
 
