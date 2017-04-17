@@ -241,6 +241,8 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
             }
         }
     }
+
+    cout << "ALL SENT" << endl;
 }
 
 void matrixMult(int matrixSize, vector<vector<int>> A,
