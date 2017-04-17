@@ -141,6 +141,8 @@ int main(int argc, char *argv[])
                 MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
 
+            cout << "RANK " << rank << "ALL RECV" << endl;
+
             // Barrier after chunks sent
             MPI_Barrier(MPI_COMM_WORLD);
 /*
