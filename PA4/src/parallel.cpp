@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
 
         for(index = 0; index < offset; index++)
         {
-            chunkA[index].resize(offset);
-            chunkB[index].resize(offset);
+            chunkA[index].resize(offset, 0);
+            chunkB[index].resize(offset, 0);
             chunkC[index].resize(offset, 0);
         }
 
@@ -137,6 +137,14 @@ int main(int argc, char *argv[])
             // Receive chunks of A and B
             for(index = 0; index < offset; index++)
             {
+
+                if(rank == 1)
+                {
+                    for(int r = 0; r < offset; r++)
+                    {
+                        cout << "BEFORE" << chunkA[index][r] << endl;
+                    }
+                }
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index]), offset, MPI_INT, 0, tag, cartComm, &status);
 
