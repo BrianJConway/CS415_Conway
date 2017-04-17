@@ -109,32 +109,14 @@ int main(int argc, char *argv[])
             MPI_Barrier(cartComm);
 
             // Copy own chunks of A and B
-
-            cout << "Main A master chunk: " << endl;
-
-             for(index = 0; index < offset; index++)
-                {
-                    for(colIndex = 0; colIndex < offset; colIndex++)
-                    {
-                        cout << A[index][colIndex] << " ";
-                    }
-                    cout << endl;
-                }
-                cout << endl << endl;
-
-             cout << "Chunk A in master: " << endl;
-
              for(index = 0; index < offset; index++)
                 {
                     for(colIndex = 0; colIndex < offset; colIndex++)
                     {
                         chunkA[index][colIndex] = A[index][colIndex];
-                        cout << chunkA[index][colIndex] << " ";
                         chunkB[index][colIndex] = B[index][colIndex];
                     }
-                    cout << endl;
                 }
-                cout << endl << endl;
 
 /*
 
