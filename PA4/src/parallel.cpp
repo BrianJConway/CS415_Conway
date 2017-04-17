@@ -140,26 +140,6 @@ int main(int argc, char *argv[])
         // Shift and multiply sqrt(numTasks) times
         for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
         {
-
-            // DEBUG
-            if (rank == 3)
-            {
-                cout << "RANK 3 A" << endl;
-                for (rowIndex = 0; rowIndex < offset; rowIndex++)
-                {
-                    for (colIndex = 0; colIndex < offset; colIndex++)
-                    {
-                        cout << chunkA[rowIndex][colIndex] << " ";
-                    }
-                    cout << endl;
-                }
-            }
-            cout << endl
-                 << endl;
-
-            // DEBUG Barrier
-            MPI_Barrier(cartComm);
-
             // Shift A rows once
             MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends A to rank " << dest << endl;
@@ -168,25 +148,6 @@ int main(int argc, char *argv[])
                 MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
                                      tag, src, tag, cartComm, &status);
             }
-
-            // DEBUG Barrier
-            MPI_Barrier(cartComm);
-
-            // DEBUG
-            if (src == 3)
-            {
-                cout << "RANK " << rank << " A" << endl;
-                for (rowIndex = 0; rowIndex < offset; rowIndex++)
-                {
-                    for (colIndex = 0; colIndex < offset; colIndex++)
-                    {
-                        cout << chunkA[rowIndex][colIndex] << " ";
-                    }
-                    cout << endl;
-                }
-            }
-            cout << endl
-                 << endl;
 
             // Shift B cols once
             MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
