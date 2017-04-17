@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
         for (int shiftIndex = 0; shiftIndex < 1; shiftIndex++)
         {
             // Shift A rows once
-            MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
+            MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends A to rank " << dest << endl;
             for (index = 0; index < offset; index++)
             {
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
             }
 
             // Shift B cols once
-            MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
+            MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends B to rank " << dest << endl;
             for (index = 0; index < offset; index++)
             {
