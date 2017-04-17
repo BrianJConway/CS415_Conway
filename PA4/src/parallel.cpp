@@ -225,10 +225,11 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
             if(procIndex != 0)
             {
 cout << "Master sending ROW " << rowIndex << " COL " << colIndex << " to " << procIndex << endl;
+cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colIndex * offset << endl;
+
                 // Send current process their chunks of A and B
                 for(index = 0; index < offset; index++)
                 {
-cout << "   START ROW " << rowIndex * offset + index << endl << "   START COL: " << colIndex * offset << endl;
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
