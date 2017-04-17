@@ -106,7 +106,8 @@ int main(int argc, char *argv[])
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
 
             // Barrier after chunks sent
- //           MPI_Barrier(MPI_COMM_WORLD);
+            MPI_Barrier(MPI_COMM_WORLD);
+
 /*
             // Copy own chunks of A and B
              for(index = 0; index < offset; index++)
@@ -137,22 +138,16 @@ int main(int argc, char *argv[])
             // Receive chunks of A and B
             for(index = 0; index < offset; index++)
             {
-
-                if(rank == 1)
-                {
-                    cout << "BEFORE: "; 
-
-                    for(int r = 0; r < offset; r++)
-                    {
-                        cout << chunkA[index][r] << " ";
-                    }
-                    cout << endl;
-                }
-
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
+            }
 
+            // Barrier after chunks sent
+            MPI_Barrier(MPI_COMM_WORLD);
+
+            for(index = 0; index < offset; index++)
+            {
                 if(rank == 1)
                 {
                     cout << "AFTER: "; 
@@ -165,8 +160,6 @@ int main(int argc, char *argv[])
                 }
             }
 
- //           // Barrier after chunks sent
-//            MPI_Barrier(MPI_COMM_WORLD);
 /*
             // Initialization and multiply once
 
@@ -238,8 +231,6 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
 {
     // Initialization
     int procIndex, rowIndex, colIndex, index, tag = 1;
-    int *tempA = new int[offset];
-    int *tempB = new int[offset];
 
     // Send each process their chunks
     procIndex = 0;
@@ -250,6 +241,7 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
             // Make sure master is skipped
             if(procIndex != 0)
             {
+
 cout << "Master sending ROW " << rowIndex << " COL " << colIndex << " to " << procIndex << endl;
 cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colIndex * offset << endl;
 
@@ -257,11 +249,6 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                 for(index = 0; index < offset; index++)
                 {
                     // Send current row portion of A
-for(int aIndex = 0; aIndex < offset; aIndex++)
-{
-    tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
-    tempA[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
-}
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
 
@@ -280,9 +267,6 @@ cout << endl;
             }
         }
     }
-
-    delete[] tempA;
-    delete[] tempB;
 
     cout << "ALL SENT" << endl;
 }
