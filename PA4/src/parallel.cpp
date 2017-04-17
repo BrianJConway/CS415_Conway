@@ -105,33 +105,63 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
+        // DEBUG
+        if (rank == 3)
+        {
+            cout << "RANK 3 A" << endl;
+            for (rowIndex = 0; rowIndex < offset; rowIndex++)
+            {
+                for( colIndex = 0; colIndex < offset; colIndex++)
+                {
+                    cout << chunkA[rowIndex][colIndex] << " ";
+                }
+                cout << endl;
+            }
+        }
+        cout << endl << endl;
+
         // Initialization
         if (coords[0] != 0)
         {
             MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends A to rank " << dest << endl;
-/*
+
             for (index = 0; index < offset; index++)
             {
                 MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
-                                     tag, src, tag, cartComm, status);
-*/
+                                     tag, src, tag, cartComm, &status);
             }
         }
 
+        // DEBUG
+        if (src == 3)
+        {
+            cout << "RANK " << dest << " A" << endl;
+            for (rowIndex = 0; rowIndex < offset; rowIndex++)
+            {
+                for( colIndex = 0; colIndex < offset; colIndex++)
+                {
+                    cout << chunkA[rowIndex][colIndex] << " ";
+                }
+                cout << endl;
+            }
+        }
+        cout << endl << endl;
+
+        MPI_Barrier(cartComm);
+        
         if (coords[1] != 0)
         {
             MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
             cout << "Rank: " << rank << " at [" << coords[0] << "," << coords[1] << "] sends B to rank " << dest << endl;
-/*
+
             for (index = 0; index < offset; index++)
             {
                 MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
-                                     tag, src, tag, cartComm, status);
+                                     tag, src, tag, cartComm, &status);
             }
-*/
         }
-/*
+        /*
         // Multiply and store
         matrixMult(chunkA, chunkB, chunkC);
 
@@ -159,182 +189,183 @@ int main(int argc, char *argv[])
         }
 
         // Barrier
-        MPI_Barrier(MPI_COMM_WORLD);
+        MPI_Barrier(cartComm);
 
         if (outputMatrices)
         {
         }
     }
 */
-    // Shut down
-    MPI_Finalize();
+        // Shut down
+        MPI_Finalize();
 
-    // Exit program
-    return 0;
-}
-
-void adjustAndAllocate(int rank, int &numTasks, int &matrixSize, int &offset,
-                       vector<vector<int>> &chunkA, vector<vector<int>> &chunkB,
-                       vector<vector<int>> &chunkC)
-{
-    // Initialize function/variables
-    int index;
-
-    // Make sure number of tasks is a perfect square
-    while (fmod(sqrt((double)numTasks), 1.0) != 0)
-    {
-        numTasks--;
-
-        if (rank == 0)
-            cout << "Task count adjusted to " << numTasks << endl;
-    }
-
-    // Adjust matrix size to be compatible with number of tasks
-    while ((int)pow(matrixSize, 2) % numTasks != 0)
-    {
-        matrixSize--;
-
-        if (rank == 0)
-            cout << "Matrix size adjusted to "
-                 << matrixSize << "x" << matrixSize << endl;
-    }
-
-    // Set proper offset value
-    offset = matrixSize / sqrt(numTasks);
-
-    // Resize chunk vectors to match task count and matrix sizes
-    chunkA.resize(offset);
-    chunkB.resize(offset);
-    chunkC.resize(offset);
-
-    for (index = 0; index < offset; index++)
-    {
-        chunkA[index].resize(offset, 0);
-        chunkB[index].resize(offset, 0);
-        chunkC[index].resize(offset, 0);
+        // Exit program
+        return 0;
     }
 }
-void generateNumbers(int matrixSize, vector<vector<int>> &A,
-                     vector<vector<int>> &B, vector<vector<int>> &C)
-{
-    // Initialize function/variables
-    int index, rowIndex, colIndex;
-    random_device rd;
-    default_random_engine generator(rd());
-    string str = "new seed";
-    seed_seq seed(str.begin(), str.end());
-    generator.seed(seed);
-    uniform_int_distribution<int> dist1(MIN_NUM, MAX_NUM);
 
-    // Size matrices appropriately
-    A.resize(matrixSize);
-    B.resize(matrixSize);
-    C.resize(matrixSize);
-
-    // Set A and C matrices
-    for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
+    void adjustAndAllocate(int rank, int &numTasks, int &matrixSize, int &offset,
+                           vector<vector<int>> &chunkA, vector<vector<int>> &chunkB,
+                           vector<vector<int>> &chunkC)
     {
-        // Loop through each column
-        for (colIndex = 0; colIndex < matrixSize; colIndex++)
+        // Initialize function/variables
+        int index;
+
+        // Make sure number of tasks is a perfect square
+        while (fmod(sqrt((double)numTasks), 1.0) != 0)
         {
-            // Set random value for A, set zero for C
-            A[rowIndex].push_back(dist1(generator));
-            C[rowIndex].push_back(0);
+            numTasks--;
+
+            if (rank == 0)
+                cout << "Task count adjusted to " << numTasks << endl;
+        }
+
+        // Adjust matrix size to be compatible with number of tasks
+        while ((int)pow(matrixSize, 2) % numTasks != 0)
+        {
+            matrixSize--;
+
+            if (rank == 0)
+                cout << "Matrix size adjusted to "
+                     << matrixSize << "x" << matrixSize << endl;
+        }
+
+        // Set proper offset value
+        offset = matrixSize / sqrt(numTasks);
+
+        // Resize chunk vectors to match task count and matrix sizes
+        chunkA.resize(offset);
+        chunkB.resize(offset);
+        chunkC.resize(offset);
+
+        for (index = 0; index < offset; index++)
+        {
+            chunkA[index].resize(offset, 0);
+            chunkB[index].resize(offset, 0);
+            chunkC[index].resize(offset, 0);
         }
     }
-    // end loop
-
-    // Set B matrix
-    for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
+    void generateNumbers(int matrixSize, vector<vector<int>> &A,
+                         vector<vector<int>> &B, vector<vector<int>> &C)
     {
-        // Loop through each column
-        for (colIndex = 0; colIndex < matrixSize; colIndex++)
-        {
-            // Set random value for A, set zero for C
-            B[rowIndex].push_back(dist1(generator));
-        }
-    }
-    // end loop
-}
+        // Initialize function/variables
+        int index, rowIndex, colIndex;
+        random_device rd;
+        default_random_engine generator(rd());
+        string str = "new seed";
+        seed_seq seed(str.begin(), str.end());
+        generator.seed(seed);
+        uniform_int_distribution<int> dist1(MIN_NUM, MAX_NUM);
 
-void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
-                          vector<vector<int>> A, vector<vector<int>> B)
-{
-    // Initialization
-    int procIndex, rowIndex, colIndex, index, tag = 1;
+        // Size matrices appropriately
+        A.resize(matrixSize);
+        B.resize(matrixSize);
+        C.resize(matrixSize);
 
-    // Send each process their chunks
-    procIndex = 0;
-    for (rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
-    {
-        for (colIndex = 0; colIndex < sqrt(numTasks); colIndex++, procIndex++)
+        // Set A and C matrices
+        for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
         {
-            // Make sure master is skipped
-            if (procIndex != 0)
+            // Loop through each column
+            for (colIndex = 0; colIndex < matrixSize; colIndex++)
             {
-                // Send current process their chunks of A and B
-                for (index = 0; index < offset; index++)
-                {
-                    // Send current row portion of A
-                    MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
-                             offset, MPI_INT, procIndex, tag, comm);
+                // Set random value for A, set zero for C
+                A[rowIndex].push_back(dist1(generator));
+                C[rowIndex].push_back(0);
+            }
+        }
+        // end loop
 
-                    // Send current row portion of B
-                    MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
-                             offset, MPI_INT, procIndex, tag, comm);
+        // Set B matrix
+        for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
+        {
+            // Loop through each column
+            for (colIndex = 0; colIndex < matrixSize; colIndex++)
+            {
+                // Set random value for A, set zero for C
+                B[rowIndex].push_back(dist1(generator));
+            }
+        }
+        // end loop
+    }
+
+    void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
+                              vector<vector<int>> A, vector<vector<int>> B)
+    {
+        // Initialization
+        int procIndex, rowIndex, colIndex, index, tag = 1;
+
+        // Send each process their chunks
+        procIndex = 0;
+        for (rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < sqrt(numTasks); colIndex++, procIndex++)
+            {
+                // Make sure master is skipped
+                if (procIndex != 0)
+                {
+                    // Send current process their chunks of A and B
+                    for (index = 0; index < offset; index++)
+                    {
+                        // Send current row portion of A
+                        MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
+                                 offset, MPI_INT, procIndex, tag, comm);
+
+                        // Send current row portion of B
+                        MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
+                                 offset, MPI_INT, procIndex, tag, comm);
+                    }
                 }
             }
         }
     }
-}
 
-void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
-                vector<vector<int>> &C)
-{
-    // Initialize function/variables
-    int index, rowIndex, colIndex;
-
-    // Multiply matrices
-    for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
+    void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
+                    vector<vector<int>> & C)
     {
-        // Loop through each column
-        for (colIndex = 0; colIndex < C.size(); colIndex++)
+        // Initialize function/variables
+        int index, rowIndex, colIndex;
+
+        // Multiply matrices
+        for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
         {
-            for (index = 0; index < C.size(); index++)
+            // Loop through each column
+            for (colIndex = 0; colIndex < C.size(); colIndex++)
             {
-                C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
+                for (index = 0; index < C.size(); index++)
+                {
+                    C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
+                }
             }
+            // end inner loop
         }
-        // end inner loop
+        // end outer loop
     }
-    // end outer loop
-}
 
-void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
-{
-    // Initialization
-    double sum = 0.0;
-    vector<double> squaredDistances;
-
-    // Calculate average
-    for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
+    void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
     {
-        sum += *it;
+        // Initialization
+        double sum = 0.0;
+        vector<double> squaredDistances;
+
+        // Calculate average
+        for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
+        {
+            sum += *it;
+        }
+
+        avg = sum / NUM_MEASUREMENTS;
+
+        // Calculate standard deviation
+        sum = 0.0;
+        for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
+        {
+            sum += pow(*it - avg, 2.0);
+        }
+
+        stdDev = sqrt(sum / NUM_MEASUREMENTS);
+
+        // Output results
+        cout << "Measurements: " << NUM_MEASUREMENTS << endl
+             << "Average Time: " << avg << "s" << endl
+             << "Standard Deviation: " << stdDev << "s" << endl;
     }
-
-    avg = sum / NUM_MEASUREMENTS;
-
-    // Calculate standard deviation
-    sum = 0.0;
-    for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
-    {
-        sum += pow(*it - avg, 2.0);
-    }
-
-    stdDev = sqrt(sum / NUM_MEASUREMENTS);
-
-    // Output results
-    cout << "Measurements: " << NUM_MEASUREMENTS << endl
-         << "Average Time: " << avg << "s" << endl
-         << "Standard Deviation: " << stdDev << "s" << endl;
-}
