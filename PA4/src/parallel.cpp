@@ -90,6 +90,10 @@ int main(int argc, char *argv[])
             chunkC[index].resize(offset, 0);
         }
 
+cout << "HEY" << endl;
+cout << chunkA[0][0] << endl;
+cout << "HEY2" << endl;
+
         // Check if argument 3 specified file output
         if (argc >= 3 && strcmp(argv[2], "y") == 0)
         {
