@@ -29,4 +29,5 @@ Timer.o: ../src/Timer.cpp
 
 clean:
 	rm $(OUTPUT) 
+	rm $(OUTPUT2) 
 	rm *.o 

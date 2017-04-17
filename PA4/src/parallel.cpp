@@ -28,7 +28,7 @@ void matrixMult(int matrixSize, vector<vector<int>> A,
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
 int main(int argc, char *argv[])
-{df
+{
     // Initialization
     int numTasks, rank, dest, src, tag = 1;
     int index, rowIndex, colIndex, procIndex, offset, matrixSize = 0;
