@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
 
             // Barrier after chunks sent
-            MPI_Barrier(MPI_COMM_WORLD);
+ //           MPI_Barrier(MPI_COMM_WORLD);
 /*
             // Copy own chunks of A and B
              for(index = 0; index < offset; index++)
@@ -141,10 +141,10 @@ int main(int argc, char *argv[])
                 MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
 
-            cout << "RANK " << rank << "ALL RECV" << endl;
+            cout << "RANK " << rank << " ALL RECV" << endl;
 
-            // Barrier after chunks sent
-            MPI_Barrier(MPI_COMM_WORLD);
+ //           // Barrier after chunks sent
+//            MPI_Barrier(MPI_COMM_WORLD);
 /*
             // Initialization and multiply once
 
