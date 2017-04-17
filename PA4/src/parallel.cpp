@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
         // Set proper offset
         offset = matrixSize / sqrt(numTasks);
-/*
+
         // Set size of single chunk of matrix
         chunkA.resize(offset);
         chunkB.resize(offset);
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
             // Barrier after chunks sent
             MPI_Barrier(MPI_COMM_WORLD);
-
+/*
             // Copy own chunks of A and B
              for(index = 0; index < offset; index++)
                 {
@@ -133,7 +133,6 @@ int main(int argc, char *argv[])
         // Check if not master
         else if(rank < numTasks)
         {
-/*
             // Receive chunks of A and B
             for(index = 0; index < offset; index++)
             {
@@ -144,7 +143,7 @@ int main(int argc, char *argv[])
 
             // Barrier after chunks sent
             MPI_Barrier(MPI_COMM_WORLD);
-
+/*
             // Initialization and multiply once
 
             // Shift and multiply sqrt(numTasks) times
@@ -156,8 +155,8 @@ int main(int argc, char *argv[])
             {
 
             }
-        }
 */
+        }
     }
 
     // Shut down
@@ -225,9 +224,11 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
             // Make sure master is skipped
             if(rowIndex != 0 && colIndex != 0)
             {
+cout << "Master sending ROW " << rowIndex << " COL " << colIndex << " to " << procIndex << endl;
                 // Send current process their chunks of A and B
                 for(index = 0; index < offset; index++)
                 {
+cout << "   START ROW " << rowIndex * offset + index << endl << "   START COL: " << colIndex * offset << endl;
                     // Send current row portion of A
                     MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
                         offset, MPI_INT, procIndex, tag, comm);
