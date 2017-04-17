@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
         matrixMult(chunkA, chunkB, chunkC);
 
         // Shift and multiply sqrt(numTasks) times
-        for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
+        for (int shiftIndex = 0; shiftIndex < 1; shiftIndex++)
         {
             // Shift A rows once
             MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
