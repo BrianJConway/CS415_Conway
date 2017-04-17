@@ -227,6 +227,7 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
 {
     // Initialization
     int procIndex, rowIndex, colIndex, index, tag = 1;
+    int *temp = new int[offset];
 
     // Send each process their chunks
     procIndex = 0;
@@ -244,7 +245,11 @@ cout << "   START ROW " << rowIndex * offset << endl << "   START COL: " << colI
                 for(index = 0; index < offset; index++)
                 {
                     // Send current row portion of A
-                    MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
+for(int aIndex = 0; aIndex < offset; aIndex++)
+{
+    temp[aIndex] = A[rowIndex * offset + index][colIndex * offset + aIndex];
+}
+                    MPI_Send(temp,
                         offset, MPI_INT, procIndex, tag, comm);
 
 cout << "       SENT ROW " << rowIndex * offset + index << " COL: " << colIndex * offset << endl;
@@ -262,6 +267,8 @@ cout << endl;
             }
         }
     }
+
+    delete[] temp;
 
     cout << "ALL SENT" << endl;
 }
