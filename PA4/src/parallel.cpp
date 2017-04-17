@@ -140,23 +140,29 @@ int main(int argc, char *argv[])
 
                 if(rank == 1)
                 {
+                    cout << "BEFORE: "; 
+
                     for(int r = 0; r < offset; r++)
                     {
-                        cout << "BEFORE" << chunkA[index][r] << " ";
+                        cout << chunkA[index][r] << " ";
                     }
                     cout << endl;
                 }
+
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index]), offset, MPI_INT, 0, tag, cartComm, &status);
 
                 if(rank == 1)
                 {
+                    cout << "BEFORE: "; 
+
                     for(int r = 0; r < offset; r++)
                     {
-                        cout << chunkA[index][r] << endl;
+                        cout << chunkA[index][r] << " ";
                     }
+                    cout << endl;
                 }
-
+                
                 MPI_Recv(&(chunkB[index]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
 
