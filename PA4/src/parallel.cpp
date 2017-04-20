@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
         // Cannon's Algorithm - Initialize Rows
         if (coords[0] != 0)
         {
+            // Shift A rows i places left
             MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -122,6 +123,7 @@ int main(int argc, char *argv[])
         // Cannon's Algorithm - Initialize Columns
         if (coords[1] != 0)
         {
+            // Shift B columns j places up
             MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -134,7 +136,7 @@ int main(int argc, char *argv[])
         MPI_Barrier(cartComm);
 
         // Multiply
-        matrixMult(chunkA, chunkB, chunkC);
+        //matrixMult(chunkA, chunkB, chunkC);
 
         // Cannon's Algorithm - Shift and multiply sqrt(numTasks) times
         for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
@@ -147,7 +149,7 @@ int main(int argc, char *argv[])
                                      tag, src, tag, cartComm, &status);
             }
 
-            // Cannon's Algorithm -Shift B cols once
+            // Cannon's Algorithm - Shift B cols once
             MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
