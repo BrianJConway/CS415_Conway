@@ -187,7 +187,7 @@ void outputMatrices(vector<vector<int>> A,
     ofstream fout;
 
     // Open output file
-    fout.open("output.txt");
+    fout.open("seqOutput.txt");
     int count = 0;
 
     // Output matrix A

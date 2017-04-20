@@ -324,6 +324,9 @@ void outputResults(vector<vector<int>> A, vector<vector<int>> B,
     // initialize function/variables
     int rowIndex, colIndex, offset = chunkC.size();
     int coords[2];
+    ofstream fout;
+
+    fout.open("parOutput.txt");
 
     // Get coordinates of process
     MPI_Cart_coords(cartComm, rank, 2, coords);
@@ -338,11 +341,17 @@ void outputResults(vector<vector<int>> A, vector<vector<int>> B,
             {
                 // Output current item
                 cout << A[rowIndex][colIndex] << " ";
+                fout << A[rowIndex][colIndex] << " ";
             }
             cout << endl;
+            fout << endl;
             // end inner loop
         }
         cout << endl
+             << endl
+             << endl;
+
+        fout << endl
              << endl
              << endl;
         // end outer loop
@@ -354,11 +363,16 @@ void outputResults(vector<vector<int>> A, vector<vector<int>> B,
             {
                 // Output current item
                 cout << B[rowIndex][colIndex] << " ";
+                fout << B[rowIndex][colIndex] << " ";
             }
             cout << endl;
+            fout << endl;
             // end inner loop
         }
         cout << endl
+             << endl
+             << endl;
+        fout << endl
              << endl
              << endl;
         // end outer loop
@@ -376,15 +390,24 @@ void outputResults(vector<vector<int>> A, vector<vector<int>> B,
                  << "], results:"
                  << endl;
 
+            fout << "Process " << rank
+                 << " at [" << coords[0]
+                 << ", " << coords[1]
+                 << "], results:"
+                 << endl;
+
             for (rowIndex = 0; rowIndex < offset; rowIndex++)
             {
                 for (colIndex = 0; colIndex < offset; colIndex++)
                 {
                     cout << chunkC[rowIndex][colIndex] << " ";
+                    fout << chunkC[rowIndex][colIndex] << " ";
                 }
                 cout << endl;
+                fout << endl;
             }
             cout << endl;
+            fout << endl;
         }
 
         // Barrier
