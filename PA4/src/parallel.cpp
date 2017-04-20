@@ -31,6 +31,9 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
+void outputResults(vector<vector<int>> A, vector<vector<int>> B,
+                    vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm);
+
 int main(int argc, char *argv[])
 {
     // Initialization
@@ -135,13 +138,10 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
-        // Multiply
-        //matrixMult(chunkA, chunkB, chunkC);
-
         // Cannon's Algorithm - Shift and multiply sqrt(numTasks) times
         for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
         {
-            // Cannon's Algorithm - Shift A rows once
+            // Cannon's Algorithm - Shift A rows once left
             MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
                                      tag, src, tag, cartComm, &status);
             }
 
-            // Cannon's Algorithm - Shift B cols once
+            // Cannon's Algorithm - Shift B cols once up
             MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -167,70 +167,10 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
+        // Output results if flag indicates
         if (outputMatrices)
         {
-            // Master output A and B matrices
-            if (rank == 0)
-            {
-                // Output matrix A
-                for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
-                {
-                    for (colIndex = 0; colIndex < A.size(); colIndex++)
-                    {
-                        // Output current item
-                        cout << A[rowIndex][colIndex] << " ";
-                    }
-                    cout << endl;
-                    // end inner loop
-                }
-                cout << endl
-                     << endl
-                     << endl;
-                // end outer loop
-
-                // Output matrix B
-                for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
-                {
-                    for (colIndex = 0; colIndex < B.size(); colIndex++)
-                    {
-                        // Output current item
-                        cout << B[rowIndex][colIndex] << " ";
-                    }
-                    cout << endl;
-                    // end inner loop
-                }
-                cout << endl
-                     << endl
-                     << endl;
-                // end outer loop
-            }
-            // Everyone output their chunks of C
-            for (int pIndex = 0; pIndex < numTasks; pIndex++)
-            {
-                // Check if turn to output
-                if (pIndex == rank)
-                {
-                    // Output current process' chunk of matrix C
-                    cout << "Process " << rank
-                         << " at [" << coords[0]
-                         << ", " << coords[1]
-                         << "], results:"
-                         << endl;
-
-                    for (rowIndex = 0; rowIndex < offset; rowIndex++)
-                    {
-                        for (colIndex = 0; colIndex < offset; colIndex++)
-                        {
-                            cout << chunkC[rowIndex][colIndex] << " ";
-                        }
-                        cout << endl;
-                    }
-                    cout << endl;
-                }
-
-                // Barrier
-                MPI_Barrier(cartComm);
-            }
+            outputResults(A, B, chunkC, rank, numTasks, cartComm);
         }
     }
 
@@ -376,6 +316,80 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
         // end inner loop
     }
     // end outer loop
+}
+
+void outputResults(vector<vector<int>> A, vector<vector<int>> B,
+                    vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
+{
+    // initialize function/variables
+    int rowIndex, colIndex, offset = chunkC.size();
+    int coords[2];
+
+    // Get coordinates of process
+    MPI_Cart_coords(cartComm, rank, 2, coords);
+
+    // Master output A and B matrices
+    if (rank == 0)
+    {
+        // Output matrix A
+        for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < A.size(); colIndex++)
+            {
+                // Output current item
+                cout << A[rowIndex][colIndex] << " ";
+            }
+            cout << endl;
+            // end inner loop
+        }
+        cout << endl
+             << endl
+             << endl;
+        // end outer loop
+
+        // Output matrix B
+        for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < B.size(); colIndex++)
+            {
+                // Output current item
+                cout << B[rowIndex][colIndex] << " ";
+            }
+            cout << endl;
+            // end inner loop
+        }
+        cout << endl
+             << endl
+             << endl;
+        // end outer loop
+    }
+    // Everyone output their chunks of C
+    for (int pIndex = 0; pIndex < numTasks; pIndex++)
+    {
+        // Check if turn to output
+        if (pIndex == rank)
+        {
+            // Output current process' chunk of matrix C
+            cout << "Process " << rank
+                 << " at [" << coords[0]
+                 << ", " << coords[1]
+                 << "], results:"
+                 << endl;
+
+            for (rowIndex = 0; rowIndex < offset; rowIndex++)
+            {
+                for (colIndex = 0; colIndex < offset; colIndex++)
+                {
+                    cout << chunkC[rowIndex][colIndex] << " ";
+                }
+                cout << endl;
+            }
+            cout << endl;
+        }
+
+        // Barrier
+        MPI_Barrier(cartComm);
+    }
 }
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
