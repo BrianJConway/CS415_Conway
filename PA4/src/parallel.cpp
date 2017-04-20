@@ -123,6 +123,9 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
+        // Start the timer
+        timer.start();
+
         // Cannon's Algorithm - Initialize Columns
         if (coords[1] != 0)
         {
@@ -166,6 +169,13 @@ int main(int argc, char *argv[])
 
         // Barrier
         MPI_Barrier(cartComm);
+
+        // Stop the timer
+        timer.stop();
+        timings.push_back(timer.getElapsedTime());
+
+        // Calculate statistics about timings
+        calcStatistics(timings, average, stdDev);
 
         // Output results if flag indicates
         if (outputMatrices)
