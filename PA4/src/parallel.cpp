@@ -32,7 +32,7 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
 void outputResults(vector<vector<int>> A, vector<vector<int>> B,
-                    vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm);
+                   vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm);
 
 int main(int argc, char *argv[])
 {
@@ -175,7 +175,10 @@ int main(int argc, char *argv[])
         timings.push_back(timer.getElapsedTime());
 
         // Calculate statistics about timings
-        calcStatistics(timings, average, stdDev);
+        if (rank == 0)
+        {
+            calcStatistics(timings, average, stdDev);
+        }
 
         // Output results if flag indicates
         if (outputMatrices)
@@ -329,7 +332,7 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
 }
 
 void outputResults(vector<vector<int>> A, vector<vector<int>> B,
-                    vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
+                   vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
 {
     // initialize function/variables
     int rowIndex, colIndex, offset = chunkC.size();
