@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
-        // Initialization
+        // Cannon's Algorithm - Initialize Rows
         if (coords[0] != 0)
         {
             MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
+        // Cannon's Algorithm - Initialize Columns
         if (coords[1] != 0)
         {
             MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
@@ -132,13 +133,13 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
-        // Multiply and store
+        // Multiply
         matrixMult(chunkA, chunkB, chunkC);
 
-        // Shift and multiply sqrt(numTasks) times
-        for (int shiftIndex = 0; shiftIndex < 1; shiftIndex++)
+        // Cannon's Algorithm - Shift and multiply sqrt(numTasks) times
+        for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
         {
-            // Shift A rows once
+            // Cannon's Algorithm - Shift A rows once
             MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -146,7 +147,7 @@ int main(int argc, char *argv[])
                                      tag, src, tag, cartComm, &status);
             }
 
-            // Shift B cols once
+            // Cannon's Algorithm -Shift B cols once
             MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
             for (index = 0; index < offset; index++)
             {
@@ -157,7 +158,7 @@ int main(int argc, char *argv[])
             // Barrier
             MPI_Barrier(cartComm);
 
-            // Multiply?
+            // Multiply
             matrixMult(chunkA, chunkB, chunkC);
         }
 
@@ -166,6 +167,31 @@ int main(int argc, char *argv[])
 
         if (outputMatrices)
         {
+            for (int pIndex = 0; pIndex < numTasks; pIndex++)
+            {
+                // Check if turn to output
+                if (pIndex == rank)
+                {
+                    // Output current process' chunk of matrix C
+                    cout << "Process " << rank
+                         << " at [" << coords[0] 
+                         << ", " << coords[1]
+                         << "], results:"
+                         << endl;
+
+                    for(rowIndex = 0; rowIndex < offset; rowIndex++)
+                    {
+                        for(colIndex = 0; colIndex < offset; colIndex++)
+                        {
+                            cout << chunkC[rowIndex][colIndex] << " ";
+                        }
+                        cout << endl;
+                    }
+                }
+
+                // Barrier
+                MPI_Barrier(cartComm);
+            }
         }
     }
 
