@@ -167,6 +167,42 @@ int main(int argc, char *argv[])
 
         if (outputMatrices)
         {
+            // Master output A and B matrices
+            if (rank == 0)
+            {
+                // Output matrix A
+                for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
+                {
+                    for (colIndex = 0; colIndex < A.size(); colIndex++)
+                    {
+                        // Output current item
+                        cout << A[rowIndex][colIndex] << " ";
+                    }
+                    cout << endl;
+                    // end inner loop
+                }
+                cout << endl
+                     << endl
+                     << endl;
+                // end outer loop
+
+                // Output matrix B
+                for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
+                {
+                    for (colIndex = 0; colIndex < B.size(); colIndex++)
+                    {
+                        // Output current item
+                        cout << B[rowIndex][colIndex] << " ";
+                    }
+                    cout << endl;
+                    // end inner loop
+                }
+                cout << endl
+                     << endl
+                     << endl;
+                // end outer loop
+            }
+            // Everyone output their chunks of C
             for (int pIndex = 0; pIndex < numTasks; pIndex++)
             {
                 // Check if turn to output
@@ -174,14 +210,14 @@ int main(int argc, char *argv[])
                 {
                     // Output current process' chunk of matrix C
                     cout << "Process " << rank
-                         << " at [" << coords[0] 
+                         << " at [" << coords[0]
                          << ", " << coords[1]
                          << "], results:"
                          << endl;
 
-                    for(rowIndex = 0; rowIndex < offset; rowIndex++)
+                    for (rowIndex = 0; rowIndex < offset; rowIndex++)
                     {
-                        for(colIndex = 0; colIndex < offset; colIndex++)
+                        for (colIndex = 0; colIndex < offset; colIndex++)
                         {
                             cout << chunkC[rowIndex][colIndex] << " ";
                         }
