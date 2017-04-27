@@ -406,6 +406,9 @@ void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
             // Send current row of chunk C
             MPI_Send(&(chunkC[rowIndex][0]), offset, MPI_INT, 0, tag, cartComm);
         }
+
+        // Barrier
+        MPI_Barrier(cartComm);
     }
 
     // Master output C
