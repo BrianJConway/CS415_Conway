@@ -27,20 +27,39 @@ const int MIN_NUM = 0;
 const int MAX_NUM = 9;
 
 /*
-Purpose: Function used to ensure the chunk matrices are the correct size. 
-Adjusts number of tasks incrementally down until it's a perfect square.
+Purpose: Function used to read input files into matrices A and B, initialize
+C to all zeroes. Also sets matrix size since that information is in each file.
+Returns true if files loaded successfully, false if either file wasn't able to
+be opened.
 */
 bool fileInput(int &matrixSize, char *fileA, char *fileB, vector<vector<int>> &A,
                vector<vector<int>> &B, vector<vector<int>> &C);
 
+/*
+Purpose: Function used to send chunks of A and B from master node to other 
+processes. 
+*/
 void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
                           vector<vector<int>> A, vector<vector<int>> B);
 
+/*
+Purpose: Function used to sequentially multiply matrices A and B, and store 
+the result in matrix C.
+*/
 void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
                 vector<vector<int>> &C);
 
+/*
+Purpose: Function used to take the vector of timings and calculate the average
+and standard deviation of all of the timing measurements, outptuts the statistics
+to the console.
+*/
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
+/*
+Purpose: Function used to gather all the chunks of C from all nodes to master, 
+then has master output the C matrix to the file "C.txt".
+*/
 void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
                    int numTasks, MPI_Comm cartComm);
 
