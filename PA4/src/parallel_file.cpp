@@ -393,9 +393,6 @@ void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
                 MPI_Recv(&(C[(coords[0] * offset) + rowIndex][coords[1] * offset]),
                          offset, MPI_INT, index, tag, cartComm, &status);
             }
-
-            // Barrier
-            MPI_Barrier(cartComm);
         }
     }
     else if (rank < numTasks)
@@ -406,9 +403,6 @@ void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
             // Send current row of chunk C
             MPI_Send(&(chunkC[rowIndex][0]), offset, MPI_INT, 0, tag, cartComm);
         }
-
-        // Barrier
-        MPI_Barrier(cartComm);
     }
 
     // Master output C
