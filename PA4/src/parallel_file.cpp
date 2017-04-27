@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
             {
                 for (colIndex = 0; colIndex < offset; colIndex++)
                 {
-                    chunkA[index][colIndex] = A[index][colIndex];
-                    chunkB[index][colIndex] = B[index][colIndex];
+                    chunkA[index][colIndex].push_back(A[index][colIndex]);
+                    chunkB[index][colIndex].push_back(B[index][colIndex]);
                 }
             }
 
@@ -275,32 +275,10 @@ bool fileInput(int &matrixSize, char *fileA, char *fileB, vector<vector<int>> &A
     else
     {
         cout << "FILE ERROR: Ensure input files are specified correctly" << endl;
+        return false;
     }
 
-            // Copy own chunks of A and B
-            for (index = 0; index < matrixSize; index++)
-            {
-                for (colIndex = 0; colIndex < matrixSize; colIndex++)
-                {
-                    cout << A[index][colIndex] << " ";
-                }
-
-                cout << endl;
-            }
-
-            cout << endl
-                 << endl;
-
-            // Copy own chunks of A and B
-            for (index = 0; index < matrixSize; index++)
-            {
-                for (colIndex = 0; colIndex < matrixSize; colIndex++)
-                {
-                    cout << B[index][colIndex] << " ";
-                }
-
-                cout << endl;
-            }
+    return true;
 }
 
 void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
@@ -310,7 +288,7 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
     int procIndex, rowIndex, colIndex, index, tag = 1;
 
     // Send each process the matrix size
-    for(index = 0; index < numTasks; index++)
+    for (index = 0; index < numTasks; index++)
     {
         MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
     }
