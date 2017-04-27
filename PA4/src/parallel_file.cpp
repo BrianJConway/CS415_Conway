@@ -306,6 +306,8 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
         MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
     }
 
+cout << "master sent mat sizes" << endl;
+
     // Send each process their chunks
     procIndex = 0;
     for (rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
