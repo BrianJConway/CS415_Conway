@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
             {
                 return 0;
             }
-            cout << "hey" << endl;
 
             // Set number of elements per row/col in chunk, allocate memory
             offset = matrixSize / sqrt(numTasks);
@@ -112,8 +111,6 @@ int main(int argc, char *argv[])
                 }
             }
 
-cout << "master sending chunks" << endl;
-
             // Send each other process their portion
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
         }
@@ -122,8 +119,6 @@ cout << "master sending chunks" << endl;
         {
             // Get matrix size
             MPI_Recv(&matrixSize, 1, MPI_INT, 0, tag, cartComm, &status);
-
-            cout << "task " << rank << " got mat size of " << matrixSize << endl;
 
             // Set number of elements per row/col in chunk, allocate memory
             offset = matrixSize / sqrt(numTasks);
@@ -143,14 +138,21 @@ cout << "master sending chunks" << endl;
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
 
-            cout << "task " << rank << " got chunk" << endl;
+            if (rank == 1)
+            {
+                for (rowIndex = 0; rowIndex < offset; rowIndex++)
+                {
+                    for (colIndex = 0; colIndex < offset; colIndex++)
+                    {
+                        cout << chunkA[rowIndex][colIndex] << " ";
+                    }
+                    cout << endl;
+                }
+            }
         }
-            cout << "task " << rank << " hit barrier" << endl;
 
         // Barrier
         MPI_Barrier(cartComm);
-
-        cout << "Finished sending chunks" << endl;
 
         // Start the timer
         timer.start();
@@ -305,8 +307,6 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
     {
         MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
     }
-
-cout << "master sent mat sizes" << endl;
 
     // Send each process their chunks
     procIndex = 0;
