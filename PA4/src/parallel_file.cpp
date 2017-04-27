@@ -101,13 +101,13 @@ int main(int argc, char *argv[])
             chunkA.resize(offset);
             chunkB.resize(offset);
             chunkC.resize(offset);
-            
+
             // Copy own chunks of A and B
             for (index = 0; index < offset; index++)
             {
                 // Allocate chunk C row
                 chunkC[index].resize(offset);
-                
+
                 // Copy A and B
                 for (colIndex = 0; colIndex < offset; colIndex++)
                 {
@@ -144,319 +144,320 @@ int main(int argc, char *argv[])
                 MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
+        }
+
+        // Barrier
+        MPI_Barrier(cartComm);
+
+        // Initialize C chunk
+        for (index = 0; index < offset; index++)
+        {
+            for (colIndex = 0; colIndex < offset; colIndex++)
+            {
+                chunkC[index][colIndex] = 0;
+            }
+        }
+
+        // Start the timer
+        timer.start();
+
+        // Cannon's Algorithm - Initialize Rows
+        if (coords[0] != 0)
+        {
+            // Shift A rows i places left
+            MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, &status);
+            }
+        }
+
+        // Barrier
+        MPI_Barrier(cartComm);
+
+        // Cannon's Algorithm - Initialize Columns
+        if (coords[1] != 0)
+        {
+            // Shift B columns j places up
+            MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, &status);
+            }
+        }
+
+        // Barrier
+        MPI_Barrier(cartComm);
+
+        // Cannon's Algorithm - Shift and multiply sqrt(numTasks) times
+        for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
+        {
+            // Cannon's Algorithm - Shift A rows once left
+            MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, &status);
+            }
+
+            // Cannon's Algorithm - Shift B cols once up
+            MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
+            for (index = 0; index < offset; index++)
+            {
+                MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
+                                     tag, src, tag, cartComm, &status);
+            }
 
             // Barrier
             MPI_Barrier(cartComm);
 
-            // Initialize C chunk
-            for (index = 0; index < offset; index++)
+            // Multiply
+            matrixMult(chunkA, chunkB, chunkC);
+        }
+
+        // Barrier
+        MPI_Barrier(cartComm);
+
+        // Stop the timer
+        timer.stop();
+        timings.push_back(timer.getElapsedTime());
+
+        // Calculate statistics about timings
+        if (rank == 0)
+        {
+            calcStatistics(timings, average, stdDev);
+        }
+
+        // Output results if flag indicates
+        if (outputMatrices)
+        {
+            outputResults(A, B, chunkC, rank, numTasks, cartComm);
+        }
+    }
+
+    // Shut down
+    MPI_Finalize();
+
+    // Exit program
+    return 0;
+}
+
+bool fileInput(int &matrixSize, char *fileA, char *fileB, vector<vector<int>> &A,
+               vector<vector<int>> &B, vector<vector<int>> &C)
+{
+    // Initialize function/variables
+    int index, rowIndex, colIndex, dummy, temp;
+    ifstream finA, finB;
+
+    // Clean and open both input files
+    finA.clear();
+    finB.clear();
+    finA.open(fileA);
+    finB.open(fileB);
+
+    // Check if both files opened good
+    if (finA.good() && finB.good())
+    {
+        // Read matrix size
+        finA >> matrixSize;
+        finB >> dummy;
+
+        // Size matrices appropriately
+        A.resize(matrixSize);
+        B.resize(matrixSize);
+        C.resize(matrixSize);
+
+        // Set A, B and C matrices
+        for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
+        {
+            // Loop through each column
+            for (colIndex = 0; colIndex < matrixSize; colIndex++)
+            {
+                // Read values for A and B
+                finA >> temp;
+                A[rowIndex].push_back(temp);
+                finB >> temp;
+                B[rowIndex].push_back(temp);
+
+                // Initialize C value
+                C[rowIndex].push_back(0);
+            }
+        }
+        // end loop
+
+        // Close files
+        finA.close();
+        finB.close();
+    }
+    else
+    {
+        cout << "FILE ERROR: Ensure input files are specified correctly" << endl;
+        return false;
+    }
+
+    return true;
+}
+
+void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
+                          vector<vector<int>> A, vector<vector<int>> B)
+{
+    // Initialization
+    int procIndex, rowIndex, colIndex, index, tag = 1;
+
+    // Send each process the matrix size
+    for (index = 1; index < numTasks; index++)
+    {
+        MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
+    }
+
+    // Send each process their chunks
+    procIndex = 0;
+    for (rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
+    {
+        for (colIndex = 0; colIndex < sqrt(numTasks); colIndex++, procIndex++)
+        {
+            // Make sure master is skipped
+            if (procIndex != 0)
+            {
+                // Send current process their chunks of A and B
+                for (index = 0; index < offset; index++)
+                {
+                    // Send current row portion of A
+                    MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
+                             offset, MPI_INT, procIndex, tag, comm);
+
+                    // Send current row portion of B
+                    MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
+                             offset, MPI_INT, procIndex, tag, comm);
+                }
+            }
+        }
+    }
+}
+
+void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
+                vector<vector<int>> &C)
+{
+    // Initialize function/variables
+    int index, rowIndex, colIndex;
+
+    // Multiply matrices
+    for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
+    {
+        // Loop through each column
+        for (colIndex = 0; colIndex < C.size(); colIndex++)
+        {
+            for (index = 0; index < C.size(); index++)
+            {
+                C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
+            }
+        }
+        // end inner loop
+    }
+    // end outer loop
+}
+
+void outputResults(vector<vector<int>> A, vector<vector<int>> B,
+                   vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
+{
+    // initialize function/variables
+    int rowIndex, colIndex, offset = chunkC.size();
+    int coords[2];
+
+    // Get coordinates of process
+    MPI_Cart_coords(cartComm, rank, 2, coords);
+
+    // Master output A and B matrices
+    if (rank == 0)
+    {
+        // Output matrix A
+        for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < A.size(); colIndex++)
+            {
+                // Output current item
+                cout << A[rowIndex][colIndex] << " ";
+            }
+            cout << endl;
+            // end inner loop
+        }
+        cout << endl
+             << endl
+             << endl;
+        // end outer loop
+
+        // Output matrix B
+        for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < B.size(); colIndex++)
+            {
+                // Output current item
+                cout << B[rowIndex][colIndex] << " ";
+            }
+            cout << endl;
+            // end inner loop
+        }
+        cout << endl
+             << endl
+             << endl;
+        // end outer loop
+    }
+    // Everyone output their chunks of C
+    for (int pIndex = 0; pIndex < numTasks; pIndex++)
+    {
+        // Check if turn to output
+        if (pIndex == rank)
+        {
+            // Output current process' chunk of matrix C
+            cout << "Process " << rank
+                 << " at [" << coords[0]
+                 << ", " << coords[1]
+                 << "], results:"
+                 << endl;
+
+            for (rowIndex = 0; rowIndex < offset; rowIndex++)
             {
                 for (colIndex = 0; colIndex < offset; colIndex++)
                 {
-                    chunkC[index][colIndex] = 0;
-                }
-            }
-
-            // Start the timer
-            timer.start();
-
-            // Cannon's Algorithm - Initialize Rows
-            if (coords[0] != 0)
-            {
-                // Shift A rows i places left
-                MPI_Cart_shift(cartComm, 1, -coords[0], &src, &dest);
-                for (index = 0; index < offset; index++)
-                {
-                    MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
-                                         tag, src, tag, cartComm, &status);
-                }
-            }
-
-            // Barrier
-            MPI_Barrier(cartComm);
-
-            // Cannon's Algorithm - Initialize Columns
-            if (coords[1] != 0)
-            {
-                // Shift B columns j places up
-                MPI_Cart_shift(cartComm, 0, -coords[1], &src, &dest);
-                for (index = 0; index < offset; index++)
-                {
-                    MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
-                                         tag, src, tag, cartComm, &status);
-                }
-            }
-
-            // Barrier
-            MPI_Barrier(cartComm);
-
-            // Cannon's Algorithm - Shift and multiply sqrt(numTasks) times
-            for (int shiftIndex = 0; shiftIndex < sqrt(numTasks); shiftIndex++)
-            {
-                // Cannon's Algorithm - Shift A rows once left
-                MPI_Cart_shift(cartComm, 1, -1, &src, &dest);
-                for (index = 0; index < offset; index++)
-                {
-                    MPI_Sendrecv_replace(&(chunkA[index][0]), offset, MPI_INT, dest,
-                                         tag, src, tag, cartComm, &status);
-                }
-
-                // Cannon's Algorithm - Shift B cols once up
-                MPI_Cart_shift(cartComm, 0, -1, &src, &dest);
-                for (index = 0; index < offset; index++)
-                {
-                    MPI_Sendrecv_replace(&(chunkB[index][0]), offset, MPI_INT, dest,
-                                         tag, src, tag, cartComm, &status);
-                }
-
-                // Barrier
-                MPI_Barrier(cartComm);
-
-                // Multiply
-                matrixMult(chunkA, chunkB, chunkC);
-            }
-
-            // Barrier
-            MPI_Barrier(cartComm);
-
-            // Stop the timer
-            timer.stop();
-            timings.push_back(timer.getElapsedTime());
-
-            // Calculate statistics about timings
-            if (rank == 0)
-            {
-                calcStatistics(timings, average, stdDev);
-            }
-
-            // Output results if flag indicates
-            if (outputMatrices)
-            {
-                outputResults(A, B, chunkC, rank, numTasks, cartComm);
-            }
-        }
-
-        // Shut down
-        MPI_Finalize();
-
-        // Exit program
-        return 0;
-    }
-
-    bool fileInput(int &matrixSize, char *fileA, char *fileB, vector<vector<int>> &A,
-                   vector<vector<int>> &B, vector<vector<int>> &C)
-    {
-        // Initialize function/variables
-        int index, rowIndex, colIndex, dummy, temp;
-        ifstream finA, finB;
-
-        // Clean and open both input files
-        finA.clear();
-        finB.clear();
-        finA.open(fileA);
-        finB.open(fileB);
-
-        // Check if both files opened good
-        if (finA.good() && finB.good())
-        {
-            // Read matrix size
-            finA >> matrixSize;
-            finB >> dummy;
-
-            // Size matrices appropriately
-            A.resize(matrixSize);
-            B.resize(matrixSize);
-            C.resize(matrixSize);
-
-            // Set A, B and C matrices
-            for (rowIndex = 0; rowIndex < matrixSize; rowIndex++)
-            {
-                // Loop through each column
-                for (colIndex = 0; colIndex < matrixSize; colIndex++)
-                {
-                    // Read values for A and B
-                    finA >> temp;
-                    A[rowIndex].push_back(temp);
-                    finB >> temp;
-                    B[rowIndex].push_back(temp);
-
-                    // Initialize C value
-                    C[rowIndex].push_back(0);
-                }
-            }
-            // end loop
-
-            // Close files
-            finA.close();
-            finB.close();
-        }
-        else
-        {
-            cout << "FILE ERROR: Ensure input files are specified correctly" << endl;
-            return false;
-        }
-
-        return true;
-    }
-
-    void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm comm,
-                              vector<vector<int>> A, vector<vector<int>> B)
-    {
-        // Initialization
-        int procIndex, rowIndex, colIndex, index, tag = 1;
-
-        // Send each process the matrix size
-        for (index = 1; index < numTasks; index++)
-        {
-            MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
-        }
-
-        // Send each process their chunks
-        procIndex = 0;
-        for (rowIndex = 0; rowIndex < sqrt(numTasks); rowIndex++)
-        {
-            for (colIndex = 0; colIndex < sqrt(numTasks); colIndex++, procIndex++)
-            {
-                // Make sure master is skipped
-                if (procIndex != 0)
-                {
-                    // Send current process their chunks of A and B
-                    for (index = 0; index < offset; index++)
-                    {
-                        // Send current row portion of A
-                        MPI_Send(&(A[(rowIndex * offset) + index][colIndex * offset]),
-                                 offset, MPI_INT, procIndex, tag, comm);
-
-                        // Send current row portion of B
-                        MPI_Send(&(B[(rowIndex * offset) + index][colIndex * offset]),
-                                 offset, MPI_INT, procIndex, tag, comm);
-                    }
-                }
-            }
-        }
-    }
-
-    void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
-                    vector<vector<int>> & C)
-    {
-        // Initialize function/variables
-        int index, rowIndex, colIndex;
-
-        // Multiply matrices
-        for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
-        {
-            // Loop through each column
-            for (colIndex = 0; colIndex < C.size(); colIndex++)
-            {
-                for (index = 0; index < C.size(); index++)
-                {
-                    C[rowIndex][colIndex] += A[rowIndex][index] * B[index][colIndex];
-                }
-            }
-            // end inner loop
-        }
-        // end outer loop
-    }
-
-    void outputResults(vector<vector<int>> A, vector<vector<int>> B,
-                       vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
-    {
-        // initialize function/variables
-        int rowIndex, colIndex, offset = chunkC.size();
-        int coords[2];
-
-        // Get coordinates of process
-        MPI_Cart_coords(cartComm, rank, 2, coords);
-
-        // Master output A and B matrices
-        if (rank == 0)
-        {
-            // Output matrix A
-            for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
-            {
-                for (colIndex = 0; colIndex < A.size(); colIndex++)
-                {
-                    // Output current item
-                    cout << A[rowIndex][colIndex] << " ";
-                }
-                cout << endl;
-                // end inner loop
-            }
-            cout << endl
-                 << endl
-                 << endl;
-            // end outer loop
-
-            // Output matrix B
-            for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
-            {
-                for (colIndex = 0; colIndex < B.size(); colIndex++)
-                {
-                    // Output current item
-                    cout << B[rowIndex][colIndex] << " ";
-                }
-                cout << endl;
-                // end inner loop
-            }
-            cout << endl
-                 << endl
-                 << endl;
-            // end outer loop
-        }
-        // Everyone output their chunks of C
-        for (int pIndex = 0; pIndex < numTasks; pIndex++)
-        {
-            // Check if turn to output
-            if (pIndex == rank)
-            {
-                // Output current process' chunk of matrix C
-                cout << "Process " << rank
-                     << " at [" << coords[0]
-                     << ", " << coords[1]
-                     << "], results:"
-                     << endl;
-
-                for (rowIndex = 0; rowIndex < offset; rowIndex++)
-                {
-                    for (colIndex = 0; colIndex < offset; colIndex++)
-                    {
-                        cout << chunkC[rowIndex][colIndex] << " ";
-                    }
-                    cout << endl;
+                    cout << chunkC[rowIndex][colIndex] << " ";
                 }
                 cout << endl;
             }
-
-            // Barrier
-            MPI_Barrier(cartComm);
+            cout << endl;
         }
-    }
 
-    void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
+        // Barrier
+        MPI_Barrier(cartComm);
+    }
+}
+
+void calcStatistics(vector<double> measurements, double &avg, double &stdDev)
+{
+    // Initialization
+    double sum = 0.0;
+    vector<double> squaredDistances;
+
+    // Calculate average
+    for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
     {
-        // Initialization
-        double sum = 0.0;
-        vector<double> squaredDistances;
-
-        // Calculate average
-        for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
-        {
-            sum += *it;
-        }
-
-        avg = sum / NUM_MEASUREMENTS;
-
-        // Calculate standard deviation
-        sum = 0.0;
-        for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
-        {
-            sum += pow(*it - avg, 2.0);
-        }
-
-        stdDev = sqrt(sum / NUM_MEASUREMENTS);
-
-        // Output results
-        cout << "Measurements: " << NUM_MEASUREMENTS << endl
-             << "Average Time: " << avg << "s" << endl
-             << "Standard Deviation: " << stdDev << "s" << endl;
+        sum += *it;
     }
+
+    avg = sum / NUM_MEASUREMENTS;
+
+    // Calculate standard deviation
+    sum = 0.0;
+    for (vector<double>::iterator it = measurements.begin(); it != measurements.end(); it++)
+    {
+        sum += pow(*it - avg, 2.0);
+    }
+
+    stdDev = sqrt(sum / NUM_MEASUREMENTS);
+
+    // Output results
+    cout << "Measurements: " << NUM_MEASUREMENTS << endl
+         << "Average Time: " << avg << "s" << endl
+         << "Standard Deviation: " << stdDev << "s" << endl;
+}
