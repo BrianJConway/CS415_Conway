@@ -301,7 +301,7 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
     int procIndex, rowIndex, colIndex, index, tag = 1;
 
     // Send each process the matrix size
-    for (index = 0; index < numTasks; index++)
+    for (index = 1; index < numTasks; index++)
     {
         MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
     }
