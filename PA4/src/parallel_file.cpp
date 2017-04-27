@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
             {
                 for (colIndex = 0; colIndex < offset; colIndex++)
                 {
-                    chunkA[index][colIndex].push_back(A[index][colIndex]);
-                    chunkB[index][colIndex].push_back(B[index][colIndex]);
+                    chunkA[index].push_back(A[index][colIndex]);
+                    chunkB[index].push_back(B[index][colIndex]);
                 }
             }
 
@@ -130,6 +130,10 @@ int main(int argc, char *argv[])
             // Receive matrix size and chunks of A and B
             for (index = 0; index < offset; index++)
             {
+                // Resize row of A and B to be able to fit chunk row
+                chunkA[index].resize(offset);
+                chunkB[index].resize(offset);
+                
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
