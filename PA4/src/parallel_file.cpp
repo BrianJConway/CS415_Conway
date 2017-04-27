@@ -94,10 +94,13 @@ int main(int argc, char *argv[])
             {
                 return 0;
             }
-                cout << "hey" << endl;
+            cout << "hey" << endl;
 
-            // Set number of elements per row/col in chunk
+            // Set number of elements per row/col in chunk, allocate memory
             offset = matrixSize / sqrt(numTasks);
+
+            chunkA.resize(offset);
+            chunkB.resize(offset);
 
             // Copy own chunks of A and B
             for (index = 0; index < offset; index++)
@@ -120,7 +123,9 @@ int main(int argc, char *argv[])
                 cout << endl;
             }
 
-            cout << endl << endl;
+            cout << endl
+                 << endl;
+
             // Copy own chunks of A and B
             for (index = 0; index < matrixSize; index++)
             {
@@ -128,7 +133,7 @@ int main(int argc, char *argv[])
                 {
                     cout << B[index][colIndex] << " ";
                 }
-                
+
                 cout << endl;
             }
 
@@ -138,7 +143,16 @@ int main(int argc, char *argv[])
         // Other nodes receive their chunk from master
         else if (rank < numTasks)
         {
-            // Receive chunks of A and B
+            // Get matrix size
+            MPI_Recv(&matrixSize, 1, MPI_INT, 0, tag, cartComm, &status);
+
+            // Set number of elements per row/col in chunk, allocate memory
+            offset = matrixSize / sqrt(numTasks);
+
+            chunkA.resize(offset);
+            chunkB.resize(offset);
+
+            // Receive matrix size and chunks of A and B
             for (index = 0; index < offset; index++)
             {
                 // Get current row of chunks for A and B
@@ -294,6 +308,12 @@ void sendChunksFromMaster(int matrixSize, int offset, int numTasks, MPI_Comm com
 {
     // Initialization
     int procIndex, rowIndex, colIndex, index, tag = 1;
+
+    // Send each process the matrix size
+    for(index = 0; index < numTasks; index++)
+    {
+        MPI_Send(&matrixSize, 1, MPI_INT, index, tag, comm);
+    }
 
     // Send each process their chunks
     procIndex = 0;
