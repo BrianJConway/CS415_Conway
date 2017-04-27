@@ -112,6 +112,8 @@ int main(int argc, char *argv[])
                 }
             }
 
+cout << "master sending chunks" << endl;
+
             // Send each other process their portion
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
         }
@@ -120,6 +122,8 @@ int main(int argc, char *argv[])
         {
             // Get matrix size
             MPI_Recv(&matrixSize, 1, MPI_INT, 0, tag, cartComm, &status);
+
+            cout << "task " << rank << " got mat size of " << matrixSize << endl;
 
             // Set number of elements per row/col in chunk, allocate memory
             offset = matrixSize / sqrt(numTasks);
@@ -133,15 +137,19 @@ int main(int argc, char *argv[])
                 // Resize row of A and B to be able to fit chunk row
                 chunkA[index].resize(offset);
                 chunkB[index].resize(offset);
-                
+
                 // Get current row of chunks for A and B
                 MPI_Recv(&(chunkA[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
                 MPI_Recv(&(chunkB[index][0]), offset, MPI_INT, 0, tag, cartComm, &status);
             }
+
+            cout << "task " << rank << " got chunk" << endl;
         }
 
         // Barrier
         MPI_Barrier(cartComm);
+
+        cout << "Finished sending chunks" << endl;
 
         // Start the timer
         timer.start();
