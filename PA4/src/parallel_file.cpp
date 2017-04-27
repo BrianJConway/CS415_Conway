@@ -41,8 +41,8 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
 
 void calcStatistics(vector<double> measurements, double &avg, double &stdDev);
 
-void outputResults(vector<vector<int>> A, vector<vector<int>> B,
-                   vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm);
+void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
+                   int numTasks, MPI_Comm cartComm);
 
 int main(int argc, char *argv[])
 {
@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
         // Output results if flag indicates
         if (outputMatrices)
         {
-            outputResults(A, B, chunkC, rank, numTasks, cartComm);
+            outputResults(C, chunkC, rank, numTasks, cartComm);
         }
     }
 
@@ -359,77 +359,77 @@ void matrixMult(vector<vector<int>> A, vector<vector<int>> B,
     // end outer loop
 }
 
-void outputResults(vector<vector<int>> A, vector<vector<int>> B,
-                   vector<vector<int>> chunkC, int rank, int numTasks, MPI_Comm cartComm)
+void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
+                   int numTasks, MPI_Comm cartComm)
 {
     // initialize function/variables
-    int rowIndex, colIndex, offset = chunkC.size();
+    int index, rowIndex, colIndex, offset = chunkC.size();
+    int tag = 1;
+    MPI_Status status;
     int coords[2];
+    ofstream fout;
 
-    // Get coordinates of process
-    MPI_Cart_coords(cartComm, rank, 2, coords);
-
-    // Master output A and B matrices
     if (rank == 0)
     {
-        // Output matrix A
-        for (rowIndex = 0; rowIndex < A.size(); rowIndex++)
+        // Master loads own chunk of C
+        for (rowIndex = 0; rowIndex < offset; rowIndex++)
         {
-            for (colIndex = 0; colIndex < A.size(); colIndex++)
+            for (colIndex = 0; colIndex < offset; colIndex++)
             {
-                // Output current item
-                cout << A[rowIndex][colIndex] << " ";
+                C[rowIndex][colIndex] = chunkC[rowIndex][colIndex];
             }
-            cout << endl;
-            // end inner loop
         }
-        cout << endl
-             << endl
-             << endl;
-        // end outer loop
 
-        // Output matrix B
-        for (rowIndex = 0; rowIndex < B.size(); rowIndex++)
+        // Master get chunks from everyone else
+        for (index = 1; index < numTasks; index++)
         {
-            for (colIndex = 0; colIndex < B.size(); colIndex++)
-            {
-                // Output current item
-                cout << B[rowIndex][colIndex] << " ";
-            }
-            cout << endl;
-            // end inner loop
-        }
-        cout << endl
-             << endl
-             << endl;
-        // end outer loop
-    }
-    // Everyone output their chunks of C
-    for (int pIndex = 0; pIndex < numTasks; pIndex++)
-    {
-        // Check if turn to output
-        if (pIndex == rank)
-        {
-            // Output current process' chunk of matrix C
-            cout << "Process " << rank
-                 << " at [" << coords[0]
-                 << ", " << coords[1]
-                 << "], results:"
-                 << endl;
+            // Get coordinates of process receiving from
+            MPI_Cart_coords(cartComm, index, 2, coords);
 
+            // Get chunk from current process
             for (rowIndex = 0; rowIndex < offset; rowIndex++)
             {
-                for (colIndex = 0; colIndex < offset; colIndex++)
-                {
-                    cout << chunkC[rowIndex][colIndex] << " ";
-                }
-                cout << endl;
+                // Get each row of chunk
+                MPI_Recv(&(C[(coords[0] * offset) + rowIndex][coords[1] * offset]),
+                         offset, MPI_INT, index, tag, cartComm, &status);
             }
-            cout << endl;
-        }
 
-        // Barrier
-        MPI_Barrier(cartComm);
+            // Barrier
+            MPI_Barrier(cartComm);
+        }
+    }
+    else if (rank < numTasks)
+    {
+        // Send master chunk C
+        for (rowIndex = 0; rowIndex < offset; rowIndex++)
+        {
+            // Send current row of chunk C
+            MPI_Send(&(chunkC[rowIndex][0]), offset, MPI_INT, 0, tag, cartComm);
+        }
+    }
+
+    // Master output C
+    if (rank == 0)
+    {
+        // Open file
+        fout.open("C.txt");
+
+        // Output matrix C
+        for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
+        {
+            for (colIndex = 0; colIndex < C.size(); colIndex++)
+            {
+                // Output current item
+                fout << C[rowIndex][colIndex] << " ";
+            }
+            fout << endl;
+            // end inner loop
+        }
+        fout << endl;
+        // end outer loop
+
+        // Close file
+        fout.close();
     }
 }
 
