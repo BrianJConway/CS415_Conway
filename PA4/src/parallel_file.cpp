@@ -109,6 +109,29 @@ int main(int argc, char *argv[])
                 }
             }
 
+            // Copy own chunks of A and B
+            for (index = 0; index < matrixSize; index++)
+            {
+                for (colIndex = 0; colIndex < matrixSize; colIndex++)
+                {
+                    cout << A[index][colIndex] << " ";
+                }
+
+                cout << endl;
+            }
+
+            cout << endl << endl;
+            // Copy own chunks of A and B
+            for (index = 0; index < matrixSize; index++)
+            {
+                for (colIndex = 0; colIndex < matrixSize; colIndex++)
+                {
+                    cout << B[index][colIndex] << " ";
+                }
+                
+                cout << endl;
+            }
+
             // Send each other process their portion
             sendChunksFromMaster(matrixSize, offset, numTasks, cartComm, A, B);
         }
