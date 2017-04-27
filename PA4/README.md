@@ -35,6 +35,31 @@ Pass "y" here if you want to see the results.
 
 ### Parallel
 
+
+#### Parallel with input files
+For parallel matrix multiplication with input files, scripts are run like so:
+
+sbatch /scripts/par_[PROCESSES].sh
+
+PROCESSES represents the number of processors. It must be one of the following
+numbers: 4, 9, 16, 25. 
+
+The scripts assume matrix A is in the file A.txt, and matrix B is in the file
+B.txt. The program will not check if your matrix sizes are compatible with the 
+number of processes specified.
+
+For parallel, timing results will be output to the console. The resulting matrix
+C will be output to the file "C.txt".
+
+If you would like to run with custom file names, feel free to edit the script
+files. The command line parameters are like so:
+
+mpi_parallel_file [Matrix A file] [Matrix B file] [OUTPUT_FLAG]
+
+OUTPUT_FLAG: optional, specifies whether to output results to "C.txt". 
+Pass "y" here if you want to see the results.
+
+#### Parallel with generated input
 For parallel matrix multiplication, scripts are run like so:
 
 sbatch /scripts/par_[PROCESSES]_[NUMBER].sh
@@ -74,7 +99,8 @@ corresponding -n number.
 cd build
 make
 sbatch /scripts/seq_[NUMBER].sh
-sbatch /scripts/par_[PROCESSES]_[NUMBER].sh
+sbatch /scripts/par_[PROCESSES].sh              // with input files
+sbatch /scripts/par_[PROCESSES]_[NUMBER].sh     // with generated input
 make clean
 ```
 
@@ -85,6 +111,12 @@ Sequential, 4x4 matrices
 sbatch /scripts/seq_4.sh
 ```
 Output will be in "seqOutput.txt"
+
+Parallel, 4 processes, matrices in input files
+```bash
+sbatch /scripts/par_4.sh
+```
+Output will be in console and in "C.txt".
 
 
 Parallel, 4 processes, 4x4 matrices
