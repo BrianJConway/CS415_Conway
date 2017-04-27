@@ -145,6 +145,7 @@ cout << "master sending chunks" << endl;
 
             cout << "task " << rank << " got chunk" << endl;
         }
+            cout << "task " << rank << " hit barrier" << endl;
 
         // Barrier
         MPI_Barrier(cartComm);
