@@ -411,6 +411,9 @@ void outputResults(vector<vector<int>> &C, vector<vector<int>> chunkC, int rank,
         // Open file
         fout.open("C.txt");
 
+        // Output matrix size
+        fout << C.size() << endl;
+        
         // Output matrix C
         for (rowIndex = 0; rowIndex < C.size(); rowIndex++)
         {
