@@ -89,14 +89,12 @@ int main(int argc, char *argv[])
         // Master reads matrices from file and sends chunks out
         if (rank == 0)
         {
-                            cout << argv[1] << " " << argv[2] << endl;
-
             // Perform file input, exit if error
             if (!fileInput(matrixSize, argv[1], argv[2], A, B, C))
             {
-                cout << "hey" << endl;
                 return 0;
             }
+                cout << "hey" << endl;
 
             // Set number of elements per row/col in chunk
             offset = matrixSize / sqrt(numTasks);
