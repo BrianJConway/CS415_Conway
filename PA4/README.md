@@ -4,7 +4,14 @@
 
 This project includes a makefile which will generate object files and executables for sequential and parallel matrix multiplication. 
 
-Sequential files were included for easy comparison with parallel results. Both scripts
+NOTE: The parallel file intended for submission is "parallel_file.cpp", which
+meets the requirements of loading the matrices from their individual files and 
+outputting the resulting matrix to a file. The file "parallel_generated.cpp"
+is included if you want to just have the program generate numbers for matrices
+A and B, then each process outputs the resulting chunks to the console. 
+
+Sequential files were included for easy comparison with parallel results. Both 
+the sequential scripts and the parallel scripts that do number generation
 will generate the same matrices A and B, and get the same results for C.
 
 There are a number of scripts depending on the dimensions of the matrices,
