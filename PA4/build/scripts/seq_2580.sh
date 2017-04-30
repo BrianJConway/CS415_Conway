@@ -7,4 +7,4 @@
 #SBATCH --mail-user=brianc@nevada.unr.edu
 #SBATCH --mail-type=ALL
 
-srun mpi_sequential 2160
+srun mpi_sequential 2580
