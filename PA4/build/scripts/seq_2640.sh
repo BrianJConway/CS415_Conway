@@ -3,8 +3,8 @@
 #SBATCH -N 1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8192MB
-#SBATCH --time=00:05:00
+#SBATCH --time=00:30:00
 #SBATCH --mail-user=brianc@nevada.unr.edu
 #SBATCH --mail-type=ALL
 
-srun mpi_sequential 540
+srun mpi_sequential 2160
