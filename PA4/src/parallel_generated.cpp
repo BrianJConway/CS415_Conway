@@ -177,6 +177,9 @@ int main(int argc, char *argv[])
         // Calculate statistics about timings
         if (rank == 0)
         {
+            // Calculate statistics of timings
+            cout << "Matrix Size: " << matrixSize << "x" << matrixSize << endl;
+
             calcStatistics(timings, average, stdDev);
         }
 
