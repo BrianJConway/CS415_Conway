@@ -14,7 +14,7 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
-const int MAX_NUM = 9;
+const int MAX_NUM = 999999;
 
 void adjustAndAllocate(int rank, int &numTasks, int &matrixSize, int &offset,
                        vector<vector<int>> &chunkA, vector<vector<int>> &chunkB,
@@ -108,6 +108,9 @@ int main(int argc, char *argv[])
         // Barrier
         MPI_Barrier(cartComm);
 
+        // Start the timer
+        timer.start();
+
         // Cannon's Algorithm - Initialize Rows
         if (coords[0] != 0)
         {
@@ -122,9 +125,6 @@ int main(int argc, char *argv[])
 
         // Barrier
         MPI_Barrier(cartComm);
-
-        // Start the timer
-        timer.start();
 
         // Cannon's Algorithm - Initialize Columns
         if (coords[1] != 0)

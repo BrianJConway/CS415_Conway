@@ -15,7 +15,7 @@ using namespace std;
 
 const int NUM_MEASUREMENTS = 1;
 const int MIN_NUM = 0;
-const int MAX_NUM = 9;
+const int MAX_NUM = 999999;
 
 bool output = false;
 
