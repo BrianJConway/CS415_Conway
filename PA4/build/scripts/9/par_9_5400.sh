@@ -6,4 +6,4 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-type=ALL
 
-srun mpi_parallel 5160
+srun mpi_parallel 5400
