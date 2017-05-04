@@ -1,0 +1,200 @@
+Matrix Size: 3960x3960
+Measurements: 1
+Average Time: 1158.14s
+Standard Deviation: 0s
+Matrix Size: 1020x1020
+Measurements: 1
+Average Time: 14.2287s
+Standard Deviation: 0s
+Matrix Size: 1080x1080
+Measurements: 1
+Average Time: 17.2486s
+Standard Deviation: 0s
+Matrix Size: 1140x1140
+Measurements: 1
+Average Time: 20.8473s
+Standard Deviation: 0s
+Matrix Size: 1200x1200
+Measurements: 1
+Average Time: 24.7139s
+Standard Deviation: 0s
+Matrix Size: 120x120
+Measurements: 1
+Average Time: 0.006546s
+Standard Deviation: 0s
+Matrix Size: 1260x1260
+Measurements: 1
+Average Time: 29.3436s
+Standard Deviation: 0s
+Matrix Size: 1320x1320
+Measurements: 1
+Average Time: 35.3099s
+Standard Deviation: 0s
+Matrix Size: 1380x1380
+Measurements: 1
+Average Time: 39.6981s
+Standard Deviation: 0s
+Matrix Size: 1440x1440
+Measurements: 1
+Average Time: 45.6165s
+Standard Deviation: 0s
+Matrix Size: 1500x1500
+Measurements: 1
+Average Time: 50.7893s
+Standard Deviation: 0s
+Matrix Size: 1560x1560
+Measurements: 1
+Average Time: 58.9637s
+Standard Deviation: 0s
+Matrix Size: 1620x1620
+Measurements: 1
+Average Time: 66.623s
+Standard Deviation: 0s
+Matrix Size: 1680x1680
+Measurements: 1
+Average Time: 74.0882s
+Standard Deviation: 0s
+Matrix Size: 1740x1740
+Measurements: 1
+Average Time: 83.3132s
+Standard Deviation: 0s
+Matrix Size: 1800x1800
+Measurements: 1
+Average Time: 92.0221s
+Standard Deviation: 0s
+Matrix Size: 180x180
+Measurements: 1
+Average Time: 0.00934s
+Standard Deviation: 0s
+Matrix Size: 1860x1860
+Measurements: 1
+Average Time: 102.078s
+Standard Deviation: 0s
+Matrix Size: 1920x1920
+Measurements: 1
+Average Time: 112.115s
+Standard Deviation: 0s
+Matrix Size: 1980x1980
+Measurements: 1
+Average Time: 129.509s
+Standard Deviation: 0s
+Matrix Size: 2040x2040
+Measurements: 1
+Average Time: 135.221s
+Standard Deviation: 0s
+Matrix Size: 2100x2100
+Measurements: 1
+Average Time: 148.65s
+Standard Deviation: 0s
+Matrix Size: 2160x2160
+Measurements: 1
+Average Time: 161.81s
+Standard Deviation: 0s
+Matrix Size: 2160x2160
+Measurements: 1
+Average Time: 161.7s
+Standard Deviation: 0s
+Matrix Size: 2280x2280
+Measurements: 1
+Average Time: 190.317s
+Standard Deviation: 0s
+Matrix Size: 2340x2340
+Measurements: 1
+Average Time: 205.95s
+Standard Deviation: 0s
+Matrix Size: 2400x2400
+Measurements: 1
+Average Time: 223.903s
+Standard Deviation: 0s
+Matrix Size: 240x240
+Measurements: 1
+Average Time: 0.02089s
+Standard Deviation: 0s
+Matrix Size: 2460x2460
+Measurements: 1
+Average Time: 238.918s
+Standard Deviation: 0s
+Matrix Size: 2520x2520
+Measurements: 1
+Average Time: 258.853s
+Standard Deviation: 0s
+Matrix Size: 2580x2580
+Measurements: 1
+Average Time: 279.031s
+Standard Deviation: 0s
+Matrix Size: 2640x2640
+Measurements: 1
+Average Time: 300.198s
+Standard Deviation: 0s
+Matrix Size: 2700x2700
+Measurements: 1
+Average Time: 321.618s
+Standard Deviation: 0s
+Matrix Size: 300x300
+Measurements: 1
+Average Time: 0.043213s
+Standard Deviation: 0s
+Matrix Size: 360x360
+Measurements: 1
+Average Time: 0.145585s
+Standard Deviation: 0s
+Matrix Size: 420x420
+Measurements: 1
+Average Time: 0.134427s
+Standard Deviation: 0s
+Matrix Size: 480x480
+Measurements: 1
+Average Time: 0.22187s
+Standard Deviation: 0s
+Matrix Size: 540x540
+Measurements: 1
+Average Time: 0.550368s
+Standard Deviation: 0s
+Matrix Size: 600x600
+Measurements: 1
+Average Time: 0.716863s
+Standard Deviation: 0s
+Matrix Size: 660x660
+Measurements: 1
+Average Time: 0.916656s
+Standard Deviation: 0s
+Matrix Size: 720x720
+Measurements: 1
+Average Time: 1.10747s
+Standard Deviation: 0s
+Matrix Size: 780x780
+Measurements: 1
+Average Time: 2.39218s
+Standard Deviation: 0s
+Matrix Size: 840x840
+Measurements: 1
+Average Time: 4.41264s
+Standard Deviation: 0s
+Matrix Size: 900x900
+Measurements: 1
+Average Time: 6.91891s
+Standard Deviation: 0s
+Matrix Size: 960x960
+Measurements: 1
+Average Time: 10.162s
+Standard Deviation: 0s
+Matrix Size: 3000x3000
+Measurements: 1
+Average Time: 447.536s
+Standard Deviation: 0s
+Matrix Size: 3240x3240
+Measurements: 1
+Average Time: 567.295s
+Standard Deviation: 0s
+Matrix Size: 3480x3480
+Measurements: 1
+Average Time: 736.911s
+Standard Deviation: 0s
+Matrix Size: 3720x3720
+Measurements: 1
+Average Time: 886.414s
+Standard Deviation: 0s
+Matrix Size: 4200x4200
+Measurements: 1
+Average Time: 1489.15s
+Standard Deviation: 0s

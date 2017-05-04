@@ -1,0 +1,118 @@
+Matrix Size: 1080x1080
+Measurements: 1
+Average Time: 1.16535s
+Standard Deviation: 0s
+Matrix Size: 120x120
+Measurements: 1
+Average Time: 0.003484s
+Standard Deviation: 0s
+Matrix Size: 1320x1320
+Measurements: 1
+Average Time: 1.99225s
+Standard Deviation: 0s
+Matrix Size: 1560x1560
+Measurements: 1
+Average Time: 5.03024s
+Standard Deviation: 0s
+Matrix Size: 1800x1800
+Measurements: 1
+Average Time: 14.4529s
+Standard Deviation: 0s
+Matrix Size: 2040x2040
+Measurements: 1
+Average Time: 33.3656s
+Standard Deviation: 0s
+Matrix Size: 2280x2280
+Measurements: 1
+Average Time: 44.7047s
+Standard Deviation: 0s
+Matrix Size: 2520x2520
+Measurements: 1
+Average Time: 61.8905s
+Standard Deviation: 0s
+Matrix Size: 2760x2760
+Measurements: 1
+Average Time: 79.9965s
+Standard Deviation: 0s
+Matrix Size: 3000x3000
+Measurements: 1
+Average Time: 102.385s
+Standard Deviation: 0s
+Matrix Size: 3240x3240
+Measurements: 1
+Average Time: 133.22s
+Standard Deviation: 0s
+Matrix Size: 3480x3480
+Measurements: 1
+Average Time: 166.503s
+Standard Deviation: 0s
+Matrix Size: 360x360
+Measurements: 1
+Average Time: 0.021125s
+Standard Deviation: 0s
+Matrix Size: 3720x3720
+Measurements: 1
+Average Time: 205.212s
+Standard Deviation: 0s
+Matrix Size: 3960x3960
+Measurements: 1
+Average Time: 257.095s
+Standard Deviation: 0s
+Matrix Size: 4200x4200
+Measurements: 1
+Average Time: 298.59s
+Standard Deviation: 0s
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** JOB 111664 CANCELLED AT 2017-04-29T22:03:59 DUE TO TIME LIMIT on compute-0-1 ***
+slurmstepd: *** STEP 111664.0 CANCELLED AT 2017-04-29T22:03:59 DUE TO TIME LIMIT on compute-0-1 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-1: tasks 0-3: Terminated
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** JOB 111676 CANCELLED AT 2017-04-29T22:09:29 DUE TO TIME LIMIT on compute-0-1 ***
+slurmstepd: *** STEP 111676.0 CANCELLED AT 2017-04-29T22:09:29 DUE TO TIME LIMIT on compute-0-1 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-1: tasks 0-3: Terminated
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** STEP 111685.0 CANCELLED AT 2017-04-29T22:15:00 DUE TO TIME LIMIT on compute-0-1 ***
+slurmstepd: *** JOB 111685 CANCELLED AT 2017-04-29T22:15:00 DUE TO TIME LIMIT on compute-0-1 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-1: tasks 0-3: Terminated
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** JOB 111692 CANCELLED AT 2017-04-29T22:20:29 DUE TO TIME LIMIT on compute-0-1 ***
+slurmstepd: *** STEP 111692.0 CANCELLED AT 2017-04-29T22:20:29 DUE TO TIME LIMIT on compute-0-1 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-1: tasks 0-3: Terminated
+Matrix Size: 600x600
+Measurements: 1
+Average Time: 0.090451s
+Standard Deviation: 0s
+Matrix Size: 840x840
+Measurements: 1
+Average Time: 0.293056s
+Standard Deviation: 0s
+srun: Job step aborted: Waiting up to 2 seconds for job step to finish.
+slurmstepd: *** STEP 111715.0 CANCELLED AT 2017-04-29T22:32:59 DUE TO TIME LIMIT on compute-0-11 ***
+slurmstepd: *** JOB 111715 CANCELLED AT 2017-04-29T22:32:59 DUE TO TIME LIMIT on compute-0-11 ***
+srun: got SIGCONT
+srun: forcing job termination
+srun: error: compute-0-11: tasks 0-3: Terminated
+Matrix Size: 4440x4440
+Measurements: 1
+Average Time: 353.809s
+Standard Deviation: 0s
+Matrix Size: 4680x4680
+Measurements: 1
+Average Time: 413.03s
+Standard Deviation: 0s
+Matrix Size: 4920x4920
+Measurements: 1
+Average Time: 488.305s
+Standard Deviation: 0s
+Matrix Size: 5160x5160
+Measurements: 1
+Average Time: 558.123s
+Standard Deviation: 0s
